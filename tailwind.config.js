@@ -23,6 +23,23 @@ export default {
       fontFamily: {
         inter: ["Inter", "sans-serif"],
       },
+      backgroundImage: {
+        "gradient-radial":
+          "radial-gradient(50% 50% at 50% 50%, var(--tw-gradient-stops))",
+      },
+      keyframes: {
+        shiftingGradient: {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+      },
+      backgroundSize: {
+        "400%": "400%",
+      },
+      animation: {
+        gradient: "shiftingGradient 16s linear infinite",
+      },
     },
   },
   plugins: [],

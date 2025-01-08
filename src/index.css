@@ -11,9 +11,9 @@
 
   html {
     font-size: 100%;
-    @apply font-inter 
-      bg-primary-background 
-      text-white 
+    @apply font-inter
+      bg-surface-primary
+      text-type-primary
       antialiased
       scroll-smooth;
   }

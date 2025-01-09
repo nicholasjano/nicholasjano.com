@@ -27,5 +27,5 @@ export const useMousePosition = (containerRef: RefObject<HTMLElement>): MousePos
 };
 
 export const calculateOffset = (mouseAxis: number, direction: number) => {
-  return `${(mouseAxis / 100) * 5 * direction}rem`;
+  return `${(mouseAxis / 100) * 5 * direction}rem`; // 5 Rem max.
 };

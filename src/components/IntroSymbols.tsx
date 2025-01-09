@@ -9,7 +9,7 @@ const IntroSymbols = ({ x, y }: MousePosition) => {
       {symbols.map((symbol, index) => (
         <motion.span
           key={index}
-          className={`symbol absolute ${
+          className={`symbol ${
             index % 2 === 0 ? "text-brand-green" : "text-brand-blue"
           }`}
           style={{

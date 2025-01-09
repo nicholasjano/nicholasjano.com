@@ -14,7 +14,8 @@ export default defineConfig({
     alias: {
       "@components": resolve(__dirname, "src/components"),
       "@data": resolve(__dirname, "src/data"),
-      "@types": resolve(__dirname, "src/types"),
+      "@pageTypes": resolve(__dirname, "src/pageTypes"),
+      "@utilities": resolve(__dirname, "src/utilities"),
     },
   },
 });

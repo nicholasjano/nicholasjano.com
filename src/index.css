@@ -9,12 +9,20 @@
     @apply box-border p-0 m-0;
   }
 
-  html {
+  html, body {
     font-size: 100%;
     @apply font-inter
       bg-surface-primary
       text-type-primary
       antialiased
-      scroll-smooth;
+      scroll-smooth
+      overflow-x-hidden
+      w-full;
+  }
+}
+
+@layer components {
+  .symbol {
+    @apply absolute -translate-x-1/2 -translate-y-1/2;
   }
 }

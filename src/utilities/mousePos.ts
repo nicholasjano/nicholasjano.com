@@ -1,11 +1,11 @@
 import { useState, useEffect, RefObject } from "react";
 import type { MousePosition } from "@pageTypes/pageTypes";
 
-export const useMousePosition = (parentRef: RefObject<HTMLElement>): MousePosition => {
+export const useMousePosition = (containerRef: RefObject<HTMLElement>): MousePosition => {
   const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
 
   useEffect(() => {
-    const element = parentRef.current;
+    const element = containerRef.current;
     if (!element) return;
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -21,7 +21,11 @@ export const useMousePosition = (parentRef: RefObject<HTMLElement>): MousePositi
 
     element.addEventListener("mousemove", handleMouseMove);
     return () => element.removeEventListener("mousemove", handleMouseMove);
-  }, [parentRef]);
+  }, [containerRef]);
 
   return mousePosition;
+};
+
+export const calculateOffset = (mouseAxis: number, direction: number) => {
+  return `${(mouseAxis / 100) * 5 * direction}rem`;
 };

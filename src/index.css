@@ -17,12 +17,13 @@
       antialiased
       scroll-smooth
       overflow-x-hidden
+      min-h-screen
       w-full;
   }
 }
 
 @layer components {
   .symbol {
-    @apply absolute -translate-x-1/2 -translate-y-1/2;
+    @apply absolute -translate-x-1/2 -translate-y-1/2 text-2xl;
   }
 }

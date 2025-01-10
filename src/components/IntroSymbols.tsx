@@ -1,7 +1,7 @@
-import { symbols } from "@data/pageData";
+import { symbols } from "../data/pageData";
 import { motion } from "framer-motion";
-import type { MousePosition } from "@pageTypes/pageTypes";
-import { calculateOffset } from "@utilities/mousePos";
+import type { MousePosition } from "../pageTypes/pageTypes";
+import { calculateOffset } from "../utilities/mousePos";
 
 const IntroSymbols = ({ x, y }: MousePosition) => {
   return (
@@ -15,12 +15,14 @@ const IntroSymbols = ({ x, y }: MousePosition) => {
           style={{
             left: symbol.horizontal,
             top: symbol.vertical,
+            textShadow: '0 0 10px rgba(255, 255, 255, 0.3)',
           }}
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 0, scale: 0 }}
           animate={{
             x: calculateOffset(x, symbol.x),
             y: calculateOffset(y, symbol.y),
             opacity: 1,
+            scale: 1,
           }}
           transition={{
             type: "spring",
@@ -28,6 +30,11 @@ const IntroSymbols = ({ x, y }: MousePosition) => {
             damping: 15,
             mass: 0.01,
             opacity: { duration: 0.5, delay: index * 0.1 },
+            scale: { duration: 0.5, delay: index * 0.1 },
+          }}
+          whileHover={{
+            scale: 1.2,
+            transition: { duration: 0.2 },
           }}
         >
           {symbol.text}

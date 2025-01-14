@@ -1,18 +1,23 @@
-export const symbols = [
-  { text: "{}", horizontal: "85%", vertical: "50%" },
-  { text: "[]", horizontal: "82.34%", vertical: "63.39%" },
-  { text: "++", horizontal: "74.75%", vertical: "74.75%" },
-  { text: '""', horizontal: "63.39%", vertical: "82.34%" },
-  { text: "</>", horizontal: "50%", vertical: "85%" },
-  { text: "||", horizontal: "36.61%", vertical: "82.34%" },
-  { text: "!==", horizontal: "25.25%", vertical: "74.75%" },
-  { text: "//", horizontal: "17.66%", vertical: "63.39%" },
-  { text: "= >", horizontal: "15%", vertical: "50%" },
-  { text: "==", horizontal: "17.66%", vertical: "36.61%" },
-  { text: ":=", horizontal: "25.25%", vertical: "25.25%" },
-  { text: "**", horizontal: "36.61%", vertical: "17.66%" },
-  { text: "&&", horizontal: "50%", vertical: "15%" },
-  { text: "<<", horizontal: "63.39%", vertical: "17.66%" },
-  { text: "::", horizontal: "74.75%", vertical: "25.25%" },
-  { text: "->", horizontal: "82.34%", vertical: "36.61%" }
-];
+export const generateSymbols = (radius: number) => {
+  const baseSymbols = [
+    "{}", "++", "</>", "!==", "//", "[]", "==", ":=", "**", "&&", ">>", "->"
+  ];
+  const numSymbols = baseSymbols.length;
+  const symbols = [];
+
+  for (let i = 0; i < numSymbols; i++) {
+    const angle = (Math.PI / 2) - (i * (2 * Math.PI / numSymbols)); 
+    let x = Math.cos(angle) * radius + 50;
+    let y = -Math.sin(angle) * radius + 50;
+
+    x = Math.round(x * 1000) / 1000;
+    y = Math.round(y * 1000) / 1000;
+
+    symbols.push({ text: baseSymbols[i], horizontal: `${x}%`, vertical: `${y}%` });
+  }
+
+  return symbols;
+};
+
+const radius: number = 35; // 50% on both sizes means 100% total
+export const symbols = generateSymbols(radius);

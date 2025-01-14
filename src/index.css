@@ -9,7 +9,8 @@
     @apply box-border p-0 m-0;
   }
 
-  html, body {
+  html,
+  body {
     font-size: 100%;
     @apply font-inter
       bg-surface-primary
@@ -24,6 +25,25 @@
 
 @layer components {
   .symbol {
-    @apply absolute -translate-x-1/2 -translate-y-1/2 text-2xl;
+    @apply absolute text-2xl leading-none drop-shadow-[0_0_0.625rem_rgba(255,255,255,0.3)];
+  }
+}
+
+@keyframes fadeScale {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@layer utilities {
+  .fade-scale {
+    opacity: 0;
+    animation: fadeScale 0.9s ease-out forwards;
+    will-change: transform, opacity;
   }
 }

@@ -3,7 +3,7 @@ export const generateSymbols = (radius: number) => {
     "{}",
     "++",
     "</>",
-    "!==",
+    "!=",
     "//",
     "[]",
     "==",

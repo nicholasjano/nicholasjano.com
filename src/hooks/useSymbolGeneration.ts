@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { baseSymbols } from '@data/pageData';
-import type { SymbolInformation } from "@pageTypes/pageTypes";
+import type { SymbolInformation, SymbolGenerationProp } from "@pageTypes/pageTypes";
 
-export const useSymbolGeneration = (radius: number): SymbolInformation[] => {
-  const symbols = useMemo(() => {
+export const useSymbolGeneration = ({ radius }: SymbolGenerationProp): SymbolInformation[] => {
+  const symbols = useMemo<SymbolInformation[]>(() => {
     const numSymbols = baseSymbols.length;
     const generatedSymbols: SymbolInformation[] = [];
 

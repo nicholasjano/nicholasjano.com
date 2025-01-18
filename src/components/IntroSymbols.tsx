@@ -4,7 +4,7 @@ import type { IntroSymbolsProp } from "@pageTypes/pageTypes";
 
 const IntroSymbols = ({ size }: IntroSymbolsProp) => {
   const radius = useRadius();
-  const symbols = useSymbolGeneration(radius);
+  const symbols = useSymbolGeneration({ radius });
 
   return (
     <div

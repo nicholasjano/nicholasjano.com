@@ -6,7 +6,7 @@ export default {
       colors: {
         surface: {
           primary: "#141414",
-          secondary: "#282828",
+          secondary: "#1E1E1E",
         },
         header: {
           primary: "rgb(16 17 18 / 0.72)",

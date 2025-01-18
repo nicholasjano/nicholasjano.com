@@ -1,4 +1,6 @@
-export const baseSymbols = [
+import type { BaseSymbolsType } from "@pageTypes/pageTypes";
+
+export const baseSymbols: BaseSymbolsType = [
   "{}",
   "++",
   "</>",
@@ -11,4 +13,4 @@ export const baseSymbols = [
   "||",
   ">>",
   "->",
-] as const;
+];

@@ -1,24 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import IntroSymbols from "@components/IntroSymbols";
+import { useResizeObserver } from '@utilities/useResizeObserver';
 
 const Intro = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [size, setSize] = useState(0); // For min(width, height)
-
-  useEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      if (entries[0]) {
-        const { width, height } = entries[0].contentRect;
-        setSize(Math.min(width, height)); // Ensure a square for the circle calculations
-      }
-    });
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  const sectionRef: React.RefObject<HTMLElement> = useRef<HTMLElement>(null);
+  const size: number = useResizeObserver(sectionRef);
 
   return (
     <section

@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import { baseSymbols } from '@data/pageData';
+import type { SymbolInformation } from "@pageTypes/pageTypes";
 
-export const generateSymbols = (radius: number) => {
+export const generateSymbols = (radius: number): SymbolInformation[] => {
   const symbols = useMemo(() => {
     const numSymbols = baseSymbols.length;
-    const generatedSymbols = [];
+    const generatedSymbols: SymbolInformation[] = [];
 
     for (let i = 0; i < numSymbols; i++) {
       const angle = Math.PI / 2 - i * ((2 * Math.PI) / numSymbols);
@@ -22,7 +23,7 @@ export const generateSymbols = (radius: number) => {
     }
 
     return generatedSymbols;
-  }, [radius]); // Recalculate only when the radius changes
+  }, [radius]);
 
   return symbols;
 };

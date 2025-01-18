@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 
-export const getRadius = () => {
-  const defaultRadiusDivider: number = 480
-  const getDefaultRadius = () => (window.innerWidth < defaultRadiusDivider ? 40 : 36);
+export const getRadius = (): number => {
+  const defaultRadiusDivider = 480
+  const getDefaultRadius = (): number => (window.innerWidth < defaultRadiusDivider ? 40 : 36);
 
-  const [radius, setRadius] = useState(getDefaultRadius);
+  const [radius, setRadius] = useState<number>(() => getDefaultRadius());
 
   useEffect(() => {
     const handleScrollAndResize = () => {

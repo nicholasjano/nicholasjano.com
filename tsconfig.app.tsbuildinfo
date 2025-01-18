@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/intro.tsx","./src/components/introsymbols.tsx","./src/components/navbar.tsx","./src/data/pagedata.ts","./src/pagetypes/pagetypes.ts","./src/utilities/generatesymbols.ts","./src/utilities/getradius.ts"],"version":"5.7.2"}

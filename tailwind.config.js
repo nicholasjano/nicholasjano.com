@@ -6,7 +6,7 @@ export default {
       colors: {
         surface: {
           primary: "#141414",
-          secondary: "#171819",
+          secondary: "#282828",
         },
         header: {
           primary: "rgb(16 17 18 / 0.72)",
@@ -24,8 +24,8 @@ export default {
         inter: ["Inter", "sans-serif"],
       },
       backgroundImage: {
-        "gradient-radial":
-          "radial-gradient(50% 50% at 50% 50%, var(--tw-gradient-stops))",
+        "symbols-gradient":
+          "radial-gradient(circle at center, theme(colors.surface.secondary) 0%, theme(colors.surface.primary) 70.71%)",
       },
       keyframes: {
         shiftingGradient: {

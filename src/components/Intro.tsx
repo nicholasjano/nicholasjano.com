@@ -23,7 +23,7 @@ const Intro = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative h-screen w-screen flex items-center justify-center overflow-hidden bg-gradient-radial from-surface-secondary from-[0.01%] to-surface-primary to-[100%]"
+      className="relative h-screen w-screen flex items-center justify-center overflow-hidden bg-surface-primary"
     >
       <IntroSymbols size={size} />
 

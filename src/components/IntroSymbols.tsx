@@ -1,9 +1,9 @@
-import { getRadius } from '@utilities/getRadius';
+import { getRadius } from "@utilities/getRadius";
 import { generateSymbols } from "@utilities/generateSymbols";
 import type { IntroSymbolsProp } from "@pageTypes/pageTypes";
 
 const IntroSymbols = ({ size }: IntroSymbolsProp) => {
-  const radius = getRadius(); 
+  const radius = getRadius();
   const symbols = generateSymbols(radius);
 
   return (
@@ -14,6 +14,13 @@ const IntroSymbols = ({ size }: IntroSymbolsProp) => {
         height: `${size}px`,
       }}
     >
+      <div
+        className="symbol -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-symbols-gradient"
+        style={{
+          width: `calc(${radius * 2}% + 1em)`,
+          height: `calc(${radius * 2}% + 1em)`,
+        }}
+      />
       {symbols.map((symbol, index) => (
         <span
           key={index}

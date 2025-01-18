@@ -1,10 +1,10 @@
-import { getRadius } from "@utilities/getRadius";
-import { generateSymbols } from "@utilities/generateSymbols";
+import { useRadius } from "@hooks/useRadius";
+import { useSymbolGeneration } from "@hooks/useSymbolGeneration";
 import type { IntroSymbolsProp } from "@pageTypes/pageTypes";
 
 const IntroSymbols = ({ size }: IntroSymbolsProp) => {
-  const radius = getRadius();
-  const symbols = generateSymbols(radius);
+  const radius = useRadius();
+  const symbols = useSymbolGeneration(radius);
 
   return (
     <div

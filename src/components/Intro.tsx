@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import IntroSymbols from "@components/IntroSymbols";
-import { useResizeObserver } from '@utilities/useResizeObserver';
+import { useResizeObserver } from '@hooks/useResizeObserver';
 
 const Intro = () => {
   const sectionRef: React.RefObject<HTMLElement> = useRef<HTMLElement>(null);

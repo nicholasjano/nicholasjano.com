@@ -25,6 +25,7 @@
     "paths": {
       "@components/*": ["./components/*"],
       "@data/*": ["./data/*"],
+      "@hooks/*": ["./hooks/*"],
       "@pageTypes/*": ["./pageTypes/*"],
       "@utilities/*": ["./utilities/*"]
     }

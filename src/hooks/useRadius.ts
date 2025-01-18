@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export const getRadius = (): number => {
+export const useRadius = (): number => {
   const defaultRadiusDivider = 480
   const getDefaultRadius = (): number => (window.innerWidth < defaultRadiusDivider ? 40 : 36);
 
@@ -27,8 +27,8 @@ export const getRadius = (): number => {
     // Call it once to set the initial radius
     handleScrollAndResize();
 
-    // Cleanup listeners on unmount
-    return () => {
+    // Cleanup
+    return (): void => {
       window.removeEventListener('scroll', handleScrollAndResize);
       window.removeEventListener('resize', handleScrollAndResize);
     };

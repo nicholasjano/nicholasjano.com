@@ -33,12 +33,23 @@ export default {
           "50%": { backgroundPosition: "100% 50%" },
           "100%": { backgroundPosition: "0% 50%" },
         },
+        fadeScale: {
+          "0%": {
+            opacity: "0",
+            transform: "translate(-50%, -50%) scale(0)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translate(-50%, -50%) scale(1)",
+          },
+        },
       },
       backgroundSize: {
         "400%": "400%",
       },
       animation: {
         gradient: "shiftingGradient 16s linear infinite",
+        fadeScale: "fadeScale 0.9s ease-out forwards",
       },
     },
   },

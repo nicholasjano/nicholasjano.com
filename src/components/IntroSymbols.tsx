@@ -1,7 +1,11 @@
-import { symbols } from "@data/pageData";
+import { getRadius } from '@utilities/getRadius';
+import { generateSymbols } from "@utilities/generateSymbols";
 import type { IntroSymbolsProp } from "@pageTypes/pageTypes";
 
 const IntroSymbols = ({ size }: IntroSymbolsProp) => {
+  const radius = getRadius(); 
+  const symbols = generateSymbols(radius);
+
   return (
     <div
       className="absolute z-0"

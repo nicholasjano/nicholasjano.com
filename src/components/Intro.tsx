@@ -9,7 +9,7 @@ const Intro = () => {
     const observer = new ResizeObserver((entries) => {
       if (entries[0]) {
         const { width, height } = entries[0].contentRect;
-        setSize(Math.min(width, height)); // Ensure a square for the circle
+        setSize(Math.min(width, height)); // Ensure a square for the circle calculations
       }
     });
 
@@ -28,11 +28,11 @@ const Intro = () => {
       <IntroSymbols size={size} />
 
       <div className="z-10 flex flex-col items-center justify-center text-center space-y-2">
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-brand-green from-20% via-brand-blue via-50% to-brand-green to-80% text-transparent bg-clip-text bg-400% animate-gradient">
+        <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-brand-green from-20% via-brand-blue via-50% to-brand-green to-80% text-transparent bg-clip-text bg-400% animate-gradient">
           Nicholas Jano
         </h1>
-        <p className="text-xl">Student at Queen's University</p>
-        <p className="text-xl">Software Engineer</p>
+        <p className="text-base sm:text-xl">Student at Queen's University</p>
+        <p className="text-base sm:text-xl">Software Engineer</p>
       </div>
     </section>
   );

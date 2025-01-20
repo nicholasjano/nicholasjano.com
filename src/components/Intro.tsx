@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import IntroSymbols from "@components/IntroSymbols";
-import { useResizeObserver } from '@hooks/useResizeObserver';
+import { useResizeObserver } from "@hooks/useResizeObserver";
 
 const Intro = () => {
   const sectionRef: React.RefObject<HTMLElement> = useRef<HTMLElement>(null);
@@ -9,11 +9,11 @@ const Intro = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative h-screen w-screen flex items-center justify-center overflow-hidden bg-surface-primary"
+      className="fixed inset-0 w-screen h-screen flex items-center justify-center overflow-hidden bg-surface-primary"
     >
       <IntroSymbols size={size} />
 
-      <div className="z-10 flex flex-col items-center justify-center text-center space-y-2">
+      <div className="flex flex-col items-center justify-center text-center space-y-2 z-20">
         <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-brand-green from-20% via-brand-blue via-50% to-brand-green to-80% text-transparent bg-clip-text bg-400% animate-gradient">
           Nicholas Jano
         </h1>

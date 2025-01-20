@@ -18,8 +18,7 @@
       antialiased
       scroll-smooth
       overflow-x-hidden
-      min-h-screen
-      w-full;
+      min-h-screen;
   }
 }
 

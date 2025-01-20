@@ -8,14 +8,14 @@ const IntroSymbols = ({ size }: IntroSymbolsProp) => {
 
   return (
     <div
-      className="absolute z-0"
+      className="absolute z-10"
       style={{
         width: `${size}px`,
         height: `${size}px`,
       }}
     >
       <div
-        className="symbol -z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-symbols-gradient"
+        className="symbol left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-symbols-gradient"
         style={{
           width: `calc(${radius * 2}% + 1em)`,
           height: `calc(${radius * 2}% + 1em)`,

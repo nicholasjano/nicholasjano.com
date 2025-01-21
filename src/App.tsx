@@ -1,9 +1,9 @@
 import { useScrollManagementRefresh } from "@hooks/useScrollManagementRefresh";
 import Intro from "@components/Intro";
 import Navbar from "@components/Navbar";
-import Test from "@components/Test";
+import Stats from "@components/Stats";
 import Spacer from "@components/Spacer";
-import Test2 from "@components/Test2";
+import About from "@components/About";
 
 function App() {
   useScrollManagementRefresh();
@@ -11,9 +11,9 @@ function App() {
     <>
       <Navbar />
       <Intro />
-      <Test />
+      <Stats />
       <Spacer />
-      <Test2 />
+      <About />
     </>
   );
 }

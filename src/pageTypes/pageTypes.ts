@@ -6,6 +6,17 @@ export interface SymbolGenerationProp {
   radius: number;
 }
 
+export interface UseAnimatedNumberProps {
+  end: number;
+  duration?: number;
+  startOnVisible?: boolean;
+}
+
+export interface AnimatedNumberProps {
+  number: number;
+  duration?: number;
+}
+
 export interface SymbolInformation {
   text: string;
   horizontal: string;

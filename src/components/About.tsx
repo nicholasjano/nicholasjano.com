@@ -1,6 +1,6 @@
 const About = () => {
   return (
-    <div className="relative w-screen min-h-screen bg-gray-100" />
+    <div className="relative w-screen min-h-screen bg-surface-primary" />
   );
 };
 

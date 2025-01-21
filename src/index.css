@@ -32,4 +32,8 @@
   .fade-scale {
     @apply opacity-0 animate-fadeScale will-change-transform;
   }
+
+  .stats-info {
+    @apply flex flex-col items-center justify-center bg-surface-secondary p-4 rounded-xl space-y-2;
+  }
 }

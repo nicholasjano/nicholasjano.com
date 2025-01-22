@@ -10,7 +10,7 @@ const Stats = () => {
             <p>12/21/24 - 01/21/25</p>
           </div>
 
-          <div className="grid grid-rows-3 sm:grid-rows-none sm:grid-cols-3 gap-4 text-center text-base sm:text-lg font-normal w-full px-12">
+          <div className="grid grid-rows-3 sm:grid-rows-none sm:grid-cols-3 gap-4 text-center text-base sm:text-lg font-normal px-12">
             <div className="stats-info">
               <p className="font-medium">GitHub</p>
               <p>

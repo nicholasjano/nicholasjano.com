@@ -26,26 +26,27 @@ export interface SymbolInformation {
 }
 
 export type BaseSymbolsType = readonly [
-  "{}",
-  "++",
-  "</>",
-  "!=",
-  "//",
-  "[]",
-  "==",
-  ":=",
-  "**",
-  "||",
-  ">>",
-  "->"
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string
 ];
 
 export type NavItemsRightType = readonly [
-  "Home",
-  "Stats",
-  "About",
-  "Experience",
-  "Contact"
+  string,
+  string,
+  string,
+  string,
+  string,
+  string
 ];
 
 export type NavItemsLeftType = readonly [

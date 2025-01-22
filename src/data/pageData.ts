@@ -1,7 +1,11 @@
 import { faFile } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedin, faGithub } from "@fortawesome/free-brands-svg-icons";
 import type { BaseSymbolsType } from "@pageTypes/pageTypes";
-import type { NavItemsRightType, NavItemsLeftType, NavItemsLeftURLType } from "@pageTypes/pageTypes";
+import type {
+  NavItemsRightType,
+  NavItemsLeftType,
+  NavItemsLeftURLType,
+} from "@pageTypes/pageTypes";
 
 export const baseSymbols: BaseSymbolsType = [
   "{}",
@@ -23,6 +27,7 @@ export const navItemsRight: NavItemsRightType = [
   "Stats",
   "About",
   "Experience",
+  "Projects",
   "Contact",
 ];
 

@@ -1,4 +1,4 @@
-export const handleScroll = (id: string) => {
+export const handleScroll = (id: string): void => {
   if (id === "home") {
     window.scrollTo({ top: 0, behavior: "smooth" });
   } else if (id === "stats") {

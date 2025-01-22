@@ -8,6 +8,7 @@ const Intro = () => {
 
   return (
     <section
+      id="home"
       ref={sectionRef}
       className="fixed inset-0 w-screen h-screen flex items-center justify-center overflow-hidden bg-surface-primary"
     >

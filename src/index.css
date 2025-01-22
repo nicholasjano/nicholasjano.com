@@ -34,6 +34,10 @@
   }
 
   .stats-info {
-    @apply flex flex-col items-center justify-center bg-surface-secondary p-4 rounded-xl space-y-2;
+    @apply flex flex-col items-center justify-center bg-surface-primary p-4 rounded-xl space-y-2;
+  }
+
+  .width-scaled {
+    @apply w-[90%];
   }
 }

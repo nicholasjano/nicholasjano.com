@@ -37,3 +37,11 @@ export type BaseSymbolsType = readonly [
   ">>",
   "->"
 ];
+
+export type NavItemsType = readonly [
+  "Home",
+  "Stats",
+  "About",
+  "Experience",
+  "Contact"
+];

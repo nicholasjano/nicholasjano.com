@@ -1,8 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export const useRadius = (): number => {
-  const defaultRadiusDivider = 480
-  const getDefaultRadius = (): number => (window.innerWidth < defaultRadiusDivider ? 40 : 36);
+  const defaultRadiusDivider = 480;
+  const getDefaultRadius = (): number =>
+    window.innerWidth < defaultRadiusDivider ||
+    window.innerHeight < defaultRadiusDivider
+      ? 40
+      : 36;
 
   const [radius, setRadius] = useState<number>(() => getDefaultRadius());
 
@@ -21,16 +25,16 @@ export const useRadius = (): number => {
     };
 
     // Update radius on scroll and resize
-    window.addEventListener('scroll', handleScrollAndResize);
-    window.addEventListener('resize', handleScrollAndResize);
+    window.addEventListener("scroll", handleScrollAndResize);
+    window.addEventListener("resize", handleScrollAndResize);
 
     // Call it once to set the initial radius
     handleScrollAndResize();
 
     // Cleanup
     return (): void => {
-      window.removeEventListener('scroll', handleScrollAndResize);
-      window.removeEventListener('resize', handleScrollAndResize);
+      window.removeEventListener("scroll", handleScrollAndResize);
+      window.removeEventListener("resize", handleScrollAndResize);
     };
   }, []);
 

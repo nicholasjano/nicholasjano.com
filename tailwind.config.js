@@ -3,6 +3,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      screens: {
+        "xs-wh": { raw: "(min-width: 540px) and (min-height: 540px)" },
+      },
       colors: {
         surface: {
           primary: "#141414",

@@ -24,17 +24,25 @@
 
 @layer components {
   .symbol {
-    @apply absolute text-xl sm:text-2xl leading-none;
+    @apply absolute text-xl xs-wh:text-2xl leading-none;
+  }
+
+  .stats-info {
+    @apply flex flex-col items-center justify-center bg-surface-primary p-4 rounded-xl space-y-2;
+  }
+
+  .nav-items {
+    @apply flex items-center gap-8 lg:gap-12;
+  }
+
+  .hamburger-line {
+    @apply w-6 h-0.5 bg-gray-300 group-hover:bg-gray-500 transition-all duration-200 focus:outline-none;
   }
 }
 
 @layer utilities {
   .fade-scale {
     @apply opacity-0 animate-fadeScale will-change-transform;
-  }
-
-  .stats-info {
-    @apply flex flex-col items-center justify-center bg-surface-primary p-4 rounded-xl space-y-2;
   }
 
   .width-scaled {

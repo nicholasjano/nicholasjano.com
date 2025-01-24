@@ -13,8 +13,8 @@ export default {
           stats: "#0A0A0A",
         },
         header: {
-          primary: "rgb(16 17 18 / 0.72)",
-          stroke: "rgb(224 238 252 / 0.15)",
+          primary: "rgb(20 20 20 / 0.75)",
+          stroke: "rgb(127 127 127 / 0.15)",
         },
         brand: {
           green: "#19B345",

@@ -20,6 +20,16 @@
       overflow-x-hidden
       min-h-screen;
   }
+
+  nav {
+    @apply fixed
+      top-0
+      left-0
+      bg-header-primary
+      backdrop-blur-lg
+      backdrop-saturate-150
+      z-40;
+  }
 }
 
 @layer components {

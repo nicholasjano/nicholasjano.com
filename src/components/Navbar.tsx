@@ -89,7 +89,7 @@ const Navbar = () => {
                   </li>
                 ))}
               </ul>
-              <ul className="flex flex-row items-center justify-center gap-10 w-[90%] py-2 mx-auto">
+              <ul className="w-screen flex flex-row items-center justify-center gap-12 py-2">
                 {navItemsLeft.map((item, index) => (
                   <li key={index}>
                     <a
@@ -97,7 +97,7 @@ const Navbar = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setIsOpen(false)}
-                      className="text-[2rem] p-2 text-gray-300 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
+                      className="flex items-center justify-center text-[2rem] w-12 h-12 text-gray-300 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
                       aria-label={`Navigate to ${item.iconName}`}
                     >
                       <FontAwesomeIcon icon={item} />

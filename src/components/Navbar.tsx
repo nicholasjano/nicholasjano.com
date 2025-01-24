@@ -21,7 +21,7 @@ const Navbar = () => {
                     href={navItemsLeftURL[index]}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xl text-gray-300 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
+                    className="text-xl nav-text-colours transition-colors duration-200 focus:outline-none"
                     aria-label={`Navigate to ${item.iconName}`}
                   >
                     <FontAwesomeIcon icon={item} />
@@ -34,7 +34,7 @@ const Navbar = () => {
                 <li key={item}>
                   <button
                     onClick={() => handleScroll(item.toLowerCase())}
-                    className="text-sm text-gray-300 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
+                    className="text-sm nav-text-colours transition-colors duration-200 focus:outline-none"
                     aria-label={`Navigate to ${item}`}
                   >
                     {item}
@@ -81,7 +81,7 @@ const Navbar = () => {
                     }}
                   >
                     <button
-                      className="w-full py-2 navmenu-xs:py-3 text-base text-gray-300 hover:text-gray-500 transition-colors duration-200 text-left focus:outline-none"
+                      className="text-base nav-text-colours w-full py-2 navmenu-xs:py-3 transition-colors duration-200 text-left focus:outline-none"
                       aria-label={`Navigate to ${item}`}
                     >
                       {item}
@@ -97,7 +97,7 @@ const Navbar = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center justify-center text-[2rem] w-12 h-12 text-gray-300 hover:text-gray-500 transition-colors duration-200 focus:outline-none"
+                      className="flex items-center justify-center w-12 h-12 text-[2rem] nav-text-colours transition-colors duration-200 focus:outline-none"
                       aria-label={`Navigate to ${item.iconName}`}
                     >
                       <FontAwesomeIcon icon={item} />

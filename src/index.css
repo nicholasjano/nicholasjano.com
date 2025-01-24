@@ -45,6 +45,10 @@
     @apply flex items-center gap-8 lg:gap-12;
   }
 
+  .nav-text-colours {
+    @apply text-gray-300 hover:text-gray-500;
+  }
+
   .hamburger-line {
     @apply w-6 h-0.5 bg-gray-300 group-hover:bg-gray-500 transition-all duration-200 focus:outline-none;
   }

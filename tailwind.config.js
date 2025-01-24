@@ -5,6 +5,7 @@ export default {
     extend: {
       screens: {
         "xs-wh": { raw: "(min-width: 540px) and (min-height: 540px)" },
+        "xxs-h": { raw: "(min-height: 410px)" },
       },
       colors: {
         surface: {

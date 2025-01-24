@@ -69,7 +69,7 @@ const Navbar = () => {
               isOpen ? "translate-y-0" : "-translate-y-full"
             }`}
           >
-            <div className="mt-12">
+            <div className="mt-4 xxs-h:mt-12">
               <ul className="flex flex-col items-center">
                 {navItemsRight.map((item) => (
                   <li
@@ -81,7 +81,7 @@ const Navbar = () => {
                     }}
                   >
                     <button
-                      className="w-full py-3 text-base text-gray-300 hover:text-gray-500 transition-colors duration-200 text-left focus:outline-none"
+                      className="w-full py-2 xxs-h:py-3 text-base text-gray-300 hover:text-gray-500 transition-colors duration-200 text-left focus:outline-none"
                       aria-label={`Navigate to ${item}`}
                     >
                       {item}

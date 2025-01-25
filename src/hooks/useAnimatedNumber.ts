@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import type { UseAnimatedNumberProps } from "@pageTypes/pageTypes";
+import type { UseAnimatedNumberProps, UseAnimatedNumberReturn } from "@pageTypes/pageTypes";
 
 export const useAnimatedNumber = ({
   end,
   duration = 2000,
   startOnVisible = true,
-}: UseAnimatedNumberProps) => {
+}: UseAnimatedNumberProps): UseAnimatedNumberReturn => {
   const [count, setCount] = useState<number>(0);
   const [isVisible, setIsVisible] = useState<boolean>(!startOnVisible);
   const elementRef = useRef<HTMLSpanElement>(null);
@@ -26,7 +26,8 @@ export const useAnimatedNumber = ({
       observer.observe(elementRef.current);
     }
 
-    return () => {
+    // Cleanup
+    return (): void => {
       if (elementRef.current) {
         observer.unobserve(elementRef.current);
       }

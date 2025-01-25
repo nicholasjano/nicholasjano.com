@@ -13,7 +13,7 @@ export function useScrollManagementRefresh(): void {
     // Force scroll restoration after mount
     const scrollPos: string | null = sessionStorage.getItem('scrollPosition');
     if (scrollPos) {
-      requestAnimationFrame(() => {
+      requestAnimationFrame((): void => {
         window.scrollTo(0, parseInt(scrollPos, 10));
       });
     }

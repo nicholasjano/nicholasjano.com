@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
-export const useResizeObserver = (ref: React.RefObject<HTMLElement>): number => {
+export const useResizeObserver = (
+  ref: React.RefObject<HTMLElement>
+): number => {
   const [size, setSize] = useState(0);
 
   useEffect(() => {
@@ -15,7 +17,7 @@ export const useResizeObserver = (ref: React.RefObject<HTMLElement>): number => 
 
     observer.observe(ref.current);
 
-    return () => observer.disconnect();
+    return (): void => observer.disconnect();
   }, [ref]);
 
   return size;

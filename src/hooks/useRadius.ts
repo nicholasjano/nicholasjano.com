@@ -11,7 +11,7 @@ export const useRadius = (): number => {
   const [radius, setRadius] = useState<number>(() => getDefaultRadius());
 
   useEffect(() => {
-    const handleScrollAndResize = () => {
+    const handleScrollAndResize = (): void => {
       const defaultRadius = getDefaultRadius();
       const viewportHeight = window.innerHeight;
       const scrollY = window.scrollY;

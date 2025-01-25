@@ -14,6 +14,11 @@ export interface UseAnimatedNumberProps {
   startOnVisible?: boolean;
 }
 
+export type UseAnimatedNumberReturn = {
+  count: number;
+  elementRef: React.RefObject<HTMLSpanElement>;
+};
+
 export interface AnimatedNumberProps {
   number: number;
   duration?: number;

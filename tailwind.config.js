@@ -6,7 +6,13 @@ export default {
       screens: {
         "xs-wh": { raw: "(min-width: 540px) and (min-height: 540px)" },
         "navmenu-xs": { raw: "(min-height: 410px)" },
-        "stats-xs": { raw: "(min-height: 380px)" },
+        "stats-cols": {
+          raw: "(min-width: 764px) or ((min-width: 579px) and (max-height: 530px))",
+        },
+        "stats-xs": {
+          raw: "(min-width: 301px) and ((min-height: 560px) or ((min-width: 453px) and (min-height: 480px)) or ((min-width: 579px) and (min-height: 350px)))",
+        },
+        "about-xs": { raw: "(min-width: 420px) and (min-height: 420px)" },
       },
       colors: {
         surface: {

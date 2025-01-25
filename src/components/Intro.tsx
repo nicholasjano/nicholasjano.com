@@ -15,9 +15,7 @@ const Intro = () => {
       <IntroSymbols size={size} />
 
       <div className="flex flex-col items-center justify-center text-center space-y-2 z-20">
-        <h1 className="text-4xl xs-wh:text-5xl font-bold bg-gradient-to-r from-brand-green from-20% via-brand-blue via-50% to-brand-green to-80% text-transparent bg-clip-text bg-400% animate-gradient">
-          Nicholas Jano
-        </h1>
+        <h1>Nicholas Jano</h1>
         <p className="text-base xs-wh:text-xl">Student at Queen's University</p>
         <p className="text-base xs-wh:text-xl">Software Engineer</p>
       </div>

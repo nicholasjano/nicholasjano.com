@@ -6,16 +6,16 @@ const About = () => {
   return (
     <section
       id="about"
-      className="relative w-screen min-h-screen flex flex-col items-center bg-surface-primary pt-24 pb-12 space-y-12"
+      className="relative w-screen flex flex-col items-center bg-surface-primary pt-24 pb-12 space-y-12"
     >
-      <div className="width-scaled flex flex-col text-left space-y-2">
+      <div className="width-scaled flex flex-col text-center sm:text-left space-y-2">
         <h2>About me</h2>
         <p className="under-h2">
           Every developer has a story -{" "}
           <span className="text-brand-green">here's mine.</span>
         </p>
       </div>
-      <div className="width-scaled flex flex-row justify-start space-x-12">
+      <div className="width-scaled flex flex-col sm:flex-row items-center sm:items-start gap-12">
         <img
           src={nickImage}
           alt="Photo of Nicholas Jano"

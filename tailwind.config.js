@@ -10,7 +10,7 @@ export default {
           raw: "(min-width: 764px) or ((min-width: 579px) and (max-height: 530px))",
         },
         "stats-xs": {
-          raw: "(min-width: 301px) and ((min-height: 560px) or ((min-width: 453px) and (min-height: 480px)) or ((min-width: 579px) and (min-height: 350px)))",
+          raw: "(min-width: 301px) and ((min-height: 560px) or ((min-width: 453px) and (min-height: 500px)) or ((min-width: 579px) and (min-height: 350px)))",
         },
         "about-xs": { raw: "(min-width: 420px) and (min-height: 420px)" },
       },

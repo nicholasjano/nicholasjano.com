@@ -30,6 +30,10 @@
       backdrop-saturate-150
       z-40;
   }
+
+  h2 {
+    @apply text-3xl sm:text-4xl font-semibold;
+  }
 }
 
 @layer components {
@@ -51,6 +55,10 @@
 
   .hamburger-line {
     @apply w-6 h-0.5 bg-gray-300 group-hover:bg-gray-500 transition-all duration-200 focus:outline-none;
+  }
+
+  .under-h2 {
+    @apply text-xl sm:text-2xl font-medium;
   }
 }
 

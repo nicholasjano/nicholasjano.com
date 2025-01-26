@@ -55,6 +55,7 @@ const languages: readonly StackItemsType[] = [
   { name: "CSS", icon: "devicon-css3-plain" },
   { name: "JavaScript", icon: "devicon-javascript-plain" },
   { name: "TypeScript", icon: "devicon-typescript-plain" },
+  { name: "SQL", icon: "devicon-azuresqldatabase-plain" },
   { name: "Swift", icon: "devicon-swift-plain" },
   { name: "Kotlin", icon: "devicon-kotlin-plain" },
 ];

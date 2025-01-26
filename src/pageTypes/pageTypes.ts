@@ -1,5 +1,3 @@
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-
 export interface IntroSymbolsProp {
   size: number;
 }
@@ -30,34 +28,12 @@ export interface SymbolInformation {
   vertical: string;
 }
 
-export type BaseSymbolsType = readonly [
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string
-];
+export type StackItemsType = {
+  name: string;
+  icon: string;
+};
 
-export type NavItemsRightType = readonly [
-  string,
-  string,
-  string,
-  string,
-  string,
-  string
-];
-
-export type NavItemsLeftType = readonly [
-  IconDefinition,
-  IconDefinition,
-  IconDefinition
-];
-
-export type NavItemsLeftURLType = readonly [string, string, string];
+export type StackListProps = {
+  title: string;
+  items: readonly StackItemsType[];
+};

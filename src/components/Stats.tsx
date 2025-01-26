@@ -9,8 +9,7 @@ const Stats = () => {
             <h2>My Monthly Stats</h2>
             <p className="under-header">12/21/24 - 01/21/25</p>
           </div>
-
-          <div className="grid grid-rows-3 stats-cols:grid-rows-none stats-cols:grid-cols-3 gap-2 stats-xs:gap-4 text-center text-base sm:text-lg font-normal mx-12">
+          <div className="w-fit stats-cols:width-scaled max-w-screen-2xl grid grid-rows-3 stats-cols:grid-rows-none stats-cols:grid-cols-3 gap-2 stats-xs:gap-4 text-center text-base sm:text-lg font-normal mx-12 stats-cols:mx-0">
             <div className="stats-info">
               <p className="font-medium">GitHub</p>
               <p>

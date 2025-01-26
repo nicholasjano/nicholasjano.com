@@ -75,6 +75,14 @@
   .under-header {
     @apply text-xl sm:text-2xl font-medium;
   }
+
+  .stack-title {
+    @apply text-lg sm:text-xl font-medium;
+  }
+
+  .stack-icon {
+    @apply w-10 h-10 flex justify-center items-center bg-surface-tertiary rounded-full flex-shrink-0;
+  }
 }
 
 @layer utilities {

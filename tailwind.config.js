@@ -1,7 +1,14 @@
 /** @type {import('tailwindcss').Config} */
+import defaultTheme from 'tailwindcss/defaultTheme'
+const { screens } = defaultTheme
+
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
+    screens: {
+      xs: "520px",
+      ...screens,
+    },
     extend: {
       screens: {
         "xs-wh": { raw: "(min-width: 540px) and (min-height: 540px)" },
@@ -18,6 +25,7 @@ export default {
         surface: {
           primary: "#141414",
           secondary: "#1E1E1E",
+          tertiary: "#282828",
           stats: "#0A0A0A",
         },
         header: {

@@ -5,7 +5,7 @@ const About = () => {
   const paragraphs = personalDescription.trim().split("\n\n");
   return (
     <section id="about" className="relative w-screen bg-surface-primary">
-      <div className="width-scaled mx-auto pt-24 pb-16 space-y-12 flex flex-col items-center border-b border-header-stroke/50">
+      <div className="width-scaled max-w-screen-2xl mx-auto pt-24 pb-16 space-y-12 flex flex-col items-center border-b border-header-stroke/50">
         <div className="w-full flex flex-col text-center lg:text-left space-y-2">
           <h2>About me</h2>
           <p className="under-header">

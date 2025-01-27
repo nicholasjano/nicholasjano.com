@@ -5,6 +5,7 @@ import Stats from "@components/Stats";
 import Spacer from "@components/Spacer";
 import About from "@components/About";
 import TechStack from "@components/TechStack";
+import Experience from "@components/Experience";
 
 function App() {
   useScrollManagementRefresh();
@@ -16,6 +17,7 @@ function App() {
       <Spacer />
       <About />
       <TechStack />
+      <Experience />
     </>
   );
 }

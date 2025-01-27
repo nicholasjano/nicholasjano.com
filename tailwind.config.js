@@ -26,7 +26,7 @@ export default {
           primary: "#141414",
           secondary: "#1E1E1E",
           tertiary: "#282828",
-          stats: "#0A0A0A",
+          dark: "#0A0A0A",
         },
         header: {
           primary: "rgb(20 20 20 / 0.75)",

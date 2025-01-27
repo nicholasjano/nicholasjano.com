@@ -1,9 +1,9 @@
 const Experience = () => {
   return (
-    <div
+    <section
       id="experience"
-      className="relative bg-surface-stats w-screen min-h-screen"
-    ></div>
+      className="relative bg-surface-dark w-screen min-h-screen"
+    ></section>
   );
 };
 

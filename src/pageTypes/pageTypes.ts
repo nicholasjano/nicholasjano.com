@@ -37,3 +37,11 @@ export type StackListProps = {
   title: string;
   items: readonly StackItemsType[];
 };
+
+export type RoleInfo = {
+  image: string;
+  role: string;
+  company: string;
+  period: string;
+  highlights: string;
+};

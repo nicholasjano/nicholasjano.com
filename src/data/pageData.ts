@@ -1,7 +1,9 @@
 import { faFile } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedin, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import type { StackItemsType } from "@pageTypes/pageTypes";
+import type { StackItemsType, RoleInfo } from "@pageTypes/pageTypes";
+import MarmonRail from "../assets/MarmonRail.webp";
+import NetSolutionsTime from "../assets/NetSolutionsTime.webp";
 
 export const baseSymbols: readonly string[] = [
   "{}",
@@ -40,9 +42,9 @@ export const navItemsLeftURL: readonly string[] = [
 ];
 
 export const personalDescription: string = `
-  Hi, I'm Nicholas Jano, a Software Engineer and final-year Bachelor of Computing student at Queen's University in Ontario, Canada. Ever since I was a kid, I've been fascinated by computers and how they work. I started in elementary school, creating mini-applications with JavaScript and ActionScript. This early passion led me to keep learning and constantly expand my technical skills, shaping me into the engineer I am today.
+Hi, I'm Nicholas Jano, a Software Engineer and final-year Bachelor of Computing student at Queen's University in Ontario, Canada. Ever since I was a kid, I've been fascinated by computers and how they work. I started in elementary school, creating mini-applications with JavaScript and ActionScript. This early passion led me to keep learning and constantly expand my technical skills, shaping me into the engineer I am today.
 
-  In the ever-evolving field of Software Engineering, I strive to stay in a consistent state of learning and innovation so I can develop software solutions that make a meaningful impact. I'm driven by the challenge of tackling new problems and exploring emerging technologies. From working on personal projects to participating in hackathons, I always seek new opportunities to learn and develop. Over the years, I've gained experience across the full development stack, including designing system architecture, building scalable backend services, and developing responsive frontend applications. By combining my creativity with my technical skills, I can create innovative applications that solve everyday problems.
+In the ever-evolving field of Software Engineering, I strive to stay in a consistent state of learning and innovation so I can develop software solutions that make a meaningful impact. I'm driven by the challenge of tackling new problems and exploring emerging technologies. From working on personal projects to participating in hackathons, I always seek new opportunities to learn and develop. Over the years, I've gained experience across the full development stack, including designing system architecture, developing responsive frontend applications, and building scalable backend services. By combining my creativity with my technical skills, I can create innovative applications that solve everyday problems.
 `;
 
 const languages: readonly StackItemsType[] = [
@@ -122,4 +124,33 @@ export const stackItems: readonly [
   frameworksAndLibraries,
   platformsAndInfrastructure,
   developerTools,
+];
+
+const MarmonRailInfo: RoleInfo = {
+  image: MarmonRail,
+  role: "Data Engineer Intern",
+  company: "Marmon Rail and Leasing Group",
+  period: "June 2024 - August 2024",
+  highlights: `
+In this position, I evaluated and utilized the ontology-powered Palantir Foundry platform to build ETL pipelines with Pipeline Builder, create LLM functions using AIP Assist, and design dashboards with Workshop and Quiver. One of my key achievements was developing a custom dashboard from scratch in just three days using Pipeline Builder, Workshop, and Quiver, which significantly improved data visualization and supported better decision-making processes.
+
+I also engineered and optimized Azure Synapse data pipelines to perform ETL from raw data into an Azure Data Lake. Additionally, I designed and implemented Power BI dashboards that were utilized by over 100 business users, enhancing operational efficiency and supporting data-driven decision-making through insightful visualizations.
+`,
+};
+
+const NetSolutionsTimeInfo: RoleInfo = {
+  image: NetSolutionsTime,
+  role: "Software Engineer Intern",
+  company: "NetSolutionsTime",
+  period: "May 2023 - August 2023",
+  highlights: `
+During this role, I collaborated closely with internal stakeholders to gather functional requirements, develop technical specifications, and implement comprehensive test plans.
+
+A significant achievement of mine was implementing RESTful APIs and microservices for enterprise integration applications that consolidated data for over 15 million customers of a major North American financial institution. This implementation enabled a comprehensive Customer 360 view using Informatica MDM technologies. I also customized and deployed code to a Microsoft Azure Cloud Database, incorporating robust error handling and monitoring systems to ensure reliable performance.
+`,
+};
+
+export const ExperienceInfos: RoleInfo[] = [
+  MarmonRailInfo,
+  NetSolutionsTimeInfo,
 ];

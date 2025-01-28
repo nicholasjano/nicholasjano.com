@@ -6,6 +6,7 @@ import Spacer from "@components/Spacer";
 import About from "@components/About";
 import TechStack from "@components/TechStack";
 import Experience from "@components/Experience";
+import Projects from "@components/Projects";
 
 function App() {
   useScrollManagementRefresh();
@@ -18,6 +19,7 @@ function App() {
       <About />
       <TechStack />
       <Experience />
+      <Projects />
     </>
   );
 }

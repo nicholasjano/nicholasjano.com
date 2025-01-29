@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import type { RoleInfo } from "@pageTypes/pageTypes";
@@ -17,7 +17,7 @@ const ExperienceCard = ({
   const { maxHeight, isResizing } = useResizeHeight({ contentRef });
 
   return (
-    <div className="bg-surface-primary p-8 rounded-[2.75rem] flex flex-col space-y-4">
+    <div className="bg-surface-primary p-6 rounded-[2.25rem] flex flex-col space-y-4">
       <div className="relative h-72 sm:h-96 rounded-xl overflow-hidden flex-shrink-0">
         <img
           src={image}

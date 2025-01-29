@@ -1,12 +1,12 @@
-export interface IntroSymbolsProp {
+export type IntroSymbolsProp = {
   size: number;
 }
 
-export interface SymbolGenerationProp {
+export type SymbolGenerationProp = {
   radius: number;
 }
 
-export interface UseAnimatedNumberProps {
+export type UseAnimatedNumberProps = {
   end: number;
   duration?: number;
   startOnVisible?: boolean;
@@ -17,7 +17,7 @@ export type UseAnimatedNumberReturn = {
   elementRef: React.RefObject<HTMLSpanElement>;
 };
 
-export interface AnimatedNumberProps {
+export type AnimatedNumberProps = {
   number: number;
   duration?: number;
 }
@@ -31,7 +31,7 @@ export type UseResizeHeightsReturn = {
   isResizing: boolean;
 };
 
-export interface SymbolInformation {
+export type SymbolInformation = {
   text: string;
   horizontal: string;
   vertical: string;

@@ -59,7 +59,7 @@ const ExperienceCard = ({
         >
           <FontAwesomeIcon
             icon={faChevronDown}
-            className={`text-2xl text-brand-green transition-transform duration-1000 ${
+            className={`text-2xl text-brand-green transition-transform duration-1000 ease-in-out ${
               isExpanded ? "rotate-180 translate-y-[2px]" : "-translate-y-[1px]"
             }`}
           />

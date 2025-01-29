@@ -1,16 +1,16 @@
 export type IntroSymbolsProp = {
   size: number;
-}
+};
 
 export type SymbolGenerationProp = {
   radius: number;
-}
+};
 
 export type UseAnimatedNumberProps = {
   end: number;
   duration?: number;
   startOnVisible?: boolean;
-}
+};
 
 export type UseAnimatedNumberReturn = {
   count: number;
@@ -20,7 +20,7 @@ export type UseAnimatedNumberReturn = {
 export type AnimatedNumberProps = {
   number: number;
   duration?: number;
-}
+};
 
 export type UseResizeHeightsProp = {
   contentRef: React.RefObject<HTMLDivElement>;
@@ -35,7 +35,7 @@ export type SymbolInformation = {
   text: string;
   horizontal: string;
   vertical: string;
-}
+};
 
 export type StackItemsType = {
   name: string;

@@ -22,6 +22,15 @@ export interface AnimatedNumberProps {
   duration?: number;
 }
 
+export type UseResizeHeightsProp = {
+  contentRef: React.RefObject<HTMLDivElement>;
+};
+
+export type UseResizeHeightsReturn = {
+  maxHeight: number;
+  isResizing: boolean;
+};
+
 export interface SymbolInformation {
   text: string;
   horizontal: string;

@@ -91,14 +91,6 @@
   .component-base {
     @apply width-scaled max-w-screen-2xl mx-auto pt-24 pb-16 space-y-12 flex flex-col items-center;
   }
-
-  .experience-divider > :not(:first-child) {
-    @apply pt-4;
-  }
-
-  .experience-divider > :not(:last-child) {
-    @apply pb-4 border-b border-header-stroke/50;
-  }
 }
 
 @layer utilities {

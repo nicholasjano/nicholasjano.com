@@ -11,7 +11,7 @@ const Experience = () => {
             A closer look at my professional journey.
           </p>
         </div>
-        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {ExperienceInfos.map((experience) => (
             <ExperienceCard {...experience} />
           ))}

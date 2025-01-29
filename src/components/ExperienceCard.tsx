@@ -64,7 +64,7 @@ const ExperienceCard = ({
             }`}
           />
           <span className="translate-y-[1px]">
-            {isExpanded ? "Show Less" : "Learn More"}
+            {isExpanded ? "Hide Details" : "View Details"}
           </span>
         </button>
       </div>

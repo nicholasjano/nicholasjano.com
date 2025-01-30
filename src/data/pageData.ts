@@ -10,6 +10,8 @@ import MarmonRail from "../assets/MarmonRail.webp";
 import NetSolutionsTime from "../assets/NetSolutionsTime.webp";
 import LeetBuddy from "../assets/LeetBuddy.webp";
 
+export const latestProject = "LeetBuddy";
+
 export const baseSymbols: readonly string[] = [
   "{}",
   "++",
@@ -161,13 +163,14 @@ export const ExperienceInfos: RoleInfo[] = [
 ];
 
 const LeetBuddyInfo: ProjectInfo = {
+  id: "leetbuddy",
   image: LeetBuddy,
   title: "LeetBuddy",
   description:
     "LeetBuddy is a Google Chrome Extension that enhances LeetCode problem-solving with AI-powered explanations, hints, and coding assistance. It provides a built-in whiteboard for visualizing problems and supports real-time guidance during coding sessions. The extension also tracks the conversation history to offer a seamless and personalized learning experience, leveraging Google Gemini's multimodal capabilities for both text and image-based inputs.",
   links: {
     github: "https://github.com/LeetBuddyAI/LeetBuddy",
-    view: "https://chromewebstore.google.com/detail/leetbuddy/nlemdecocfoaimdbfgpilfgdmcllhphn",
+    preview: "https://chromewebstore.google.com/detail/leetbuddy/nlemdecocfoaimdbfgpilfgdmcllhphn",
   },
 };
 

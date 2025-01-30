@@ -1,5 +1,9 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRocket } from "@fortawesome/free-solid-svg-icons";
 import AnimatedNumber from "@components/AnimatedNumber";
-import { getMonthlyDates } from "@utilities/GetDateEST"
+import { latestProject } from "@data/pageData";
+import { getMonthlyDates } from "@utilities/GetDateEST";
+import { handleScroll } from "@utilities/ScrollingUtilities";
 
 const Stats = () => {
   const { prevMonth, currMonth } = getMonthlyDates();
@@ -9,9 +13,11 @@ const Stats = () => {
         <div className="h-full w-full flex flex-col justify-center items-center space-y-4 stats-xs:space-y-20">
           <div className="flex flex-col justify-center items-center text-center space-y-2">
             <h2>My Monthly Stats</h2>
-            <p className="under-header">{prevMonth} - {currMonth}</p>
+            <p className="under-header">
+              {prevMonth} - {currMonth}
+            </p>
           </div>
-          <div className="w-fit stats-cols:width-scaled max-w-screen-2xl grid grid-rows-3 stats-cols:grid-rows-none stats-cols:grid-cols-3 gap-2 stats-xs:gap-4 text-center text-base sm:text-lg font-normal mx-12 stats-cols:mx-0">
+          <div className="w-fit stats-cols:width-scaled max-w-screen-2xl grid grid-rows-3 stats-cols:grid-rows-none stats-cols:grid-cols-3 gap-2 stats-xs:gap-4 text-center text-base sm:text-lg mx-12 stats-cols:mx-0">
             <div className="stats-info">
               <p className="font-medium">GitHub</p>
               <p>
@@ -21,7 +27,24 @@ const Stats = () => {
             </div>
             <div className="stats-info">
               <p className="font-medium">Latest Project</p>
-              <p>LeetBuddy</p>
+              <div className="overflow-y-visible">
+                <button
+                  onClick={() =>
+                    handleScroll(latestProject.toLowerCase(), true)
+                  }
+                  className="link-hover py-3 -my-3 sm:py-2.5 sm:-my-2.5 after:bottom-3 sm:after:bottom-2.5 text-brand-blue"
+                  aria-label={`Navigate to ${latestProject}`}
+                >
+                  {latestProject}
+                  <span className="ml-1.5 text-sm sm:text-base">
+                    <FontAwesomeIcon
+                      icon={faRocket}
+                      className="translate-y-[1px]"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </button>
+              </div>
             </div>
             <div className="stats-info">
               <p className="font-medium">LeetCode</p>

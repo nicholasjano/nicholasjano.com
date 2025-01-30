@@ -56,11 +56,12 @@ export type RoleInfo = {
 };
 
 export type ProjectInfo = {
+  id: string;
   image: string;
   title: string;
   description: string;
   links: {
     github?: string;
-    view?: string;
+    preview?: string;
   };
 };

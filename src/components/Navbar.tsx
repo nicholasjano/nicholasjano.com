@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useScreenSize } from "@hooks/useScreenSize";
 import { navItemsRight, navItemsLeft, navItemsLeftURL } from "@data/pageData";
-import { handleScroll } from "@utilities/NavbarUtilities";
+import { handleScroll } from "@utilities/ScrollingUtilities";
 import { useState } from "react";
 
 const Navbar = () => {

@@ -92,16 +92,17 @@
     @apply width-scaled max-w-screen-2xl mx-auto pt-24 pb-16 space-y-12 flex flex-col items-center;
   }
 
-  .project-link-hover {
-    @apply relative py-2.5 -my-2.5 overflow-hidden;
+  /* For link-hover, to ensure button click range is big enough, add py-X -my-X after:bottom-X */
+  .link-hover {
+    @apply relative overflow-hidden;
   }
 
-  .project-link-hover::after {
+  .link-hover::after {
     content: "";
-    @apply absolute left-0 bottom-2.5 h-[2px] w-full bg-current origin-center scale-x-0 transition-transform duration-500;
+    @apply absolute left-0 bottom-0 h-[2px] w-full bg-current origin-center scale-x-0 transition-transform duration-500;
   }
 
-  .project-link-hover:hover::after {
+  .link-hover:hover::after {
     @apply scale-x-100;
   }
 

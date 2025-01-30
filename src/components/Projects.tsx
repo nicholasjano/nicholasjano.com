@@ -1,3 +1,6 @@
+import { ProjectInfos } from "@data/pageData";
+import ProjectCard from "@components/ProjectCard";
+
 const Projects = () => {
   return (
     <section
@@ -10,6 +13,11 @@ const Projects = () => {
           <p className="under-header">
             Here's what I've been building along the way.
           </p>
+        </div>
+        <div className="project-list">
+          {ProjectInfos.map((project) => (
+            <ProjectCard {...project} />
+          ))}
         </div>
       </div>
     </section>

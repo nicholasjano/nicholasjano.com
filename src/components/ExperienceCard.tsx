@@ -27,7 +27,7 @@ const ExperienceCard = ({
       </div>
       <div className="w-full flex flex-col">
         <div className="flex flex-col space-y-1 pb-4 border-b border-header-stroke/50">
-          <h3 className="text-xl sm:text-2xl font-medium text-brand-green">
+          <h3 className="under-header text-brand-green">
             {role}
           </h3>
           <p>{company}</p>

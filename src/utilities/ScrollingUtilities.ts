@@ -1,3 +1,7 @@
+const rootFontSize = parseFloat(
+  getComputedStyle(document.documentElement).fontSize
+);
+
 export const handleScroll = (id: string, push: boolean = false): void => {
   if (id === "home") {
     // If home, go to the top
@@ -12,8 +16,7 @@ export const handleScroll = (id: string, push: boolean = false): void => {
     if (section) {
       if (push) {
         // Calculate 3rem offset for navbar when going to a specific project
-        const offset =
-          3 * parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const offset = 3 * rootFontSize;
         const position =
           section.getBoundingClientRect().top + window.scrollY - offset;
 

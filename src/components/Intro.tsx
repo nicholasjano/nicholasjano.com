@@ -3,13 +3,13 @@ import IntroSymbols from "@components/IntroSymbols";
 import { useResizeObserver } from "@hooks/useResizeObserver";
 
 const Intro = () => {
-  const sectionRef: React.RefObject<HTMLElement> = useRef<HTMLElement>(null);
-  const size: number = useResizeObserver(sectionRef);
+  const headerRef: React.RefObject<HTMLElement> = useRef<HTMLElement>(null);
+  const size: number = useResizeObserver(headerRef);
 
   return (
-    <section
+    <header
       id="home"
-      ref={sectionRef}
+      ref={headerRef}
       className="fixed inset-0 w-screen h-screen flex items-center justify-center overflow-hidden bg-surface-primary"
     >
       <IntroSymbols size={size} />
@@ -19,7 +19,7 @@ const Intro = () => {
         <p className="text-base xs-wh:text-xl">Student at Queen's University</p>
         <p className="text-base xs-wh:text-xl">Software Engineer</p>
       </div>
-    </section>
+    </header>
   );
 };
 

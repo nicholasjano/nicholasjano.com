@@ -7,19 +7,23 @@ import About from "@components/About";
 import TechStack from "@components/TechStack";
 import Experience from "@components/Experience";
 import Projects from "@components/Projects";
+import Contact from "@components/Contact";
 
 function App() {
   useScrollManagementRefresh();
   return (
     <>
       <Navbar />
-      <Intro />
-      <Stats />
-      <Spacer />
-      <About />
-      <TechStack />
-      <Experience />
-      <Projects />
+      <main>
+        <Intro />
+        <Stats />
+        <Spacer />
+        <About />
+        <TechStack />
+        <Experience />
+        <Projects />
+        <Contact />
+      </main>
     </>
   );
 }

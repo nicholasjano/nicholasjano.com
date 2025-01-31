@@ -194,16 +194,6 @@ const IndigenousArtGalleyInfo: ProjectInfo = {
   links: {},
 };
 
-const LavishDiscordChatBotInfo: ProjectInfo = {
-  image: LavishDiscordChatBot,
-  title: "Lavish - Discord Chat Bot",
-  description:
-    "Lavish is a Discord bot that I created using Discord.py. The bot comes packed with features, including a global weather tracker, meme captioning system, user/server information commands, activity viewer, and lots more. It connects to several APIs to fetch data, like using the OWM API for live weather updates. The bot has grown to serve over 45,000 users.",
-  links: {
-    github: "https://github.com/nicholasjano/LavishDiscordBot",
-  },
-};
-
 const KeepUpChampionsInfo: ProjectInfo = {
   image: KeepUpChampions,
   title: "Keep Up Champions",
@@ -215,10 +205,20 @@ const KeepUpChampionsInfo: ProjectInfo = {
   },
 };
 
+const LavishDiscordChatBotInfo: ProjectInfo = {
+  image: LavishDiscordChatBot,
+  title: "Lavish - Discord Chat Bot",
+  description:
+    "Lavish is a Discord bot that I created using Discord.py. The bot comes packed with features, including a global weather tracker, meme captioning system, user/server information commands, activity viewer, and lots more. It connects to several APIs to fetch data, like using the OWM API for live weather updates. The bot has grown to serve over 45,000 users.",
+  links: {
+    github: "https://github.com/nicholasjano/LavishDiscordBot",
+  },
+};
+
 export const ProjectInfos: ProjectInfo[] = [
   LeetBuddyInfo,
   VillaraInfo,
   IndigenousArtGalleyInfo,
-  LavishDiscordChatBotInfo,
   KeepUpChampionsInfo,
+  LavishDiscordChatBotInfo,
 ];

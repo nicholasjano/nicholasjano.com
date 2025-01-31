@@ -3,12 +3,15 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import type { ProjectInfo } from "@pageTypes/pageTypes";
 
-const ProjectCard = ({ id, image, title, description, links }: ProjectInfo) => {
+const ProjectCard = ({ image, title, description, links }: ProjectInfo) => {
   const hasGitHub = Boolean(links?.github?.trim());
   const hasPreview = Boolean(links?.preview?.trim());
 
   return (
-    <div id={id} className="w-full flex flex-col items-center gap-12">
+    <div
+      id={title.toLowerCase()}
+      className="w-full flex flex-col items-center gap-12"
+    >
       <img
         src={image}
         alt="Project Mockup"

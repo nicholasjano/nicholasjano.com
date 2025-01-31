@@ -9,6 +9,10 @@ import type {
 import MarmonRail from "../assets/MarmonRail.webp";
 import NetSolutionsTime from "../assets/NetSolutionsTime.webp";
 import LeetBuddy from "../assets/LeetBuddy.webp";
+import Villara from "../assets/Villara.webp";
+import KeepUpChampions from "../assets/KeepUpChampions.webp";
+import IndigenousArtGallery from "../assets/IndigenousArtGallery.webp";
+import LavishDiscordChatBot from "../assets/LavishDiscordChatBot.webp";
 
 export const latestProject = "LeetBuddy";
 
@@ -163,20 +167,58 @@ export const ExperienceInfos: RoleInfo[] = [
 ];
 
 const LeetBuddyInfo: ProjectInfo = {
-  id: "leetbuddy",
   image: LeetBuddy,
   title: "LeetBuddy",
   description:
     "LeetBuddy is a Google Chrome Extension that enhances LeetCode problem-solving with AI-powered explanations, hints, and coding assistance. It provides a built-in whiteboard for visualizing problems and supports real-time guidance during coding sessions. The extension also tracks the conversation history to offer a seamless and personalized learning experience, leveraging Google Gemini's multimodal capabilities for both text and image-based inputs.",
   links: {
     github: "https://github.com/LeetBuddyAI/LeetBuddy",
-    preview: "https://chromewebstore.google.com/detail/leetbuddy/nlemdecocfoaimdbfgpilfgdmcllhphn",
+    preview:
+      "https://chromewebstore.google.com/detail/leetbuddy/nlemdecocfoaimdbfgpilfgdmcllhphn",
+  },
+};
+
+const VillaraInfo: ProjectInfo = {
+  image: Villara,
+  title: "Villara",
+  description:
+    "Villara is a full-stack web application to connect those with talents in freelancing and trade skills to potential customers and clients within a community. Services include haircuts, nails, automotive repairs, and more in the coming future. Villara is currently still in development.",
+  links: {},
+};
+
+const IndigenousArtGalleyInfo: ProjectInfo = {
+  image: IndigenousArtGallery,
+  title: "Indigenous Art Gallery",
+  description:
+    "I'm currently developing an interactive Indigenous Art Gallery to preserve Indigenous history and educate students and researchers on Indigenous artwork and history. The art gallery is a full-stack web application that utilizes various forms of media and has built-in accessibility features. The application will be complete on March 31st, 2025.",
+  links: {},
+};
+
+const LavishDiscordChatBotInfo: ProjectInfo = {
+  image: LavishDiscordChatBot,
+  title: "Lavish - Discord Chat Bot",
+  description:
+    "Lavish is a Discord bot that I created using Discord.py. The bot comes packed with features, including a global weather tracker, meme captioning system, user/server information commands, activity viewer, and lots more. It connects to several APIs to fetch data, like using the OWM API for live weather updates. The bot has grown to serve over 45,000 users.",
+  links: {
+    github: "https://github.com/nicholasjano/LavishDiscordBot",
+  },
+};
+
+const KeepUpChampionsInfo: ProjectInfo = {
+  image: KeepUpChampions,
+  title: "Keep Up Champions",
+  description:
+    "Keep Up Champions is a Roblox Simulator game. Core software engineering principles were incorporated into the development process of the game. The game has a lifetime of over 15,000 visits with an 86% positive like-to-dislike ratio and made a 400% gain on investment.",
+  links: {
+    preview:
+      "https://www.roblox.com/games/7167348960/WORLD-CUP-Keep-Up-Champions",
   },
 };
 
 export const ProjectInfos: ProjectInfo[] = [
   LeetBuddyInfo,
-  LeetBuddyInfo,
-  LeetBuddyInfo,
-  LeetBuddyInfo,
+  VillaraInfo,
+  IndigenousArtGalleyInfo,
+  LavishDiscordChatBotInfo,
+  KeepUpChampionsInfo,
 ];

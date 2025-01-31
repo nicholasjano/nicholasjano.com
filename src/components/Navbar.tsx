@@ -3,10 +3,13 @@ import { useScreenSize } from "@hooks/useScreenSize";
 import { navItemsRight, navItemsLeft, navItemsLeftURL } from "@data/pageData";
 import { handleScroll } from "@utilities/ScrollingUtilities";
 import { useState } from "react";
+import { useIconPadding } from "@hooks/useIconPadding";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const isLargeScreen = useScreenSize();
+
+  const { linkRefs, paddings } = useIconPadding(navItemsLeft);
 
   return (
     <>
@@ -16,12 +19,17 @@ const Navbar = () => {
           <div className="h-full width-scaled flex items-center justify-between">
             <ul className="nav-items">
               {navItemsLeft.map((item, index) => (
-                <li key={index}>
+                <li className="h-full flex items-center" key={index}>
                   <a
+                    ref={linkRefs[index]}
                     href={navItemsLeftURL[index]}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xl nav-text-colours transition-colors duration-200 focus:outline-none"
+                    style={{
+                      padding: `0 ${paddings[index]}`,
+                      margin: `0 -${paddings[index]}`,
+                    }}
+                    className="h-full flex items-center text-xl nav-text-colours transition-colors duration-200 focus:outline-none"
                     aria-label={`Navigate to ${item.iconName}`}
                   >
                     <FontAwesomeIcon icon={item} />
@@ -31,10 +39,10 @@ const Navbar = () => {
             </ul>
             <ul className="nav-items">
               {navItemsRight.map((item) => (
-                <li key={item}>
+                <li className="h-full flex items-center" key={item}>
                   <button
                     onClick={() => handleScroll(item.toLowerCase())}
-                    className="text-sm nav-text-colours transition-colors duration-200 focus:outline-none"
+                    className="h-full text-sm nav-text-colours transition-colors duration-200 focus:outline-none"
                     aria-label={`Navigate to ${item}`}
                   >
                     {item}

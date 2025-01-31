@@ -1,3 +1,5 @@
+import { RefObject } from "react";
+
 export type IntroSymbolsProp = {
   size: number;
 };
@@ -14,7 +16,7 @@ export type UseAnimatedNumberProps = {
 
 export type UseAnimatedNumberReturn = {
   count: number;
-  elementRef: React.RefObject<HTMLSpanElement>;
+  elementRef: RefObject<HTMLSpanElement>;
 };
 
 export type AnimatedNumberProps = {
@@ -23,7 +25,7 @@ export type AnimatedNumberProps = {
 };
 
 export type UseResizeHeightsProp = {
-  contentRef: React.RefObject<HTMLDivElement>;
+  contentRef: RefObject<HTMLDivElement>;
 };
 
 export type UseResizeHeightsReturn = {
@@ -64,4 +66,9 @@ export type ProjectInfo = {
     github?: string;
     preview?: string;
   };
+};
+
+export type IconPaddingReturn = {
+  linkRefs: RefObject<HTMLAnchorElement>[];
+  paddings: string[];
 };

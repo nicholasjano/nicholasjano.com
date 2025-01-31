@@ -61,7 +61,7 @@
   }
 
   .nav-items {
-    @apply flex items-center gap-8 lg:gap-12;
+    @apply h-10 flex items-center gap-8 lg:gap-12;
   }
 
   .nav-text-colours {

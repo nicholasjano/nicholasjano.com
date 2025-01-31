@@ -12,8 +12,8 @@ const Experience = () => {
           </p>
         </div>
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          {ExperienceInfos.map((experience) => (
-            <ExperienceCard {...experience} />
+          {ExperienceInfos.map((experience, index) => (
+            <ExperienceCard key={index} {...experience} />
           ))}
         </div>
       </div>

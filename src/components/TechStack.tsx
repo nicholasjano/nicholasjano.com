@@ -15,7 +15,7 @@ const TechStack = () => {
         </h3>
         <div className="w-full grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
           {stackTitles.map((title, index) => (
-            <StackCard title={title} items={stackItems[index]} />
+            <StackCard key={index} title={title} items={stackItems[index]} />
           ))}
         </div>
       </div>

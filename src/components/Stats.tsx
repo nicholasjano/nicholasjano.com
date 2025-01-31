@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRocket } from "@fortawesome/free-solid-svg-icons";
+import { faDownLong } from "@fortawesome/free-solid-svg-icons";
 import AnimatedNumber from "@components/AnimatedNumber";
 import { latestProject } from "@data/pageData";
 import { getMonthlyDates } from "@utilities/GetDateEST";
@@ -38,8 +38,7 @@ const Stats = () => {
                   {latestProject}
                   <span className="ml-1.5 text-sm sm:text-base">
                     <FontAwesomeIcon
-                      icon={faRocket}
-                      className="translate-y-[1px]"
+                      icon={faDownLong}
                       aria-hidden="true"
                     />
                   </span>

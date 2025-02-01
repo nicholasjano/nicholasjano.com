@@ -1,68 +1,130 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@layer base {
+  *,
+  *::before,
+  *::after {
+    @apply box-border
+      p-0
+      m-0;
   }
-  a:hover {
-    color: #747bff;
+
+  html,
+  body {
+    font-size: 100%;
+    @apply font-inter
+      bg-surface-primary
+      text-gray-200
+      antialiased
+      scroll-smooth
+      overflow-x-hidden
+      min-h-screen;
   }
-  button {
-    background-color: #f9f9f9;
+
+  nav {
+    @apply fixed
+      top-0
+      left-0
+      bg-header-primary
+      backdrop-blur-lg
+      backdrop-saturate-150
+      z-40;
+  }
+
+  h1 {
+    @apply text-4xl
+      xs-wh:text-5xl
+      font-bold
+      bg-gradient-to-r from-brand-green from-20% via-brand-blue via-50% to-brand-green to-80%
+      text-transparent
+      bg-clip-text
+      bg-400%
+      animate-gradient;
+  }
+
+  h2 {
+    @apply text-3xl
+      sm:text-4xl
+      font-semibold;
+  }
+}
+
+@layer components {
+  .symbol {
+    @apply absolute text-xl xs-wh:text-2xl leading-none;
+  }
+
+  .stats-info {
+    @apply flex flex-col items-center justify-center bg-surface-primary p-2 stats-xs:p-4 rounded-xl space-y-1 stats-xs:space-y-2;
+  }
+
+  .nav-items {
+    @apply h-10 flex items-center gap-8 lg:gap-12;
+  }
+
+  .hover-colour {
+    @apply hover:text-gray-400;
+  }
+
+  .hamburger-line {
+    @apply w-6 h-0.5 bg-gray-200 group-hover:bg-gray-400 transition-all duration-200 focus:outline-none;
+  }
+
+  .header-texts {
+    @apply w-full flex flex-col text-center lg:text-left space-y-2;
+  }
+
+  .under-header {
+    @apply text-xl sm:text-2xl font-medium;
+  }
+
+  .stack-title {
+    @apply text-lg sm:text-xl font-medium;
+  }
+
+  .stack-icon {
+    @apply w-10 h-10 flex justify-center items-center bg-surface-tertiary rounded-full flex-shrink-0;
+  }
+
+  .component-base {
+    @apply width-scaled max-w-screen-2xl mx-auto pt-24 pb-16 space-y-12 flex flex-col items-center;
+  }
+
+  /* For link-hover, to ensure button click range is big enough, add py-X -my-X after:bottom-X */
+  .link-hover {
+    @apply relative overflow-hidden;
+  }
+
+  .link-hover::after {
+    content: "";
+    @apply absolute left-0 bottom-0 h-[2px] w-full bg-current origin-center scale-x-0 transition-transform duration-500;
+  }
+
+  .link-hover:hover::after {
+    @apply scale-x-100;
+  }
+
+  .project-list {
+    @apply w-full flex flex-col items-center;
+  }
+
+  .project-list > * {
+    @apply pb-12 mb-12 border-b border-header-stroke/50;
+  }
+
+  .project-list > *:last-child {
+    @apply pb-0 mb-0 border-b-0;
+  }
+}
+
+@layer utilities {
+  .fade-scale {
+    @apply opacity-0 animate-fadeScale will-change-transform;
+  }
+
+  .width-scaled {
+    @apply w-[90%];
   }
 }

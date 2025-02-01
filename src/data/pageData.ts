@@ -1,11 +1,19 @@
-import { faFile, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFile,
+  faEnvelope,
+  faPhone,
+  faCode,
+  faLocationDot,
+  faSchool,
+} from "@fortawesome/free-solid-svg-icons";
 import { faLinkedin, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import type {
   StackItemsType,
   RoleInfo,
   ProjectInfo,
-  FooterIconsInfo,
+  FooterRightInfo,
+  FooterLeftInfo,
   FooterType,
 } from "@pageTypes/pageTypes";
 import MarmonRail from "../assets/MarmonRail.webp";
@@ -225,22 +233,40 @@ export const ProjectInfos: ProjectInfo[] = [
   LavishDiscordChatBotInfo,
 ];
 
-const EmailInfo: FooterIconsInfo = {
+const FooterRoleInfo: FooterLeftInfo = {
+  title: "Software Engineer",
+  icon: faCode,
+};
+
+const FooterSchoolInfo: FooterLeftInfo = {
+  title: "Queen's University",
+  icon: faSchool,
+};
+
+const FooterLocationInfo: FooterLeftInfo = {
+  title: "Richmond Hill, Ontario, Canada",
+  icon: faLocationDot,
+};
+
+const EmailInfo: FooterRightInfo = {
   link: "mailto:nicholasjano@outlook.com",
   aria: "Email",
   icon: faEnvelope,
 };
-const PhoneInfo: FooterIconsInfo = {
+
+const PhoneInfo: FooterRightInfo = {
   link: "tel:+14167029974",
   aria: "Phone",
   icon: faPhone,
 };
-const LinkedInInfo: FooterIconsInfo = {
+
+const LinkedInInfo: FooterRightInfo = {
   link: "https://www.linkedin.com/in/nicholasjano/",
   aria: "LinkedIn profile",
   icon: faLinkedin,
 };
-const GitHubInfo: FooterIconsInfo = {
+
+const GitHubInfo: FooterRightInfo = {
   link: "https://github.com/nicholasjano",
   aria: "Github profile",
   icon: faGithub,
@@ -248,10 +274,6 @@ const GitHubInfo: FooterIconsInfo = {
 
 export const FooterInfo: FooterType = {
   name: "Nicholas Jano",
-  role: "Software Engineer",
-  school: "Queen's University",
-  location: "Richmond Hill, Ontario, Canada",
-  email: "nicholasjano@outlook.com",
-  phone: "+14167029974",
+  internal: [FooterRoleInfo, FooterSchoolInfo, FooterLocationInfo],
   external: [EmailInfo, PhoneInfo, LinkedInInfo, GitHubInfo],
 };

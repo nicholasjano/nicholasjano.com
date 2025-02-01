@@ -1,9 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCode,
-  faLocationDot,
-  faSchool,
-} from "@fortawesome/free-solid-svg-icons";
 import { FooterInfo } from "@data/pageData";
 import { useIconPadding } from "@hooks/useIconPadding";
 
@@ -23,30 +18,21 @@ const Footer = () => {
           <p className="under-header">Let's write the next chapter together.</p>
         </div>
         <div className="w-full flex flex-col md:flex-row justify-start md:justify-between gap-3 md:gap-0 text-center md:text-left mt-12 pb-6 mb-6 border-b border-header-stroke/50">
-          <div className="space-y-3">
-            <h3 className="under-header">{FooterInfo.name}</h3>
-            <p className="text-base sm:text-lg">
-              <span className="mr-2 md:mr-3">
-                <FontAwesomeIcon icon={faCode} />
-              </span>
-              {FooterInfo.role}
-            </p>
-            <p className="text-base sm:text-lg">
-            <span className="mr-2 md:mr-3">
-                <FontAwesomeIcon icon={faSchool} />
-              </span>
-              {FooterInfo.school}
-            </p>
-            <p className="text-base sm:text-lg">
-            <span className="mr-2 md:mr-3">
-                <FontAwesomeIcon
-                  className="w-fit md:w-[1.40625rem]"
-                  icon={faLocationDot}
-                />
-              </span>
-              {FooterInfo.location}
-            </p>
-          </div>
+          <ul className="space-y-3">
+            <li key="name">
+              <h3 className="under-header">{FooterInfo.name}</h3>
+            </li>
+            {FooterInfo.internal.map((item, index) => (
+              <li key={index}>
+                <p className="flex items-center text-base sm:text-lg">
+                  <span className="mr-2 md:mr-3">
+                    <FontAwesomeIcon className="w-fit md:w-[1.40625rem]" icon={item.icon} />
+                  </span>
+                  {item.title}
+                </p>
+              </li>
+            ))}
+          </ul>
           <ul className="flex justify-center md:justify-start items-start md:items-end gap-10 text-xl sm:text-2xl">
             {FooterInfo.external.map((item, index) => (
               <li key={index}>

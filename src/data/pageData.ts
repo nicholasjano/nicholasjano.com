@@ -1,10 +1,11 @@
-import { faFile } from "@fortawesome/free-solid-svg-icons";
+import { faFile, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedin, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import type {
   StackItemsType,
   RoleInfo,
   ProjectInfo,
+  FooterIconsInfo,
   FooterType,
 } from "@pageTypes/pageTypes";
 import MarmonRail from "../assets/MarmonRail.webp";
@@ -224,6 +225,27 @@ export const ProjectInfos: ProjectInfo[] = [
   LavishDiscordChatBotInfo,
 ];
 
+const EmailInfo: FooterIconsInfo = {
+  link: "mailto:nicholasjano@outlook.com",
+  aria: "Email",
+  icon: faEnvelope,
+};
+const PhoneInfo: FooterIconsInfo = {
+  link: "tel:+14167029974",
+  aria: "Phone",
+  icon: faPhone,
+};
+const LinkedInInfo: FooterIconsInfo = {
+  link: "https://www.linkedin.com/in/nicholasjano/",
+  aria: "LinkedIn profile",
+  icon: faLinkedin,
+};
+const GitHubInfo: FooterIconsInfo = {
+  link: "https://github.com/nicholasjano",
+  aria: "Github profile",
+  icon: faGithub,
+};
+
 export const FooterInfo: FooterType = {
   name: "Nicholas Jano",
   role: "Software Engineer",
@@ -231,8 +253,5 @@ export const FooterInfo: FooterType = {
   location: "Richmond Hill, Ontario, Canada",
   email: "nicholasjano@outlook.com",
   phone: "+14167029974",
-  icons: {
-    github: faGithub,
-    linkedin: faLinkedin,
-  },
+  external: [EmailInfo, PhoneInfo, LinkedInInfo, GitHubInfo],
 };

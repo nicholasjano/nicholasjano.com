@@ -69,14 +69,20 @@ export type ProjectInfo = {
 };
 
 export type IconPaddingProps = {
-  items: readonly IconDefinition[];
+  iconCount: number;
   fullSize: number;
-  minimumPadding: number;
+  minimumPadding?: number;
 };
 
 export type IconPaddingReturn = {
   linkRefs: RefObject<HTMLAnchorElement>[];
-  paddings: string[];
+  paddings: { x: string; y: string }[];
+};
+
+export type FooterIconsInfo = {
+  link: string;
+  aria: string;
+  icon: IconDefinition;
 };
 
 export type FooterType = {
@@ -86,8 +92,5 @@ export type FooterType = {
   location: string;
   email: string;
   phone: string;
-  icons: {
-    github: IconDefinition;
-    linkedin: IconDefinition;
-  };
+  external: FooterIconsInfo[];
 };

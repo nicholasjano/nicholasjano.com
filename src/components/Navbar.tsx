@@ -11,9 +11,8 @@ const Navbar = () => {
 
   const { linkRefs: linkRefsNavBar, paddings: paddingsNavBar } = useIconPadding(
     {
-      items: navItemsLeft,
+      iconCount: navItemsLeft.length,
       fullSize: 40,
-      minimumPadding: 10,
     }
   );
 
@@ -25,17 +24,17 @@ const Navbar = () => {
           <div className="h-full width-scaled flex items-center justify-between">
             <ul className="nav-items">
               {navItemsLeft.map((item, index) => (
-                <li className="h-full flex items-center" key={index}>
+                <li className="flex items-center" key={index}>
                   <a
                     ref={linkRefsNavBar[index]}
                     href={navItemsLeftURL[index]}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
-                      padding: `0 ${paddingsNavBar[index]}px`,
-                      margin: `0 -${paddingsNavBar[index]}px`,
+                      padding: `${paddingsNavBar[index].y}px ${paddingsNavBar[index].x}px`,
+                      margin: `-${paddingsNavBar[index].y}px -${paddingsNavBar[index].x}px`,
                     }}
-                    className="h-full flex items-center text-xl hover-colour transition-colors duration-200 focus:outline-none"
+                    className="flex items-center text-xl hover-colour transition-colors duration-200 focus:outline-none"
                     aria-label={`Navigate to ${item.iconName}`}
                   >
                     <FontAwesomeIcon icon={item} />

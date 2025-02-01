@@ -7,8 +7,16 @@ import {
   faSchool,
 } from "@fortawesome/free-solid-svg-icons";
 import { FooterInfo } from "@data/pageData";
+import { useIconPadding } from "@hooks/useIconPadding";
 
 const Footer = () => {
+  const { linkRefs: linkRefsFooter, paddings: paddingsFooter } = useIconPadding(
+    {
+      iconCount: FooterInfo.external.length,
+      fullSize: 48,
+    }
+  );
+
   return (
     <footer id="contact" className="relative w-screen bg-surface-dark">
       <div className="width-scaled max-w-screen-2xl mx-auto pt-24 pb-6 flex flex-col items-center">
@@ -41,44 +49,26 @@ const Footer = () => {
               {FooterInfo.location}
             </p>
           </div>
-          <div className="flex justify-center md:justify-start items-start md:items-end gap-8 text-2xl sm:text-3xl">
-            <a
-              href={`mailto:${FooterInfo.email}`}
-              aria-label="Email"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover-colour transition-colors duration-200 focus:outline-none flex items-center"
-            >
-              <FontAwesomeIcon icon={faEnvelope} />
-            </a>
-            <a
-              href={`tel:${FooterInfo.phone}`}
-              aria-label="Phone"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover-colour transition-colors duration-200 focus:outline-none flex items-center"
-            >
-              <FontAwesomeIcon icon={faPhone} />
-            </a>
-            <a
-              href="https://github.com/nicholasjano"
-              aria-label="GitHub profile"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover-colour transition-colors duration-200 focus:outline-none flex items-center"
-            >
-              <FontAwesomeIcon icon={FooterInfo.icons.github} />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/nicholasjano/"
-              aria-label="LinkedIn profile"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover-colour transition-colors duration-200 focus:outline-none flex items-center"
-            >
-              <FontAwesomeIcon icon={FooterInfo.icons.linkedin} />
-            </a>
-          </div>
+          <ul className="flex justify-center md:justify-start items-start md:items-end gap-10 text-2xl sm:text-3xl">
+            {FooterInfo.external.map((item, index) => (
+              <li key={index}>
+                <a
+                  ref={linkRefsFooter[index]}
+                  href={item.link}
+                  aria-label={item.aria}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    padding: `${paddingsFooter[index].y}px ${paddingsFooter[index].x}px`,
+                    margin: `-${paddingsFooter[index].y}px -${paddingsFooter[index].x}px`,
+                  }}
+                  className="hover-colour transition-colors duration-200 focus:outline-none flex items-center"
+                >
+                  <FontAwesomeIcon icon={item.icon} />
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
         <p className="text-sm text-center">Curated by Nicholas Jano</p>
       </div>

@@ -1,4 +1,4 @@
-import nickImage from "../assets/NickMain.webp";
+import nickImage from "../assets/nickMain.webp";
 import { personalDescription } from "@data/pageData";
 
 const About = () => {

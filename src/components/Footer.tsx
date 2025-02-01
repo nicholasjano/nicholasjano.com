@@ -2,8 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCode,
   faLocationDot,
-  faEnvelope,
-  faPhone,
   faSchool,
 } from "@fortawesome/free-solid-svg-icons";
 import { FooterInfo } from "@data/pageData";

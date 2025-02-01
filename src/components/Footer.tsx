@@ -24,11 +24,16 @@ const Footer = () => {
             </li>
             {FooterInfo.internal.map((item, index) => (
               <li key={index}>
-                <p className="flex items-center text-base sm:text-lg">
-                  <span className="mr-2 md:mr-3">
-                    <FontAwesomeIcon className="w-fit md:w-[1.40625rem]" icon={item.icon} />
+                <p className="text-base sm:text-lg">
+                  <span className="whitespace-nowrap">
+                    <span className="mr-2 md:mr-3">
+                      <FontAwesomeIcon
+                        className="w-fit md:w-[1.40625rem]"
+                        icon={item.icon}
+                      />
+                    </span>
+                    {item.title}
                   </span>
-                  {item.title}
                 </p>
               </li>
             ))}

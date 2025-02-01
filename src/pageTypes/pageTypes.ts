@@ -1,4 +1,5 @@
 import { RefObject } from "react";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 export type IntroSymbolsProp = {
   size: number;
@@ -67,7 +68,26 @@ export type ProjectInfo = {
   };
 };
 
+export type IconPaddingProps = {
+  items: readonly IconDefinition[];
+  fullSize: number;
+  minimumPadding: number;
+};
+
 export type IconPaddingReturn = {
   linkRefs: RefObject<HTMLAnchorElement>[];
   paddings: string[];
+};
+
+export type FooterType = {
+  name: string;
+  role: string;
+  school: string;
+  location: string;
+  email: string;
+  phone: string;
+  icons: {
+    github: IconDefinition;
+    linkedin: IconDefinition;
+  };
 };

@@ -5,6 +5,7 @@ import type {
   StackItemsType,
   RoleInfo,
   ProjectInfo,
+  FooterType,
 } from "@pageTypes/pageTypes";
 import MarmonRail from "../assets/MarmonRail.webp";
 import NetSolutionsTime from "../assets/NetSolutionsTime.webp";
@@ -222,3 +223,16 @@ export const ProjectInfos: ProjectInfo[] = [
   KeepUpChampionsInfo,
   LavishDiscordChatBotInfo,
 ];
+
+export const FooterInfo: FooterType = {
+  name: "Nicholas Jano",
+  role: "Software Engineer",
+  school: "Queen's University",
+  location: "Richmond Hill, Ontario, Canada",
+  email: "nicholasjano@outlook.com",
+  phone: "+14167029974",
+  icons: {
+    github: faGithub,
+    linkedin: faLinkedin,
+  },
+};

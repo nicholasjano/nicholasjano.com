@@ -7,7 +7,7 @@ import About from "@components/About";
 import TechStack from "@components/TechStack";
 import Experience from "@components/Experience";
 import Projects from "@components/Projects";
-import Contact from "@components/Contact";
+import Footer from "@components/Footer";
 
 function App() {
   useScrollManagementRefresh();
@@ -22,8 +22,8 @@ function App() {
         <TechStack />
         <Experience />
         <Projects />
-        <Contact />
       </main>
+      <Footer />
     </>
   );
 }

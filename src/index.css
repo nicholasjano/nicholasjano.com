@@ -16,7 +16,7 @@
     font-size: 100%;
     @apply font-inter
       bg-surface-primary
-      text-type-primary
+      text-gray-200
       antialiased
       scroll-smooth
       overflow-x-hidden
@@ -64,12 +64,12 @@
     @apply h-10 flex items-center gap-8 lg:gap-12;
   }
 
-  .nav-text-colours {
-    @apply text-gray-300 hover:text-gray-500;
+  .hover-colour {
+    @apply hover:text-gray-400;
   }
 
   .hamburger-line {
-    @apply w-6 h-0.5 bg-gray-300 group-hover:bg-gray-500 transition-all duration-200 focus:outline-none;
+    @apply w-6 h-0.5 bg-gray-200 group-hover:bg-gray-400 transition-all duration-200 focus:outline-none;
   }
 
   .header-texts {

@@ -1,12 +1,15 @@
 import { useRef, useState, useEffect } from "react";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import type { IconPaddingReturn } from "@pageTypes/pageTypes";
+import type { IconPaddingReturn, IconPaddingProps } from "@pageTypes/pageTypes";
 
-export const useIconPadding = (
-  items: readonly IconDefinition[]
-): IconPaddingReturn => {
+export const useIconPadding = ({
+  items,
+  fullSize,
+  minimumPadding,
+}: IconPaddingProps): IconPaddingReturn => {
   const refs = items.map(() => useRef<HTMLAnchorElement>(null));
-  const [paddings, setPaddings] = useState(items.map(() => "10px"));
+  const [paddings, setPaddings] = useState(
+    items.map(() => `${minimumPadding}`)
+  );
 
   useEffect(() => {
     refs.forEach((ref, index) => {
@@ -15,10 +18,13 @@ export const useIconPadding = (
         const svg = ref.current.querySelector("svg");
         if (svg) {
           const iconWidth = svg.getBoundingClientRect().width;
-          const requiredPadding = Math.max((40 - iconWidth) / 2, 10);
+          const requiredPadding = Math.max(
+            (fullSize - iconWidth) / 2,
+            minimumPadding
+          );
           setPaddings((prev) => {
             const newPaddings = [...prev];
-            newPaddings[index] = `${requiredPadding}px`;
+            newPaddings[index] = `${requiredPadding}`;
             return newPaddings;
           });
         }

@@ -9,7 +9,13 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const isLargeScreen = useScreenSize();
 
-  const { linkRefs, paddings } = useIconPadding(navItemsLeft);
+  const { linkRefs: linkRefsNavBar, paddings: paddingsNavBar } = useIconPadding(
+    {
+      items: navItemsLeft,
+      fullSize: 40,
+      minimumPadding: 10,
+    }
+  );
 
   return (
     <>
@@ -21,15 +27,15 @@ const Navbar = () => {
               {navItemsLeft.map((item, index) => (
                 <li className="h-full flex items-center" key={index}>
                   <a
-                    ref={linkRefs[index]}
+                    ref={linkRefsNavBar[index]}
                     href={navItemsLeftURL[index]}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
-                      padding: `0 ${paddings[index]}`,
-                      margin: `0 -${paddings[index]}`,
+                      padding: `0 ${paddingsNavBar[index]}px`,
+                      margin: `0 -${paddingsNavBar[index]}px`,
                     }}
-                    className="h-full flex items-center text-xl nav-text-colours transition-colors duration-200 focus:outline-none"
+                    className="h-full flex items-center text-xl hover-colour transition-colors duration-200 focus:outline-none"
                     aria-label={`Navigate to ${item.iconName}`}
                   >
                     <FontAwesomeIcon icon={item} />
@@ -42,7 +48,7 @@ const Navbar = () => {
                 <li className="h-full flex items-center" key={item}>
                   <button
                     onClick={() => handleScroll(item.toLowerCase())}
-                    className="h-full text-sm nav-text-colours transition-colors duration-200 focus:outline-none"
+                    className="h-full text-sm hover-colour transition-colors duration-200 focus:outline-none"
                     aria-label={`Navigate to ${item}`}
                   >
                     {item}
@@ -89,7 +95,7 @@ const Navbar = () => {
                     }}
                   >
                     <button
-                      className="text-base nav-text-colours w-full py-2 navmenu-xs:py-3 transition-colors duration-200 text-left focus:outline-none"
+                      className="text-base hover-colour w-full py-2 navmenu-xs:py-3 transition-colors duration-200 text-left focus:outline-none"
                       aria-label={`Navigate to ${item}`}
                     >
                       {item}
@@ -105,7 +111,7 @@ const Navbar = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center justify-center w-12 h-12 text-[2rem] nav-text-colours transition-colors duration-200 focus:outline-none"
+                      className="flex items-center justify-center w-12 h-12 text-[2rem] hover-colour transition-colors duration-200 focus:outline-none"
                       aria-label={`Navigate to ${item.iconName}`}
                     >
                       <FontAwesomeIcon icon={item} />

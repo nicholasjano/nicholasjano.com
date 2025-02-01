@@ -36,9 +36,6 @@ export default {
           green: "#19B345",
           blue: "#4FB4E6",
         },
-        type: {
-          primary: "#EBEBEB",
-        },
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],

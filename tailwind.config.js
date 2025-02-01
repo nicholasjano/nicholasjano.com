@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-import defaultTheme from 'tailwindcss/defaultTheme'
-const { screens } = defaultTheme
+import defaultTheme from "tailwindcss/defaultTheme";
+const { screens } = defaultTheme;
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -10,6 +10,12 @@ export default {
       ...screens,
     },
     extend: {
+      minHeight: {
+        "screen-dvh": "100dvh",
+      },
+      height: {
+        "screen-dvh": "100dvh",
+      },
       screens: {
         "xs-wh": { raw: "(min-width: 540px) and (min-height: 540px)" },
         "navmenu-xs": { raw: "(min-height: 410px)" },

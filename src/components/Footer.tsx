@@ -25,29 +25,29 @@ const Footer = () => {
         <div className="w-full flex flex-col md:flex-row justify-start md:justify-between gap-3 md:gap-0 text-center md:text-left mt-12 pb-6 mb-6 border-b border-header-stroke/50">
           <div className="space-y-3">
             <h3 className="under-header">{FooterInfo.name}</h3>
-            <p className="text-lg sm:text-xl">
-              <span className="mr-3">
+            <p className="text-base sm:text-lg">
+              <span className="mr-2 md:mr-3">
                 <FontAwesomeIcon icon={faCode} />
               </span>
               {FooterInfo.role}
             </p>
-            <p className="text-lg sm:text-xl">
-              <span className="mr-3">
+            <p className="text-base sm:text-lg">
+            <span className="mr-2 md:mr-3">
                 <FontAwesomeIcon icon={faSchool} />
               </span>
               {FooterInfo.school}
             </p>
-            <p className="text-lg sm:text-xl block md:flex">
-              <span className="mr-3">
+            <p className="text-base sm:text-lg">
+            <span className="mr-2 md:mr-3">
                 <FontAwesomeIcon
-                  className="w-fit md:w-[1.5625rem]"
+                  className="w-fit md:w-[1.40625rem]"
                   icon={faLocationDot}
                 />
               </span>
               {FooterInfo.location}
             </p>
           </div>
-          <ul className="flex justify-center md:justify-start items-start md:items-end gap-10 text-2xl sm:text-3xl">
+          <ul className="flex justify-center md:justify-start items-start md:items-end gap-10 text-xl sm:text-2xl">
             {FooterInfo.external.map((item, index) => (
               <li key={index}>
                 <a

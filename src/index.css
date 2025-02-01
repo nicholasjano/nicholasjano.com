@@ -20,7 +20,7 @@
       antialiased
       scroll-smooth
       overflow-x-hidden
-      min-h-screen;
+      min-h-screen-dvh;
   }
 
   nav {
@@ -117,9 +117,7 @@
   .project-list > *:last-child {
     @apply pb-0 mb-0 border-b-0;
   }
-}
 
-@layer utilities {
   .fade-scale {
     @apply opacity-0 animate-fadeScale will-change-transform;
   }

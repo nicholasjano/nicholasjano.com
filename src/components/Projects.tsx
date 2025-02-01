@@ -5,7 +5,7 @@ const Projects = () => {
   return (
     <section
       id="projects"
-      className="relative w-screen min-h-screen bg-surface-primary"
+      className="relative w-screen bg-surface-primary"
     >
       <div className="component-base">
         <div className="header-texts">

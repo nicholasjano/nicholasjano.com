@@ -10,7 +10,7 @@ const Intro = () => {
     <header
       id="home"
       ref={headerRef}
-      className="fixed inset-0 w-screen h-screen flex items-center justify-center overflow-hidden bg-surface-primary"
+      className="fixed inset-0 w-screen h-screen-dvh flex items-center justify-center overflow-hidden bg-surface-primary"
     >
       <IntroSymbols size={size} />
 

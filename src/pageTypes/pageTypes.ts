@@ -79,7 +79,12 @@ export type IconPaddingReturn = {
   paddings: { x: string; y: string }[];
 };
 
-export type FooterIconsInfo = {
+export type FooterLeftInfo = {
+  title: string;
+  icon: IconDefinition;
+};
+
+export type FooterRightInfo = {
   link: string;
   aria: string;
   icon: IconDefinition;
@@ -87,10 +92,6 @@ export type FooterIconsInfo = {
 
 export type FooterType = {
   name: string;
-  role: string;
-  school: string;
-  location: string;
-  email: string;
-  phone: string;
-  external: FooterIconsInfo[];
+  internal: FooterLeftInfo[];
+  external: FooterRightInfo[];
 };

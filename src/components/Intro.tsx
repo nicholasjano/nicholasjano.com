@@ -1,23 +1,31 @@
-import { useRef } from "react";
 import IntroSymbols from "@components/IntroSymbols";
 import { useResizeObserver } from "@hooks/useResizeObserver";
+import { useHideOnScroll } from "@hooks/useHideOnScroll";
+import type { refType } from "@pageTypes/pageTypes";
 
-const Intro = () => {
-  const headerRef: React.RefObject<HTMLElement> = useRef<HTMLElement>(null);
-  const size: number = useResizeObserver(headerRef);
+const Intro = ({ introRef }: refType) => {
+  const size = useResizeObserver(introRef);
+  const hideContents = useHideOnScroll(introRef);
 
   return (
     <header
       id="home"
-      ref={headerRef}
-      className="fixed inset-0 w-screen h-screen-dvh flex items-center justify-center overflow-hidden bg-surface-primary"
+      ref={introRef}
+      className="fixed inset-0 w-screen h-screen-lvh flex flex-col justify-start overflow-hidden bg-surface-primary"
     >
-      <IntroSymbols size={size} />
-
-      <div className="flex flex-col items-center justify-center text-center space-y-2 z-20">
-        <h1>Nicholas Jano</h1>
-        <p className="text-base xs-wh:text-xl">Student at Queen's University</p>
-        <p className="text-base xs-wh:text-xl">Software Engineer</p>
+      <div
+        className={`h-screen-dvh w-full flex flex-col items-center justify-center transition-[height] duration-200 ease-in ${
+          hideContents ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        <IntroSymbols size={size} />
+        <div className="flex flex-col items-center justify-center text-center space-y-2 z-20">
+          <h1>Nicholas Jano</h1>
+          <p className="text-base xs-wh:text-xl">
+            Student at Queen's University
+          </p>
+          <p className="text-base xs-wh:text-xl">Software Engineer</p>
+        </div>
       </div>
     </header>
   );

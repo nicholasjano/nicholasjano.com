@@ -1,14 +1,20 @@
+import type { handleScrollProps } from "@pageTypes/pageTypes";
+
 const rootFontSize = parseFloat(
   getComputedStyle(document.documentElement).fontSize
 );
 
-export const handleScroll = (id: string, push: boolean = false): void => {
+export const handleScroll = ({
+  id,
+  push = false,
+  ref = null,
+}: handleScrollProps): void => {
   if (id === "home") {
     // If home, go to the top
     window.scrollTo({ top: 0, behavior: "smooth" });
-  } else if (id === "stats") {
-    // If stats, go 100vh
-    const position = window.innerHeight;
+  } else if (id === "stats" && ref?.current) {
+    // If stats, go 100lvh
+    const position = ref.current.offsetHeight;
     window.scrollTo({ top: position, behavior: "smooth" });
   } else {
     // Otherwise, get from id

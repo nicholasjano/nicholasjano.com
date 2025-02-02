@@ -15,7 +15,7 @@ const ProjectCard = ({ image, title, description, links }: ProjectInfo) => {
       <img
         src={image}
         alt="Project Mockup"
-        className="w-fit h-56 sm:h-96 2xl:h-[32rem]"
+        className="w-auto max-w-full h-56 sm:h-96 2xl:h-[32rem]"
       />
       <div className="w-full lg:w-2/3 flex flex-col items-center gap-4">
         <h3 className="under-header text-brand-green text-center">{title}</h3>

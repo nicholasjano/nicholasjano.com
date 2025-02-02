@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, RefObject } from "react";
 
 export const useResizeObserver = (
-  ref: React.RefObject<HTMLElement>
+  ref: RefObject<HTMLElement>
 ): number => {
   const [size, setSize] = useState(0);
 

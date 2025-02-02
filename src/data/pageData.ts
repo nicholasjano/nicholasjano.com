@@ -16,13 +16,13 @@ import type {
   FooterLeftInfo,
   FooterType,
 } from "@pageTypes/pageTypes";
-import MarmonRail from "../assets/MarmonRail.webp";
-import NetSolutionsTime from "../assets/NetSolutionsTime.webp";
-import LeetBuddy from "../assets/LeetBuddy.webp";
-import Villara from "../assets/Villara.webp";
-import KeepUpChampions from "../assets/KeepUpChampions.webp";
-import IndigenousArtGallery from "../assets/IndigenousArtGallery.webp";
-import LavishDiscordChatBot from "../assets/LavishDiscordChatBot.webp";
+import MarmonRail from "@assets/MarmonRail.webp";
+import NetSolutionsTime from "@assets/NetSolutionsTime.webp";
+import LeetBuddy from "@assets/LeetBuddy.webp";
+import Villara from "@assets/Villara.webp";
+import KeepUpChampions from "@assets/KeepUpChampions.webp";
+import IndigenousArtGallery from "@assets/IndigenousArtGallery.webp";
+import LavishDiscordChatBot from "@assets/LavishDiscordChatBot.webp";
 
 export const latestProject = "LeetBuddy";
 

@@ -7,6 +7,7 @@ const FadeInOnView = ({
   delay = 0,
   className = "",
   direction = FadeDirection.UP,
+  threshold = 0.05,
 }: FadeInOnViewProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
@@ -19,7 +20,7 @@ const FadeInOnView = ({
         }
       },
       {
-        threshold: 0.05,
+        threshold: threshold,
       }
     );
 
@@ -32,10 +33,10 @@ const FadeInOnView = ({
         observer.disconnect();
       }
     };
-  }, [delay]);
+  }, [delay, threshold]);
 
   const getTransformStyle = () => {
-    const distance = 20;
+    const distance = 10;
     switch (direction) {
       case FadeDirection.UP:
         return `translateY(${isVisible ? 0 : distance}px)`;
@@ -59,7 +60,8 @@ const FadeInOnView = ({
         WebkitFontSmoothing: "antialiased",
         perspective: "1000px",
         opacity: isVisible ? 1 : 0,
-        transition: "transform 700ms cubic-bezier(0.25, 0.1, 0.25, 1), opacity 500ms linear"
+        transition:
+          "transform 350ms cubic-bezier(0.25, 0.1, 0.25, 1), opacity 250ms linear",
       }}
     >
       {children}

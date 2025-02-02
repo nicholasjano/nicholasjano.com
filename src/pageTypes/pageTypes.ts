@@ -118,4 +118,16 @@ export type FadeInOnViewProps = {
   delay?: number;
   direction?: FadeDirection;
   className?: string;
+  threshold?: number;
 };
+
+export type UseAnimationTriggerProps = {
+  elementRef: RefObject<HTMLDivElement>;
+  eventName?: string;
+};
+
+export type UseResponsiveThresholdProps = {
+  default?: number;
+  large?: number;
+  breakpoint?: number;
+}

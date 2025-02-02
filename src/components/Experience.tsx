@@ -1,19 +1,29 @@
 import { ExperienceInfos } from "@data/pageData";
 import ExperienceCard from "@components/ExperienceCard";
+import FadeInOnView from "@components/FadeInOnView";
+import { FadeDirection } from "@pageTypes/pageTypes";
 
 const Experience = () => {
   return (
     <section id="experience" className="relative w-screen bg-surface-dark">
       <div className="component-base">
-        <div className="header-texts">
-          <h2>My Experience</h2>
-          <p className="under-header">
-            A closer look at my professional journey.
-          </p>
-        </div>
+        <FadeInOnView
+          delay={100}
+          className="w-full"
+          direction={FadeDirection.RIGHT}
+        >
+          <div className="header-texts">
+            <h2>My Experience</h2>
+            <p className="under-header">
+              A closer look at my professional journey.
+            </p>
+          </div>
+        </FadeInOnView>
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {ExperienceInfos.map((experience, index) => (
-            <ExperienceCard key={index} {...experience} />
+            <FadeInOnView key={index} delay={200} className="w-full" direction={FadeDirection.LEFT}>
+              <ExperienceCard key={index} {...experience} />
+            </FadeInOnView>
           ))}
         </div>
       </div>

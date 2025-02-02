@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import { RefObject, ReactNode } from "react";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 export type IntroSymbolsProp = {
@@ -106,3 +106,16 @@ export type refType = {
   introRef: RefObject<HTMLElement>;
 };
 
+export enum FadeDirection {
+  UP = "up",
+  DOWN = "down",
+  LEFT = "left",
+  RIGHT = "right",
+}
+
+export type FadeInOnViewProps = {
+  children: ReactNode;
+  delay?: number;
+  direction?: FadeDirection;
+  className?: string;
+};

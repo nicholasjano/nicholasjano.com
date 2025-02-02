@@ -95,3 +95,14 @@ export type FooterType = {
   internal: FooterLeftInfo[];
   external: FooterRightInfo[];
 };
+
+export type handleScrollProps = {
+  id: string;
+  push?: boolean;
+  ref?: RefObject<HTMLElement> | null;
+};
+
+export type refType = {
+  introRef: RefObject<HTMLElement>;
+};
+

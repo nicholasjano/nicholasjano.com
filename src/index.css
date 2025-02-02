@@ -20,7 +20,7 @@
       antialiased
       scroll-smooth
       overflow-x-hidden
-      min-h-screen-dvh;
+      min-h-screen-lvh;
   }
 
   nav {

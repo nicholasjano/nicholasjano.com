@@ -11,10 +11,14 @@ export default {
     },
     extend: {
       minHeight: {
+        "screen-svh": "100svh",
         "screen-dvh": "100dvh",
+        "screen-lvh": "100lvh",
       },
       height: {
+        "screen-svh": "100svh",
         "screen-dvh": "100dvh",
+        "screen-lvh": "100lvh",
       },
       screens: {
         "xs-wh": { raw: "(min-width: 540px) and (min-height: 540px)" },

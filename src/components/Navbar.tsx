@@ -4,8 +4,9 @@ import { navItemsRight, navItemsLeft, navItemsLeftURL } from "@data/pageData";
 import { handleScroll } from "@utilities/ScrollingUtilities";
 import { useState } from "react";
 import { useIconPadding } from "@hooks/useIconPadding";
+import type { refType } from "@pageTypes/pageTypes";
 
-const Navbar = () => {
+const Navbar = ({ introRef }: refType) => {
   const [isOpen, setIsOpen] = useState(false);
   const isLargeScreen = useScreenSize();
 
@@ -46,7 +47,7 @@ const Navbar = () => {
               {navItemsRight.map((item) => (
                 <li className="h-full flex items-center" key={item}>
                   <button
-                    onClick={() => handleScroll(item.toLowerCase())}
+                    onClick={() => handleScroll({id: item.toLowerCase(), ref: introRef})}
                     className="h-full text-sm hover-colour transition-colors duration-200 focus:outline-none"
                     aria-label={`Navigate to ${item}`}
                   >
@@ -89,7 +90,7 @@ const Navbar = () => {
                     key={item}
                     className="width-scaled border-b border-header-stroke/50 cursor-pointer"
                     onClick={() => {
-                      handleScroll(item.toLowerCase());
+                      handleScroll({id: item.toLowerCase(), ref: introRef});
                       setIsOpen(false);
                     }}
                   >

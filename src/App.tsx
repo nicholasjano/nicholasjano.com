@@ -1,3 +1,4 @@
+import { RefObject, useRef } from "react";
 import { useScrollManagementRefresh } from "@hooks/useScrollManagementRefresh";
 import Intro from "@components/Intro";
 import Navbar from "@components/Navbar";
@@ -11,11 +12,12 @@ import Footer from "@components/Footer";
 
 function App() {
   useScrollManagementRefresh();
+  const introRef: RefObject<HTMLElement> = useRef<HTMLElement>(null);
   return (
     <>
-      <Navbar />
+      <Navbar introRef={introRef} />
       <main>
-        <Intro />
+        <Intro introRef={introRef} />
         <Stats />
         <Spacer />
         <About />

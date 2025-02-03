@@ -108,27 +108,6 @@ jobs:
         run: |
           pip install awscli
 
-      - name: Set CORS configuration for R2 bucket
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-        run: |
-          echo '{
-            "CORSRules": [
-              {
-                "AllowedOrigins": ["https://nicholasjano.com", "http://localhost:5173"],
-                "AllowedMethods": ["GET"],
-                "AllowedHeaders": ["*"],
-                "MaxAgeSeconds": 3000
-              }
-            ]
-          }' > cors.json
-          aws s3api put-bucket-cors --bucket ${R2_BUCKET} \
-            --cors-configuration file://cors.json \
-            --endpoint-url ${R2_ENDPOINT}
-
       - name: Upload stats.json to R2
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}

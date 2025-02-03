@@ -287,4 +287,4 @@ export const defaultStats: Readonly<DynamicStatsType> = {
 };
 
 export const API_URL =
-  "https://github.com/nicholasjano/nicholasjano.com/actions/artifacts/latest/stats-json/contents/stats.json" as const;
+  "https://github.com/nicholasjano/nicholasjano.com/releases/latest/download/stats.json" as const;

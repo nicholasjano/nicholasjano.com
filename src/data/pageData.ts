@@ -57,13 +57,13 @@ export const navItemsLeft: readonly IconDefinition[] = [
 ];
 
 export const navItemsLeftURL: readonly string[] = [
-  "https://www.google.com/", // Update to resume link
+  "/resume.pdf",
   "https://www.linkedin.com/in/nicholasjano/",
   "https://github.com/nicholasjano",
 ];
 
 export const personalDescription: string = `
-Hi, I'm Nicholas Jano, a Software Engineer and final-year Bachelor of Computing student at Queen's University in Ontario, Canada. Ever since I was a kid, I've been fascinated by computers and how they work. I started in elementary school, creating mini-applications with JavaScript and ActionScript. This early passion led me to keep learning and constantly expand my technical skills, shaping me into the engineer I am today.
+Hi, I'm Nicholas Jano, a Software Engineer and final-year Bachelor of Computer Science student at Queen's University in Ontario, Canada. Ever since I was a kid, I've been fascinated by computers and how they work. I started in elementary school, creating mini-applications with JavaScript and ActionScript. This early passion led me to keep learning and constantly expand my technical skills, shaping me into the engineer I am today.
 
 In the ever-evolving field of Software Engineering, I strive to stay in a consistent state of learning and innovation so I can develop software solutions that make a meaningful impact. I'm driven by the challenge of tackling new problems and exploring emerging technologies. From working on personal projects to participating in hackathons, I always seek new opportunities to learn and develop. Over the years, I've gained experience across the full development stack, including designing system architecture, developing responsive frontend applications, and building scalable backend services. By combining my creativity with my technical skills, I can create innovative applications that solve everyday problems.
 `;
@@ -92,7 +92,7 @@ const frameworksAndLibraries: readonly StackItemsType[] = [
   { name: "Flask", icon: "devicon-flask-original" },
   { name: "PyTorch", icon: "devicon-pytorch-original" },
   { name: "SQLAlchemy", icon: "devicon-sqlalchemy-plain" },
-  { name: "Apache Spark", icon: "devicon-apachespark-original" },
+  { name: "PySpark", icon: "devicon-apachespark-original" },
   { name: "Pandas", icon: "devicon-pandas-plain" },
   { name: "NumPy", icon: "devicon-numpy-plain" },
   { name: "SwiftUI", icon: "devicon-swift-plain" },

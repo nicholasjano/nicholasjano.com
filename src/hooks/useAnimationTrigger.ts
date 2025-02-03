@@ -3,14 +3,17 @@ import type { UseAnimationTriggerProps } from "@pageTypes/pageTypes";
 
 export const useAnimationTrigger = ({
   elementRef,
+  isLoaded,
   eventName = "startNumberAnimation",
 }: UseAnimationTriggerProps): { hasStartedAnimation: boolean } => {
   const [hasStartedAnimation, setHasStartedAnimation] = useState(false);
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !hasStartedAnimation) {
+        setInView(entry.isIntersecting);
+        if (entry.isIntersecting && !hasStartedAnimation && isLoaded) {
           setHasStartedAnimation(true);
           window.dispatchEvent(new Event(eventName));
         }
@@ -27,7 +30,14 @@ export const useAnimationTrigger = ({
         observer.unobserve(elementRef.current);
       }
     };
-  }, [elementRef, hasStartedAnimation, eventName]);
+  }, [elementRef, hasStartedAnimation, isLoaded, eventName]);
+
+  useEffect(() => {
+    if (isLoaded && inView && !hasStartedAnimation) {
+      setHasStartedAnimation(true);
+      window.dispatchEvent(new Event(eventName));
+    }
+  }, [isLoaded, inView, hasStartedAnimation, eventName]);
 
   return { hasStartedAnimation };
 };

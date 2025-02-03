@@ -123,6 +123,7 @@ export type FadeInOnViewProps = {
 
 export type UseAnimationTriggerProps = {
   elementRef: RefObject<HTMLDivElement>;
+  isLoaded: boolean;
   eventName?: string;
 };
 
@@ -136,4 +137,9 @@ export type DynamicStatsType = {
   totalCommitsPastMonth: number;
   uniqueRepositoriesPastMonth: number;
   newSolutionCommits: number;
+};
+
+export type UseFetchStatsReturn = {
+  stats: DynamicStatsType;
+  isLoaded: boolean;
 };

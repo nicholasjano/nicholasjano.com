@@ -9,10 +9,10 @@ import { getMonthlyDates } from "@utilities/GetDateEST";
 import { handleScroll } from "@utilities/ScrollingUtilities";
 
 const Stats = () => {
-  const stats = useFetchStats();
+  const { stats, isLoaded } = useFetchStats();
   const { prevMonth, currMonth } = getMonthlyDates();
   const sectionRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-  useAnimationTrigger({ elementRef: sectionRef });
+  useAnimationTrigger({ elementRef: sectionRef, isLoaded });
 
   return (
     <section id="stats" className="overflow-x-clip absolute inset-x-0 top-0">

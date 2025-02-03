@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
-import type { DynamicStatsType } from "@pageTypes/pageTypes";
+import type {
+  DynamicStatsType,
+  UseFetchStatsReturn,
+} from "@pageTypes/pageTypes";
 import { defaultStats, API_URL } from "@data/pageData";
 
 const FETCH_INTERVAL = 5 * 60 * 1000;
 
-export const useFetchStats = (): DynamicStatsType => {
+export const useFetchStats = (): UseFetchStatsReturn => {
   const [stats, setStats] = useState<DynamicStatsType>(defaultStats);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     async function fetchStats() {
@@ -22,6 +26,8 @@ export const useFetchStats = (): DynamicStatsType => {
       } catch (error) {
         console.error("Error fetching stats:", error);
         setStats(defaultStats);
+      } finally {
+        setIsLoaded(true);
       }
     }
 
@@ -36,8 +42,9 @@ export const useFetchStats = (): DynamicStatsType => {
       fetchStats();
     } else {
       setStats(JSON.parse(cachedStats));
+      setIsLoaded(true);
     }
   }, []);
 
-  return stats;
+  return { stats, isLoaded };
 };

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import type { DynamicStatsType } from "@pageTypes/pageTypes";
 import { defaultStats, API_URL } from "@data/pageData";
 
-const FETCH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+const FETCH_INTERVAL = 5 * 60 * 1000;
 
 export const useFetchStats = (): DynamicStatsType => {
   const [stats, setStats] = useState<DynamicStatsType>(defaultStats);

@@ -279,6 +279,7 @@ export const FooterInfo: FooterType = {
   external: [EmailInfo, PhoneInfo, LinkedInInfo, GitHubInfo],
 };
 
+// Average
 export const defaultStats: Readonly<DynamicStatsType> = {
   totalCommitsPastMonth: 88,
   uniqueRepositoriesPastMonth: 4,

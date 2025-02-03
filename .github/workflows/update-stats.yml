@@ -1,0 +1,100 @@
+name: Update GitHub Stats
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'nicholasjano'
+    steps:
+      - name: Check GitHub API Rate Limits
+        id: rate_limit
+        run: |
+          RATE_LIMIT=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+            "https://api.github.com/rate_limit" | jq '.rate.remaining')
+          echo "Remaining API requests: $RATE_LIMIT"
+          if [ "$RATE_LIMIT" -lt 100 ]; then
+            echo "GitHub API rate limit is low! Skipping this run."
+            exit 1
+          fi
+
+      - name: Calculate date one month ago
+        id: datecalc
+        run: |
+          ONE_MONTH_AGO=$(date -d "1 month ago" +%Y-%m-%d)
+          echo "one_month_ago=$ONE_MONTH_AGO" >> $GITHUB_OUTPUT
+          echo "Using date: $ONE_MONTH_AGO"
+
+      - name: Fetch total commits (past month, any repository)
+        id: total_commits
+        run: |
+          DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
+          echo "Querying commits from: $DATE_QUERY"
+          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+            -H "Accept: application/vnd.github.cloak-preview" \
+            "https://api.github.com/search/commits?q=author:nicholasjano+committer-date:>=$DATE_QUERY&per_page=100")
+          TOTAL_COMMITS=$(echo "$RESPONSE" | jq '.total_count')
+          echo "Total commits: $TOTAL_COMMITS"
+          echo "total_commits=$TOTAL_COMMITS" >> $GITHUB_OUTPUT
+
+      - name: Fetch unique repositories for commits (past month)
+        id: unique_repos
+        run: |
+          DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
+          echo "Querying commits for unique repos from: $DATE_QUERY"
+          UNIQUE_REPOS_TEMP_FILE="repos.txt"
+          > $UNIQUE_REPOS_TEMP_FILE
+          for page in {1..10}; do
+              echo "Fetching page $page"
+              RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+                -H "Accept: application/vnd.github.cloak-preview" \
+                "https://api.github.com/search/commits?q=author:nicholasjano+committer-date:>=$DATE_QUERY&per_page=100&page=$page")
+              ITEM_COUNT=$(echo "$RESPONSE" | jq '.items | length')
+              if [ "$ITEM_COUNT" -eq "0" ]; then
+                  break
+              fi
+              echo "$RESPONSE" | jq -r '.items[].repository.full_name' >> $UNIQUE_REPOS_TEMP_FILE
+          done
+          UNIQUE_COUNT=$(sort -u $UNIQUE_REPOS_TEMP_FILE | wc -l | tr -d ' ')
+          echo "Unique repositories: $UNIQUE_COUNT"
+          echo "unique_repos=$UNIQUE_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Fetch 'New Solution' commits from Leetcode-Solutions repo (past month)
+        id: new_solution_commits
+        run: |
+          DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
+          NEW_SOLUTION_COUNT=0
+          for page in {1..10}; do
+              echo "Fetching page $page"
+              RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+                -H "Accept: application/vnd.github.cloak-preview" \
+                "https://api.github.com/search/commits?q=repo:nicholasjano/Leetcode-Solutions+\"New Solution\"+in:commit+committer-date:>=$DATE_QUERY&per_page=100&page=$page")
+              ITEM_COUNT=$(echo "$RESPONSE" | jq '.items | length')
+              if [ "$ITEM_COUNT" -eq "0" ]; then
+                  break
+              fi
+              NEW_SOLUTION_COUNT=$((NEW_SOLUTION_COUNT + ITEM_COUNT))
+          done
+          echo "New Solution commits: $NEW_SOLUTION_COUNT"
+          echo "new_solution_commits=$NEW_SOLUTION_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Create stats JSON file
+        run: |
+          echo "{" > stats.json
+          echo "  \"totalCommitsPastMonth\": ${{ steps.total_commits.outputs.total_commits }}," >> stats.json
+          echo "  \"uniqueRepositoriesPastMonth\": ${{ steps.unique_repos.outputs.unique_repos }}," >> stats.json
+          echo "  \"newSolutionCommits\": ${{ steps.new_solution_commits.outputs.new_solution_commits }}" >> stats.json
+          echo "}" >> stats.json
+          echo "Generated stats.json:"
+          cat stats.json
+
+      - name: Upload stats JSON as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: stats-json
+          path: stats.json

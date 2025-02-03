@@ -3,11 +3,13 @@ import { faDownLong } from "@fortawesome/free-solid-svg-icons";
 import { useRef, RefObject } from "react";
 import AnimatedNumber from "@components/AnimatedNumber";
 import { useAnimationTrigger } from "@hooks/useAnimationTrigger";
+import { useFetchStats } from "@hooks/useFetchStats";
 import { latestProject } from "@data/pageData";
 import { getMonthlyDates } from "@utilities/GetDateEST";
 import { handleScroll } from "@utilities/ScrollingUtilities";
 
 const Stats = () => {
+  const stats = useFetchStats();
   const { prevMonth, currMonth } = getMonthlyDates();
   const sectionRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   useAnimationTrigger({ elementRef: sectionRef });
@@ -29,8 +31,8 @@ const Stats = () => {
             <div className="stats-info">
               <p className="font-medium">GitHub</p>
               <p>
-                <AnimatedNumber number={88} /> Commits made across{" "}
-                <AnimatedNumber number={4} /> Repositories
+                <AnimatedNumber number={stats.totalCommitsPastMonth} /> Commits made across{" "}
+                <AnimatedNumber number={stats.uniqueRepositoriesPastMonth} /> Repositories
               </p>
             </div>
             <div className="stats-info">
@@ -56,7 +58,7 @@ const Stats = () => {
             <div className="stats-info">
               <p className="font-medium">LeetCode</p>
               <p>
-                <AnimatedNumber number={20} /> Problems Solved
+                <AnimatedNumber number={stats.newSolutionCommits} /> Problems Solved
               </p>
             </div>
           </div>

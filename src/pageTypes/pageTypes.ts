@@ -130,4 +130,10 @@ export type UseResponsiveThresholdProps = {
   default?: number;
   large?: number;
   breakpoint?: number;
-}
+};
+
+export type DynamicStatsType = {
+  totalCommitsPastMonth: number;
+  uniqueRepositoriesPastMonth: number;
+  newSolutionCommits: number;
+};

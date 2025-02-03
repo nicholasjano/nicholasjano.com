@@ -15,6 +15,7 @@ import type {
   FooterRightInfo,
   FooterLeftInfo,
   FooterType,
+  DynamicStatsType,
 } from "@pageTypes/pageTypes";
 import MarmonRail from "@assets/MarmonRail.webp";
 import NetSolutionsTime from "@assets/NetSolutionsTime.webp";
@@ -277,3 +278,12 @@ export const FooterInfo: FooterType = {
   internal: [FooterRoleInfo, FooterSchoolInfo, FooterLocationInfo],
   external: [EmailInfo, PhoneInfo, LinkedInInfo, GitHubInfo],
 };
+
+export const defaultStats: Readonly<DynamicStatsType> = {
+  totalCommitsPastMonth: 88,
+  uniqueRepositoriesPastMonth: 4,
+  newSolutionCommits: 20,
+};
+
+export const API_URL =
+  "https://github.com/nicholasjano/nicholasjano.com/actions/artifacts/latest/stats-json/contents/stats.json" as const;

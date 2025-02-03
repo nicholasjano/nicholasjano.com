@@ -86,7 +86,8 @@ jobs:
           for page in {1..10}; do
               RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
                 -H "Accept: application/vnd.github.cloak-preview" \
-                "https://api.github.com/search/commits?q=repo:nicholasjano/Leetcode-Solutions+%22New%20Solution%22+in:commit+committer-date:>=$DATE_QUERY&per_page=100&page=$page")
+                "https://api.github.com/search/commits?q=repo:nicholasjano/Leetcode-Solutions+%22New%20Solution%22+committer-date:>=$DATE_QUERY&per_page=100&page=$page")
+              echo "Response: $RESPONSE" # Debug line
               ITEM_COUNT=$(echo "$RESPONSE" | jq '.items | length')
               if [ "$ITEM_COUNT" -eq "0" ]; then
                   break
@@ -106,6 +107,27 @@ jobs:
       - name: Install AWS CLI
         run: |
           pip install awscli
+
+      - name: Set CORS configuration for R2 bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          echo '{
+            "CORSRules": [
+              {
+                "AllowedOrigins": ["https://nicholasjano.com", "http://localhost:5173"],
+                "AllowedMethods": ["GET"],
+                "AllowedHeaders": ["*"],
+                "MaxAgeSeconds": 3000
+              }
+            ]
+          }' > cors.json
+          aws s3api put-bucket-cors --bucket ${R2_BUCKET} \
+            --cors-configuration file://cors.json \
+            --endpoint-url ${R2_ENDPOINT}
 
       - name: Upload stats.json to R2
         env:

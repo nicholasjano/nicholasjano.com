@@ -14,7 +14,7 @@ const Projects = () => {
             </p>
           </div>
         </FadeInOnView>
-        <FadeInOnView delay={200}>
+        <FadeInOnView delay={200} threshold={0.02}>
           <div className="project-list">
             {ProjectInfos.map((project, index) => (
               <ProjectCard key={index} {...project} />

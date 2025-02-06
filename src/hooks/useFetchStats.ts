@@ -4,6 +4,7 @@ import type {
   UseFetchStatsReturn,
 } from "@pageTypes/pageTypes";
 import { defaultStats, API_URL } from "@data/pageData";
+import { isValidStats } from "@utilities/StatsValidation";
 
 const FETCH_INTERVAL = 5 * 60 * 1000;
 
@@ -17,12 +18,16 @@ export const useFetchStats = (): UseFetchStatsReturn => {
         const response = await fetch(API_URL, { cache: "no-store" });
         if (!response.ok) throw new Error("Failed to fetch stats.json");
 
-        const data: DynamicStatsType = await response.json();
+        const data = await response.json();
 
-        setStats(data);
-
-        localStorage.setItem("githubStats", JSON.stringify(data));
-        localStorage.setItem("lastFetchTime", Date.now().toString());
+        // Check if data matches our type requirements
+        if (!isValidStats(data)) {
+          setStats(defaultStats);
+        } else {
+          setStats(data);
+          localStorage.setItem("githubStats", JSON.stringify(data));
+          localStorage.setItem("lastFetchTime", Date.now().toString());
+        }
       } catch (error) {
         console.error("Error fetching stats:", error);
         setStats(defaultStats);

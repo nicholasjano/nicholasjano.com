@@ -75,7 +75,7 @@ jobs:
           NEW_SOLUTION_COUNT=0
 
           while :; do
-            # Construct query with pagination
+            # Construct query with pagination using jq.
             QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg current_date "$CURRENT_DATE" --arg cursor "$CURSOR" '
               {
                 query: "query {
@@ -93,7 +93,7 @@ jobs:
                     defaultBranchRef {
                       target {
                         ... on Commit {
-                          history(first: 100, since: \($date_query), after: " \($cursor) ") {
+                          history(first: 100, since: \($date_query), after: \($cursor | if . == \"null\" then null else . end)) {
                             pageInfo {
                               hasNextPage
                               endCursor
@@ -113,39 +113,39 @@ jobs:
                   }
                 }"
               }')
-
+            
             RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
               -H "Content-Type: application/json" \
               https://api.github.com/graphql \
               -d "$QUERY")
-
+            
             echo "Raw response:"
             echo "$RESPONSE"
-
+            
             # Check for errors
             if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
               echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
               exit 1
             fi
-
-            # Extract commit messages authored only by nicholasjano
+            
+            # Extract commit messages authored only by nicholasjano and matching "new" and "solution" (case-insensitive)
             PAGE_COUNT=$(echo "$RESPONSE" | jq '[.data.repository.defaultBranchRef.target.history.nodes[]
               | select(.author.user.login == "nicholasjano")
               | select(.message | test("new"; "i") and test("solution"; "i"))] | length')
-
+            
             NEW_SOLUTION_COUNT=$((NEW_SOLUTION_COUNT + PAGE_COUNT))
-
+            
             # Get pagination info
             HAS_NEXT_PAGE=$(echo "$RESPONSE" | jq '.data.repository.defaultBranchRef.target.history.pageInfo.hasNextPage')
             CURSOR=$(echo "$RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor')
-
+            
             # Stop if there are no more pages
             if [[ "$HAS_NEXT_PAGE" != "true" || "$CURSOR" == "null" ]]; then
               break
             fi
           done
 
-          # Extract values for total commits & unique repos
+          # Extract values for total commits & unique repos (from the last response)
           TOTAL_COMMITS=$(echo "$RESPONSE" | jq '.data.user.contributionsCollection.totalCommitContributions')
           UNIQUE_REPOS=$(echo "$RESPONSE" | jq '.data.user.contributionsCollection.commitContributionsByRepository | length')
 

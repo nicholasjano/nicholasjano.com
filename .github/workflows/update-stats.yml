@@ -78,21 +78,23 @@ jobs:
           CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
 
           # First, fetch the non-paginated data (total commits and unique repos)
-          INITIAL_QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg current_date "$CURRENT_DATE" '
-          {
-            query: "query {
-              user(login: \"nicholasjano\") {
-                contributionsCollection(from: \($date_query), to: \($current_date)) {
-                  totalCommitContributions
-                  commitContributionsByRepository {
-                    repository {
-                      id
+          INITIAL_QUERY=$(jq -n \
+            --arg date_query "$DATE_QUERY" \
+            --arg current_date "$CURRENT_DATE" \
+            '{
+              query: "query {
+                user(login: \"nicholasjano\") {
+                  contributionsCollection(from: \"" + $date_query + "\", to: \"" + $current_date + "\") {
+                    totalCommitContributions
+                    commitContributionsByRepository {
+                      repository {
+                        id
+                      }
                     }
                   }
                 }
-              }
-            }"
-          }')
+              }"
+            }')
 
           # Execute the initial query
           INITIAL_RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
@@ -117,23 +119,26 @@ jobs:
 
           while true; do
             # Construct GraphQL query for commit history with pagination
-            COMMITS_QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg cursor "$CURSOR" '
-            {
-              query: "query ($cursor: String) {
-                repository(owner: \"nicholasjano\", name: \"Leetcode-Solutions\") {
-                  defaultBranchRef {
-                    target {
-                      ... on Commit {
-                        history(first: 100, since: \($date_query), after: $cursor) {
-                          pageInfo {
-                            hasNextPage
-                            endCursor
-                          }
-                          nodes {
-                            message
-                            author {
-                              user {
-                                login
+            COMMITS_QUERY=$(jq -n \
+              --arg date_query "$DATE_QUERY" \
+              --arg cursor "$CURSOR" \
+              '{
+                query: "query ($cursor: String) {
+                  repository(owner: \"nicholasjano\", name: \"Leetcode-Solutions\") {
+                    defaultBranchRef {
+                      target {
+                        ... on Commit {
+                          history(first: 100, since: \"" + $date_query + "\", after: $cursor) {
+                            pageInfo {
+                              hasNextPage
+                              endCursor
+                            }
+                            nodes {
+                              message
+                              author {
+                                user {
+                                  login
+                                }
                               }
                             }
                           }
@@ -141,12 +146,11 @@ jobs:
                       }
                     }
                   }
+                }",
+                variables: {
+                  cursor: ($cursor | if . == "" then null else . end)
                 }
-              }",
-              variables: {
-                cursor: ($cursor | if . == "" then null else . end)
-              }
-            }')
+              }')
 
             # Execute the commits query
             COMMITS_RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \

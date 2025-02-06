@@ -70,15 +70,17 @@ jobs:
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
           CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
 
-          # Initialize pagination variables
+          # Initialize variables
           CURSOR=""
           NEW_SOLUTION_COUNT=0
+          TOTAL_COMMITS=0
+          UNIQUE_REPOS=0
 
           while :; do
-            # Build the GraphQL query with proper cursor pagination
+            # Construct GraphQL query dynamically with cursor pagination
             QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg current_date "$CURRENT_DATE" --arg cursor "$CURSOR" '
             {
-              query: "query {
+              query: "query ($afterCursor: String) {
                 user(login: \"nicholasjano\") {
                   contributionsCollection(from: \($date_query), to: \($current_date)) {
                     totalCommitContributions
@@ -93,7 +95,7 @@ jobs:
                   defaultBranchRef {
                     target {
                       ... on Commit {
-                        history(first: 100, since: \($date_query) \($cursor)) {
+                        history(first: 100, since: \($date_query), after: $afterCursor) {
                           pageInfo {
                             hasNextPage
                             endCursor
@@ -111,7 +113,8 @@ jobs:
                     }
                   }
                 }
-              }"
+              }",
+              variables: { afterCursor: ($cursor | if . == "" then null else . end) }
             }')
 
             # Execute the GraphQL query
@@ -137,21 +140,27 @@ jobs:
 
             NEW_SOLUTION_COUNT=$((NEW_SOLUTION_COUNT + PAGE_COUNT))
 
-            # Get pagination info
+            # Extract pagination info
             HAS_NEXT_PAGE=$(echo "$RESPONSE" | jq '.data.repository.defaultBranchRef.target.history.pageInfo.hasNextPage')
             NEXT_CURSOR=$(echo "$RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor')
 
-            # Update CURSOR for next iteration if more pages exist
-            if [[ "$HAS_NEXT_PAGE" == "true" && "$NEXT_CURSOR" != "null" ]]; then
-              CURSOR=", after: \\\"$NEXT_CURSOR\\\""
-            else
+            # Extract total commits & unique repos on the first iteration
+            if [[ "$TOTAL_COMMITS" -eq 0 ]]; then
+              TOTAL_COMMITS=$(echo "$RESPONSE" | jq '.data.user.contributionsCollection.totalCommitContributions')
+            fi
+
+            if [[ "$UNIQUE_REPOS" -eq 0 ]]; then
+              UNIQUE_REPOS=$(echo "$RESPONSE" | jq '.data.user.contributionsCollection.commitContributionsByRepository | length')
+            fi
+
+            # If there's no next page, stop fetching
+            if [[ "$HAS_NEXT_PAGE" == "false" || "$NEXT_CURSOR" == "null" ]]; then
               break
             fi
-          done
 
-          # Extract values for total commits & unique repos (from the last response)
-          TOTAL_COMMITS=$(echo "$RESPONSE" | jq '.data.user.contributionsCollection.totalCommitContributions')
-          UNIQUE_REPOS=$(echo "$RESPONSE" | jq '.data.user.contributionsCollection.commitContributionsByRepository | length')
+            # Update cursor for next iteration
+            CURSOR="$NEXT_CURSOR"
+          done
 
           echo "Total commits: $TOTAL_COMMITS"
           echo "Unique repositories: $UNIQUE_REPOS"

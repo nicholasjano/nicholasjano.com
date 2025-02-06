@@ -71,19 +71,12 @@ jobs:
           CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
 
           # Initialize cursor and pagination variables
-          CURSOR=""
+          CURSOR=null
           NEW_SOLUTION_COUNT=0
 
           while :; do
-            # Construct the after clause for the GraphQL query
-            if [ -z "$CURSOR" ]; then
-              AFTER_CLAUSE=""
-            else
-              AFTER_CLAUSE=", after: \\\"$CURSOR\\\""
-            fi
-
             # Construct the GraphQL query
-            QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg current_date "$CURRENT_DATE" --arg after_clause "$AFTER_CLAUSE" '
+            QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg current_date "$CURRENT_DATE" --arg cursor "$CURSOR" '
               {
                 query: "query {
                   user(login: \"nicholasjano\") {
@@ -100,7 +93,7 @@ jobs:
                     defaultBranchRef {
                       target {
                         ... on Commit {
-                          history(first: 100, since: \($date_query)\($after_clause)) {
+                          history(first: 100, since: \($date_query)" + ($cursor != "null" ? ", after: \\\"\($cursor)\\\"" : "") + ") {
                             pageInfo {
                               hasNextPage
                               endCursor
@@ -147,7 +140,7 @@ jobs:
             CURSOR=$(echo "$RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor')
 
             # Stop if there are no more pages
-            if [[ "$HAS_NEXT_PAGE" != "true" || -z "$CURSOR" ]]; then
+            if [[ "$HAS_NEXT_PAGE" != "true" || "$CURSOR" == "null" ]]; then
               break
             fi
           done

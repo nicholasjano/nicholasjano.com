@@ -49,7 +49,7 @@ const Footer = () => {
                     padding: `${paddingsFooter[index].y}px ${paddingsFooter[index].x}px`,
                     margin: `-${paddingsFooter[index].y}px -${paddingsFooter[index].x}px`,
                   }}
-                  className="hover-colour transition-colors duration-200 focus:outline-none flex items-center"
+                  className="hover-colour transition-colors duration-200 focus:outline-none"
                 >
                   <FontAwesomeIcon icon={item.icon} />
                 </a>

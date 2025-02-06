@@ -1,5 +1,5 @@
 import nickImage from "@assets/nickMain.webp";
-import { personalDescription } from "@data/pageData";
+import { personalDescription, mainInfoRootMargin } from "@data/pageData";
 import FadeInOnView from "@components/FadeInOnView";
 
 const About = () => {
@@ -18,7 +18,7 @@ const About = () => {
             </p>
           </div>
         </FadeInOnView>
-        <FadeInOnView delay={200} className="w-full">
+        <FadeInOnView delay={200} rootMargin={mainInfoRootMargin} className="w-full">
           <div className="w-full flex flex-col lg:flex-row items-center lg:items-start gap-12">
             <div className="relative w-72 h-72 about-xs:w-96 about-xs:h-96 flex-shrink-0">
               <div className="absolute inset-0 bg-brand-blue rounded-2xl blur-md opacity-40" />

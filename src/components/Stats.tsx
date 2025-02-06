@@ -31,8 +31,13 @@ const Stats = () => {
             <div className="stats-info">
               <p className="font-medium">GitHub</p>
               <p>
-                <AnimatedNumber number={stats.totalCommitsPastMonth} /> Commits made across{" "}
-                <AnimatedNumber number={stats.uniqueRepositoriesPastMonth} /> Repositories
+                <AnimatedNumber number={stats.totalCommitsPastMonth} />{" "}
+                {stats.totalCommitsPastMonth === 1 ? "Commit" : "Commits"} made
+                across{" "}
+                <AnimatedNumber number={stats.uniqueRepositoriesPastMonth} />{" "}
+                {stats.uniqueRepositoriesPastMonth === 1
+                  ? "Repository"
+                  : "Repositories"}
               </p>
             </div>
             <div className="stats-info">
@@ -58,7 +63,8 @@ const Stats = () => {
             <div className="stats-info">
               <p className="font-medium">LeetCode</p>
               <p>
-                <AnimatedNumber number={stats.newSolutionCommits} /> Problems Solved
+                <AnimatedNumber number={stats.newSolutionCommits} />{" "}
+                {stats.newSolutionCommits === 1 ? "Problem" : "Problems"} Solved
               </p>
             </div>
           </div>

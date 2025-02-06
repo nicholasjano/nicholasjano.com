@@ -288,3 +288,5 @@ export const defaultStats: Readonly<DynamicStatsType> = {
 
 export const API_URL =
   "https://stats.nicholasjano.com/stats.json" as const;
+
+export const mainInfoRootMargin = 40 as const;

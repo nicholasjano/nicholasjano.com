@@ -118,7 +118,7 @@ export type FadeInOnViewProps = {
   delay?: number;
   direction?: FadeDirection;
   className?: string;
-  threshold?: number;
+  rootMargin?: number;
 };
 
 export type UseAnimationTriggerProps = {

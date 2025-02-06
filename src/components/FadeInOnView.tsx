@@ -7,7 +7,7 @@ const FadeInOnView = ({
   delay = 0,
   className = "",
   direction = FadeDirection.UP,
-  threshold = 0.05,
+  rootMargin = 4,
 }: FadeInOnViewProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
@@ -20,7 +20,7 @@ const FadeInOnView = ({
         }
       },
       {
-        threshold: threshold,
+        rootMargin: `-${rootMargin}px 0px -${rootMargin}px 0px`,
       }
     );
 
@@ -33,7 +33,7 @@ const FadeInOnView = ({
         observer.disconnect();
       }
     };
-  }, [delay, threshold]);
+  }, [delay, rootMargin]);
 
   const getTransformStyle = () => {
     const distance = 10;

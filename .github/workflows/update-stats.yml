@@ -46,53 +46,79 @@ jobs:
             DAY_NUM=$LAST_DAY_NUM
           fi
           DAY_NUM=$(printf "%02d" $DAY_NUM)
-          ONE_MONTH_AGO="${PREV_YEAR}-${PREV_MONTH}-${DAY_NUM}"
+          ONE_MONTH_AGO=$(date -d "${PREV_YEAR}-${PREV_MONTH}-${DAY_NUM}" +"%m/%d/%y")
           echo "one_month_ago=$ONE_MONTH_AGO" >> $GITHUB_OUTPUT
 
       - name: Fetch total commits (past month, any repository)
         id: total_commits
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
-            -H "Accept: application/vnd.github.cloak-preview" \
-            "https://api.github.com/search/commits?q=author:nicholasjano+committer-date:>=$DATE_QUERY&per_page=100")
-          TOTAL_COMMITS=$(echo "$RESPONSE" | jq '.total_count')
+          QUERY='query($query: String!) {
+            search(query: $query, type: COMMIT, first: 1) {
+              commitCount
+            }
+          }'
+          
+          RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            https://api.github.com/graphql \
+            -d "{\"query\":\"$QUERY\",\"variables\":{\"query\":\"author:nicholasjano author-date:>=$DATE_QUERY\"}}")
+          
+          # Check for errors in response
+          if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
+            echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
+            exit 1
+          fi
+          
+          TOTAL_COMMITS=$(echo "$RESPONSE" | jq '.data.search.commitCount')
           echo "total_commits=$TOTAL_COMMITS" >> $GITHUB_OUTPUT
 
       - name: Fetch unique repositories for commits (past month)
         id: unique_repos
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          UNIQUE_REPOS_TEMP_FILE="repos.txt"
-          > $UNIQUE_REPOS_TEMP_FILE
-          for page in {1..10}; do
-              RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
-                -H "Accept: application/vnd.github.cloak-preview" \
-                "https://api.github.com/search/commits?q=author:nicholasjano+committer-date:>=$DATE_QUERY&per_page=100&page=$page")
-              ITEM_COUNT=$(echo "$RESPONSE" | jq '.items | length')
-              if [ "$ITEM_COUNT" -eq "0" ]; then
-                  break
-              fi
-              echo "$RESPONSE" | jq -r '.items[].repository.full_name' >> $UNIQUE_REPOS_TEMP_FILE
-          done
-          UNIQUE_COUNT=$(sort -u $UNIQUE_REPOS_TEMP_FILE | wc -l | tr -d ' ')
-          echo "unique_repos=$UNIQUE_COUNT" >> $GITHUB_OUTPUT
+          QUERY='query($query: String!) {
+            search(query: $query, type: COMMIT, first: 1) {
+              repositoryCount
+            }
+          }'
+          
+          RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            https://api.github.com/graphql \
+            -d "{\"query\":\"$QUERY\",\"variables\":{\"query\":\"author:nicholasjano author-date:>=$DATE_QUERY\"}}")
+          
+          # Check for errors in response
+          if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
+            echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
+            exit 1
+          fi
+          
+          UNIQUE_REPOS=$(echo "$RESPONSE" | jq '.data.search.repositoryCount')
+          echo "unique_repos=$UNIQUE_REPOS" >> $GITHUB_OUTPUT
 
       - name: Fetch 'New Solution' commits from Leetcode-Solutions repo (past month)
         id: new_solution_commits
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          NEW_SOLUTION_COUNT=0
-          for page in {1..10}; do
-              RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
-                -H "Accept: application/vnd.github.cloak-preview" \
-                "https://api.github.com/search/commits?q=repo:nicholasjano/Leetcode-Solutions+New%20Solution+committer-date:>=$DATE_QUERY&per_page=100&page=$page")
-              ITEM_COUNT=$(echo "$RESPONSE" | jq '.items | length')
-              if [ "$ITEM_COUNT" -eq "0" ]; then
-                  break
-              fi
-              NEW_SOLUTION_COUNT=$((NEW_SOLUTION_COUNT + ITEM_COUNT))
-          done
+          QUERY='query($query: String!) {
+            search(query: $query, type: COMMIT, first: 1) {
+              commitCount
+            }
+          }'
+          
+          RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            https://api.github.com/graphql \
+            -d "{\"query\":\"$QUERY\",\"variables\":{\"query\":\"repo:nicholasjano/Leetcode-Solutions message:new message:solution author-date:>=$DATE_QUERY\"}}")
+          
+          # Check for errors in response
+          if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
+            echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
+            exit 1
+          fi
+          
+          NEW_SOLUTION_COUNT=$(echo "$RESPONSE" | jq '.data.search.commitCount')
           echo "new_solution_commits=$NEW_SOLUTION_COUNT" >> $GITHUB_OUTPUT
 
       - name: Create stats JSON file
@@ -105,7 +131,7 @@ jobs:
 
       - name: Install AWS CLI
         run: |
-          pip install awscli
+          pip install awscli || exit 1
 
       - name: Upload stats.json to R2
         env:
@@ -114,8 +140,31 @@ jobs:
           R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
         run: |
-          # Set cache control to prevent caching
-          aws s3 cp stats.json s3://${R2_BUCKET}/stats.json \
-            --endpoint-url ${R2_ENDPOINT} \
-            --cache-control "no-store, no-cache" \
-            --content-type "application/json"
+          # Check if file exists
+          if [ ! -f stats.json ]; then
+            echo "Error: stats.json file not found"
+            exit 1
+          fi
+
+          # Check if file is valid JSON
+          if ! jq empty stats.json 2>/dev/null; then
+            echo "Error: stats.json is not valid JSON"
+            exit 1
+          fi
+
+          # Attempt upload with retries
+          for i in {1..3}; do
+            if aws s3 cp stats.json s3://${R2_BUCKET}/stats.json \
+              --endpoint-url ${R2_ENDPOINT} \
+              --cache-control "no-store, no-cache" \
+              --content-type "application/json"; then
+              echo "Successfully uploaded stats.json to R2"
+              exit 0
+            else
+              echo "Attempt $i failed, retrying in 5 seconds..."
+              sleep 5
+            fi
+          done
+
+          echo "Error: Failed to upload stats.json after 3 attempts"
+          exit 1

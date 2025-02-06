@@ -1,4 +1,4 @@
-import { ExperienceInfos } from "@data/pageData";
+import { ExperienceInfos, mainInfoRootMargin } from "@data/pageData";
 import ExperienceCard from "@components/ExperienceCard";
 import FadeInOnView from "@components/FadeInOnView";
 
@@ -14,7 +14,7 @@ const Experience = () => {
             </p>
           </div>
         </FadeInOnView>
-        <FadeInOnView delay={200}>
+        <FadeInOnView delay={200} rootMargin={mainInfoRootMargin}>
           <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {ExperienceInfos.map((experience, index) => (
               <ExperienceCard key={index} {...experience} />

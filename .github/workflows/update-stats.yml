@@ -64,40 +64,57 @@ jobs:
           echo "Computed one_month_ago: $ONE_MONTH_AGO"
           echo "one_month_ago=$ONE_MONTH_AGO" >> $GITHUB_OUTPUT
 
-      - name: Install Octokit
-        run: npm install @octokit/core @octokit/plugin-paginate-graphql
-
       - name: Fetch GitHub Stats (Total Commits, Unique Repos, New Solutions)
         id: fetch_stats
         run: |
-          node <<EOF
-          const { Octokit } = require("@octokit/core");
-          const { paginateGraphQL } = require("@octokit/plugin-paginate-graphql");
+          DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
+          CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
 
-          const MyOctokit = Octokit.plugin(paginateGraphQL);
-          const octokit = new MyOctokit({ auth: process.env.PAT_TOKEN });
-
-          (async () => {
-            const dateQuery = "${{ steps.datecalc.outputs.one_month_ago }}";
-            const currentDate = new Date().toISOString();
-
-            const query = `
-              query paginate($cursor: String) {
-                user(login: "nicholasjano") {
-                  contributionsCollection(from: "${dateQuery}", to: "${currentDate}") {
-                    totalCommitContributions
-                    commitContributionsByRepository {
-                      repository {
-                        id
-                      }
+          # First, fetch the non-paginated data (total commits and unique repos)
+          INITIAL_QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg current_date "$CURRENT_DATE" '
+          {
+            query: "query {
+              user(login: \"nicholasjano\") {
+                contributionsCollection(from: \($date_query), to: \($current_date)) {
+                  totalCommitContributions
+                  commitContributionsByRepository {
+                    repository {
+                      id
                     }
                   }
                 }
-                repository(owner: "nicholasjano", name: "Leetcode-Solutions") {
+              }
+            }"
+          }')
+
+          # Execute the initial query
+          INITIAL_RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            https://api.github.com/graphql \
+            -d "$INITIAL_QUERY")
+
+          # Extract total commits and unique repos
+          TOTAL_COMMITS=$(echo "$INITIAL_RESPONSE" | jq '.data.user.contributionsCollection.totalCommitContributions')
+          UNIQUE_REPOS=$(echo "$INITIAL_RESPONSE" | jq '.data.user.contributionsCollection.commitContributionsByRepository | length')
+
+          # Now handle the paginated commits query separately
+          CURSOR=""
+          NEW_SOLUTION_COUNT=0
+
+          while true; do
+            # Construct GraphQL query for commit history with pagination
+            COMMITS_QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg cursor "$CURSOR" '
+            {
+              query: "query ($cursor: String) {
+                repository(owner: \"nicholasjano\", name: \"Leetcode-Solutions\") {
                   defaultBranchRef {
                     target {
                       ... on Commit {
-                        history(first: 100, since: "${dateQuery}", after: $cursor) {
+                        history(first: 100, since: \($date_query), after: $cursor) {
+                          pageInfo {
+                            hasNextPage
+                            endCursor
+                          }
                           nodes {
                             message
                             author {
@@ -106,45 +123,60 @@ jobs:
                               }
                             }
                           }
-                          pageInfo {
-                            hasNextPage
-                            endCursor
-                          }
                         }
                       }
                     }
                   }
                 }
+              }",
+              variables: {
+                cursor: ($cursor | if . == "" then null else . end)
               }
-            `;
+            }')
 
-            let newSolutionCount = 0;
+            # Execute the commits query
+            COMMITS_RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              https://api.github.com/graphql \
+              -d "$COMMITS_QUERY")
 
-            const response = await octokit.graphql.paginate(query);
+            # Check for errors in response
+            if echo "$COMMITS_RESPONSE" | jq -e 'has("errors")' > /dev/null; then
+              ERROR_MESSAGE=$(echo "$COMMITS_RESPONSE" | jq -r '.errors[0].message')
+              echo "Error: $ERROR_MESSAGE"
+              exit 1
+            fi
 
-            // Extract commit messages only authored by "nicholasjano"
-            const commits = response.repository.defaultBranchRef.target.history.nodes.filter(commit =>
-              commit.author?.user?.login === "nicholasjano" &&
-              /new/i.test(commit.message) && /solution/i.test(commit.message)
-            );
+            # Extract commit data
+            PAGE_COUNT=$(echo "$COMMITS_RESPONSE" | jq '[.data.repository.defaultBranchRef.target.history.nodes[]
+              | select(.author.user.login == "nicholasjano")
+              | select(.message | test("new"; "i") and test("solution"; "i"))] | length')
 
-            newSolutionCount = commits.length;
+            NEW_SOLUTION_COUNT=$((NEW_SOLUTION_COUNT + PAGE_COUNT))
 
-            const totalCommits = response.user.contributionsCollection.totalCommitContributions;
-            const uniqueRepos = response.user.contributionsCollection.commitContributionsByRepository.length;
+            # Handle pagination
+            HAS_NEXT_PAGE=$(echo "$COMMITS_RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.hasNextPage')
+            NEXT_CURSOR=$(echo "$COMMITS_RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor')
 
-            console.log("Total commits:", totalCommits);
-            console.log("Unique repositories:", uniqueRepos);
-            console.log("New solution commits:", newSolutionCount);
+            echo "Processed page with $PAGE_COUNT matching commits. Has next page: $HAS_NEXT_PAGE"
 
-            // Store values as GitHub Action outputs
-            console.log(`::set-output name=total_commits::${totalCommits}`);
-            console.log(`::set-output name=unique_repos::${uniqueRepos}`);
-            console.log(`::set-output name=new_solution_commits::${newSolutionCount}`);
-          })();
-          EOF
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+            # Break if we've reached the last page
+            if [[ "$HAS_NEXT_PAGE" != "true" || "$NEXT_CURSOR" == "null" ]]; then
+              break
+            fi
+
+            # Update cursor for next iteration
+            CURSOR="$NEXT_CURSOR"
+          done
+
+          echo "Total commits: $TOTAL_COMMITS"
+          echo "Unique repositories: $UNIQUE_REPOS"
+          echo "Final count of new solution commits: $NEW_SOLUTION_COUNT"
+
+          # Store values in GitHub Actions outputs
+          echo "total_commits=$TOTAL_COMMITS" >> $GITHUB_OUTPUT
+          echo "unique_repos=$UNIQUE_REPOS" >> $GITHUB_OUTPUT
+          echo "new_solution_commits=$NEW_SOLUTION_COUNT" >> $GITHUB_OUTPUT
 
       - name: Create stats JSON file
         run: |

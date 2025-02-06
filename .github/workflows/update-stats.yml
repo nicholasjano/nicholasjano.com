@@ -84,7 +84,7 @@ jobs:
             '{
               query: "query {
                 user(login: \"nicholasjano\") {
-                  contributionsCollection(from: \"" + $date_query + "\", to: \"" + $current_date + "\") {
+                  contributionsCollection(from: \($date_query), to: \($current_date)) {
                     totalCommitContributions
                     commitContributionsByRepository {
                       repository {
@@ -128,7 +128,7 @@ jobs:
                     defaultBranchRef {
                       target {
                         ... on Commit {
-                          history(first: 100, since: \"" + $date_query + "\", after: $cursor) {
+                          history(first: 100, since: \($date_query), after: $cursor) {
                             pageInfo {
                               hasNextPage
                               endCursor

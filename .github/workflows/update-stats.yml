@@ -68,18 +68,19 @@ jobs:
         id: fetch_stats
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-      
+          CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
+
           # Initialize cursor and pagination variables
           CURSOR=null
           NEW_SOLUTION_COUNT=0
-      
+
           while :; do
-            # Construct query with pagination (Removed `author: { id: "nicholasjano" }`)
-            QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg cursor "$CURSOR" '
+            # Construct query with pagination (Fixed syntax for jq)
+            QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg current_date "$CURRENT_DATE" --arg cursor "$CURSOR" '
               {
                 query: "query {
                   user(login: \"nicholasjano\") {
-                    contributionsCollection(from: \($date_query), to: \"$(date -u +"%Y-%m-%dT00:00:00Z")\") {
+                    contributionsCollection(from: \($date_query), to: \($current_date)) {
                       totalCommitContributions
                       commitContributionsByRepository {
                         repository {
@@ -112,51 +113,50 @@ jobs:
                   }
                 }"
               }')
-      
+
             RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
               -H "Content-Type: application/json" \
               https://api.github.com/graphql \
               -d "$QUERY")
-      
+
             echo "Raw response:"
             echo "$RESPONSE"
-      
+
             # Check for errors
             if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
               echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
               exit 1
             fi
-      
+
             # Extract commit messages authored only by nicholasjano
             PAGE_COUNT=$(echo "$RESPONSE" | jq '[.data.repository.defaultBranchRef.target.history.nodes[]
               | select(.author.user.login == "nicholasjano")
               | select(.message | test("new"; "i") and test("solution"; "i"))] | length')
-      
+
             NEW_SOLUTION_COUNT=$((NEW_SOLUTION_COUNT + PAGE_COUNT))
-      
+
             # Get pagination info
             HAS_NEXT_PAGE=$(echo "$RESPONSE" | jq '.data.repository.defaultBranchRef.target.history.pageInfo.hasNextPage')
             CURSOR=$(echo "$RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor')
-      
+
             # Stop if there are no more pages
             if [[ "$HAS_NEXT_PAGE" != "true" || "$CURSOR" == "null" ]]; then
               break
             fi
           done
-      
+
           # Extract values for total commits & unique repos
           TOTAL_COMMITS=$(echo "$RESPONSE" | jq '.data.user.contributionsCollection.totalCommitContributions')
           UNIQUE_REPOS=$(echo "$RESPONSE" | jq '.data.user.contributionsCollection.commitContributionsByRepository | length')
-      
+
           echo "Total commits: $TOTAL_COMMITS"
           echo "Unique repositories: $UNIQUE_REPOS"
           echo "Final count of new solution commits: $NEW_SOLUTION_COUNT"
-      
+
           # Store values in GitHub Actions outputs
           echo "total_commits=$TOTAL_COMMITS" >> $GITHUB_OUTPUT
           echo "unique_repos=$UNIQUE_REPOS" >> $GITHUB_OUTPUT
           echo "new_solution_commits=$NEW_SOLUTION_COUNT" >> $GITHUB_OUTPUT
-                 
 
       - name: Create stats JSON file
         run: |

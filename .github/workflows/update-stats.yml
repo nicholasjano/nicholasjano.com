@@ -53,64 +53,66 @@ jobs:
         id: total_commits
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          QUERY='query($query: String!) { search(query: $query, type: COMMIT, first: 1) { totalCount } }'
-
+          
           RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Content-Type: application/json" \
             https://api.github.com/graphql \
-            -d "{\"query\":\"$QUERY\",\"variables\":{\"query\":\"author:nicholasjano author-date:>=$DATE_QUERY\"}}")
-
+            -d "{\"query\": \"query { search(query: \\\"author:nicholasjano author-date:>=$DATE_QUERY\\\", type: COMMIT, first: 1) { totalCount } }\"}")
+          
+          echo "Raw response:"
+          echo "$RESPONSE"
+          
           # Check for errors in response
           if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
             echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
             exit 1
           fi
-
-          TOTAL_COMMITS=$(echo "$RESPONSE" | jq '.data.search.commitCount')
+          
+          TOTAL_COMMITS=$(echo "$RESPONSE" | jq '.data.search.totalCount')
           echo "total_commits=$TOTAL_COMMITS" >> $GITHUB_OUTPUT
-
+      
       - name: Fetch unique repositories for commits (past month)
         id: unique_repos
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          QUERY='query($query: String!) {
-            search(query: $query, type: COMMIT, first: 1) {
-              repositoryCount
-            }
-          }'
-
+          
           RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Content-Type: application/json" \
             https://api.github.com/graphql \
-            -d "{\"query\":\"$QUERY\",\"variables\":{\"query\":\"author:nicholasjano author-date:>=$DATE_QUERY\"}}")
-
+            -d "{\"query\": \"query { search(query: \\\"author:nicholasjano author-date:>=$DATE_QUERY\\\", type: COMMIT, first: 1) { repositories { totalCount } } }\"}")
+          
+          echo "Raw response:"
+          echo "$RESPONSE"
+          
           # Check for errors in response
           if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
             echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
             exit 1
           fi
-
-          UNIQUE_REPOS=$(echo "$RESPONSE" | jq '.data.search.repositoryCount')
+          
+          UNIQUE_REPOS=$(echo "$RESPONSE" | jq '.data.search.repositories.totalCount')
           echo "unique_repos=$UNIQUE_REPOS" >> $GITHUB_OUTPUT
-
+      
       - name: Fetch 'New Solution' commits from Leetcode-Solutions repo (past month)
         id: new_solution_commits
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          QUERY='query($query: String!) { search(query: $query, type: COMMIT, first: 1) { totalCount } }'
-
+          
           RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Content-Type: application/json" \
             https://api.github.com/graphql \
-            -d "{\"query\":\"$QUERY\",\"variables\":{\"query\":\"repo:nicholasjano/Leetcode-Solutions message:new message:solution author-date:>=$DATE_QUERY\"}}")
-
+            -d "{\"query\": \"query { search(query: \\\"repo:nicholasjano/Leetcode-Solutions message:new message:solution author-date:>=$DATE_QUERY\\\", type: COMMIT, first: 1) { totalCount } }\"}")
+          
+          echo "Raw response:"
+          echo "$RESPONSE"
+          
           # Check for errors in response
           if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
             echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
             exit 1
           fi
-
-          NEW_SOLUTION_COUNT=$(echo "$RESPONSE" | jq '.data.search.commitCount')
+          
+          NEW_SOLUTION_COUNT=$(echo "$RESPONSE" | jq '.data.search.totalCount')
           echo "new_solution_commits=$NEW_SOLUTION_COUNT" >> $GITHUB_OUTPUT
 
       - name: Create stats JSON file

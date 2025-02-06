@@ -16,19 +16,52 @@ jobs:
       - name: Check GitHub API Rate Limits
         id: rate_limit
         run: |
-          RATE_LIMIT=$(curl -s -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
-            "https://api.github.com/rate_limit" | jq '.rate.remaining')
+          # Maximum retries in case of API failure
+          MAX_RETRIES=3
+          RETRY_DELAY=5  # Wait 5 seconds between retries
 
-          # Add error checking for the rate limit query
-          if [ -z "$RATE_LIMIT" ] || [ "$RATE_LIMIT" = "null" ]; then
-            echo "Error: Could not fetch rate limit. Check your token."
-            exit 1
-          fi
+          # Function to fetch the GitHub API rate limit
+          fetch_rate_limit() {
+            curl -s -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
+                    -H "Content-Type: application/json" \
+                    "https://api.github.com/rate_limit"
+          }
 
-          if [ "$RATE_LIMIT" -lt 100 ]; then
-            echo "GitHub API rate limit too low: $RATE_LIMIT"
-            exit 1
-          fi
+          for ((i=1; i<=MAX_RETRIES; i++)); do
+            # Fetch rate limit with retry logic
+            RESPONSE=$(fetch_rate_limit)
+
+            # Ensure response is not empty
+            if [[ -z "$RESPONSE" ]]; then
+              echo "Error: Empty response from GitHub API (Attempt $i/$MAX_RETRIES)"
+            else
+              # Extract rate limit remaining and reset time using jq
+              RATE_LIMIT=$(echo "$RESPONSE" | jq -r '.rate.remaining' 2>/dev/null)
+              RATE_RESET=$(echo "$RESPONSE" | jq -r '.rate.reset' 2>/dev/null)
+
+              # Ensure we got valid numeric values
+              if [[ -n "$RATE_LIMIT" && "$RATE_LIMIT" =~ ^[0-9]+$ ]]; then
+                if (( RATE_LIMIT < 100 )); then
+                  RESET_TIME=$(date -d "@$RATE_RESET" '+%Y-%m-%d %H:%M:%S UTC' 2>/dev/null || echo "unknown")
+                  echo "GitHub API rate limit too low: $RATE_LIMIT. Reset at: $RESET_TIME"
+                  exit 1
+                fi
+                echo "GitHub API rate limit is sufficient: $RATE_LIMIT"
+                exit 0
+              else
+                echo "Error: Could not parse rate limit. Response: $RESPONSE (Attempt $i/$MAX_RETRIES)"
+              fi
+            fi
+
+            # Wait before retrying
+            if (( i < MAX_RETRIES )); then
+              echo "Retrying in $RETRY_DELAY seconds..."
+              sleep $RETRY_DELAY
+            fi
+          done
+
+          echo "Failed to fetch GitHub API rate limit after $MAX_RETRIES attempts."
+          exit 1
 
       - name: Calculate date one month ago (EST)
         id: datecalc

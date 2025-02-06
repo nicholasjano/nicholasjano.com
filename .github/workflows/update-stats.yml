@@ -74,17 +74,17 @@ jobs:
       - name: Fetch GitHub Stats (Total Commits, Unique Repos, New Solutions)
         id: fetch_stats
         run: |
-          DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
+          DATE_QUERY="${{ steps.datecalc.outputs.one_month_ago }}"
           CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
 
           # First, fetch the non-paginated data (total commits and unique repos)
           INITIAL_QUERY=$(jq -n \
-            --arg date_query "$DATE_QUERY" \
-            --arg current_date "$CURRENT_DATE" \
+            --arg from "$DATE_QUERY" \
+            --arg to "$CURRENT_DATE" \
             '{
               query: "query {
                 user(login: \"nicholasjano\") {
-                  contributionsCollection(from: \($date_query), to: \($current_date)) {
+                  contributionsCollection(from: \($from), to: \($to)) {
                     totalCommitContributions
                     commitContributionsByRepository {
                       repository {
@@ -120,7 +120,7 @@ jobs:
           while true; do
             # Construct GraphQL query for commit history with pagination
             COMMITS_QUERY=$(jq -n \
-              --arg date_query "$DATE_QUERY" \
+              --arg since "$DATE_QUERY" \
               --arg cursor "$CURSOR" \
               '{
                 query: "query ($cursor: String) {
@@ -128,7 +128,7 @@ jobs:
                     defaultBranchRef {
                       target {
                         ... on Commit {
-                          history(first: 100, since: \($date_query), after: $cursor) {
+                          history(first: 100, since: \($since), after: $cursor) {
                             pageInfo {
                               hasNextPage
                               endCursor

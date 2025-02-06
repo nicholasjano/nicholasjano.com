@@ -53,8 +53,7 @@ jobs:
         id: total_commits
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          echo "Date query: $DATE_QUERY"
-          QUERY='query($query: String!) { search(query: $query, type: COMMIT, first: 1) { commitCount } }'
+          QUERY='query($query: String!) { search(query: $query, type: COMMIT, first: 1) { totalCount } }'
 
           RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Content-Type: application/json" \
@@ -74,7 +73,11 @@ jobs:
         id: unique_repos
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          QUERY='query($query: String!) { search(query: $query, type: COMMIT, first: 1) { repositoryCount } }'
+          QUERY='query($query: String!) {
+            search(query: $query, type: COMMIT, first: 1) {
+              repositoryCount
+            }
+          }'
 
           RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Content-Type: application/json" \
@@ -94,7 +97,7 @@ jobs:
         id: new_solution_commits
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          QUERY='query($query: String!) { search(query: $query, type: COMMIT, first: 1) { commitCount } }'
+          QUERY='query($query: String!) { search(query: $query, type: COMMIT, first: 1) { totalCount } }'
 
           RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Content-Type: application/json" \

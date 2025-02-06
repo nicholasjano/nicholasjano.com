@@ -68,22 +68,22 @@ jobs:
         id: fetch_stats
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")  # Precompute current date
+          CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
 
           # Initialize cursor and pagination variables
           CURSOR=""
           NEW_SOLUTION_COUNT=0
 
           while :; do
-            # If CURSOR is empty, set it to null for the first request
-            if [[ -z "$CURSOR" || "$CURSOR" == "null" ]]; then
-              AFTER_CURSOR="null"
+            # Construct the after clause for the GraphQL query
+            if [ -z "$CURSOR" ]; then
+              AFTER_CLAUSE=""
             else
-              AFTER_CURSOR="\"$CURSOR\""
+              AFTER_CLAUSE=", after: \\\"$CURSOR\\\""
             fi
 
-            # Construct query using jq (Fixed handling of after: null)
-            QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg current_date "$CURRENT_DATE" --arg after_cursor "$AFTER_CURSOR" '
+            # Construct the GraphQL query
+            QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg current_date "$CURRENT_DATE" --arg after_clause "$AFTER_CLAUSE" '
               {
                 query: "query {
                   user(login: \"nicholasjano\") {
@@ -100,7 +100,7 @@ jobs:
                     defaultBranchRef {
                       target {
                         ... on Commit {
-                          history(first: 100, since: \($date_query), after: " + $after_cursor + ") {
+                          history(first: 100, since: \($date_query)\($after_clause)) {
                             pageInfo {
                               hasNextPage
                               endCursor
@@ -147,7 +147,7 @@ jobs:
             CURSOR=$(echo "$RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor')
 
             # Stop if there are no more pages
-            if [[ "$HAS_NEXT_PAGE" != "true" || "$CURSOR" == "null" ]]; then
+            if [[ "$HAS_NEXT_PAGE" != "true" || -z "$CURSOR" ]]; then
               break
             fi
           done

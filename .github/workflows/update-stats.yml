@@ -70,40 +70,39 @@ jobs:
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
           CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
 
-          # Initialize cursor and pagination variables
-          CURSOR=null
+          # Initialize pagination variables
+          CURSOR=""
           NEW_SOLUTION_COUNT=0
 
           while :; do
-            # Construct the GraphQL query
+            # Build the GraphQL query with proper cursor pagination
             QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg current_date "$CURRENT_DATE" --arg cursor "$CURSOR" '
-              {
-                query: "query {
-                  user(login: \"nicholasjano\") {
-                    contributionsCollection(from: \($date_query), to: \($current_date)) {
-                      totalCommitContributions
-                      commitContributionsByRepository {
-                        repository {
-                          id
-                        }
+            {
+              query: "query {
+                user(login: \"nicholasjano\") {
+                  contributionsCollection(from: \($date_query), to: \($current_date)) {
+                    totalCommitContributions
+                    commitContributionsByRepository {
+                      repository {
+                        id
                       }
                     }
                   }
-                  repository(owner: \"nicholasjano\", name: \"Leetcode-Solutions\") {
-                    defaultBranchRef {
-                      target {
-                        ... on Commit {
-                          history(first: 100, since: \($date_query)" + ($cursor != "null" ? ", after: \\\"\($cursor)\\\"" : "") + ") {
-                            pageInfo {
-                              hasNextPage
-                              endCursor
-                            }
-                            nodes {
-                              message
-                              author {
-                                user {
-                                  login
-                                }
+                }
+                repository(owner: \"nicholasjano\", name: \"Leetcode-Solutions\") {
+                  defaultBranchRef {
+                    target {
+                      ... on Commit {
+                        history(first: 100, since: \($date_query) \($cursor)) {
+                          pageInfo {
+                            hasNextPage
+                            endCursor
+                          }
+                          nodes {
+                            message
+                            author {
+                              user {
+                                login
                               }
                             }
                           }
@@ -111,9 +110,11 @@ jobs:
                       }
                     }
                   }
-                }"
-              }')
+                }
+              }"
+            }')
 
+            # Execute the GraphQL query
             RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
               -H "Content-Type: application/json" \
               https://api.github.com/graphql \
@@ -122,13 +123,14 @@ jobs:
             echo "Raw response:"
             echo "$RESPONSE"
 
-            # Check for errors
-            if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
-              echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
+            # Check for errors in response
+            ERROR_MESSAGE=$(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end')
+            if [[ -n "$ERROR_MESSAGE" ]]; then
+              echo "Error: $ERROR_MESSAGE"
               exit 1
             fi
 
-            # Extract commit messages authored only by nicholasjano and matching "new" and "solution" (case-insensitive)
+            # Extract commit messages only from commits authored by 'nicholasjano'
             PAGE_COUNT=$(echo "$RESPONSE" | jq '[.data.repository.defaultBranchRef.target.history.nodes[]
               | select(.author.user.login == "nicholasjano")
               | select(.message | test("new"; "i") and test("solution"; "i"))] | length')
@@ -137,10 +139,12 @@ jobs:
 
             # Get pagination info
             HAS_NEXT_PAGE=$(echo "$RESPONSE" | jq '.data.repository.defaultBranchRef.target.history.pageInfo.hasNextPage')
-            CURSOR=$(echo "$RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor')
+            NEXT_CURSOR=$(echo "$RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor')
 
-            # Stop if there are no more pages
-            if [[ "$HAS_NEXT_PAGE" != "true" || "$CURSOR" == "null" ]]; then
+            # Update CURSOR for next iteration if more pages exist
+            if [[ "$HAS_NEXT_PAGE" == "true" && "$NEXT_CURSOR" != "null" ]]; then
+              CURSOR=", after: \\\"$NEXT_CURSOR\\\""
+            else
               break
             fi
           done

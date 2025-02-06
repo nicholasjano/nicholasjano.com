@@ -19,6 +19,7 @@ jobs:
           RATE_LIMIT=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
             "https://api.github.com/rate_limit" | jq '.rate.remaining')
           if [ "$RATE_LIMIT" -lt 100 ]; then
+            echo "GitHub API rate limit too low: $RATE_LIMIT"
             exit 1
           fi
 
@@ -26,101 +27,143 @@ jobs:
         id: datecalc
         run: |
           export TZ="America/New_York"
-          TODAY=$(date +"%Y-%m-%d")
-          YEAR=$(date +"%Y")
-          MONTH=$(date +"%m")
-          DAY=$(date +"%d")
-          MONTH_NUM=$(echo $MONTH | sed 's/^0*//')
-          DAY_NUM=$(echo $DAY | sed 's/^0*//')
-          if [ "$MONTH_NUM" -eq 1 ]; then
+
+          # Get today's date in EST
+          TODAY=$(TZ="America/New_York" date +"%Y-%m-%d")
+
+          # Extract components
+          YEAR=$(date -d "$TODAY" +"%Y")
+          MONTH=$(date -d "$TODAY" +"%m")
+          DAY=$(date -d "$TODAY" +"%d")
+
+          # Compute the previous month
+          if [ "$MONTH" -eq 01 ]; then
             PREV_MONTH=12
             PREV_YEAR=$((YEAR - 1))
           else
-            PREV_MONTH=$((MONTH_NUM - 1))
+            PREV_MONTH=$((10#$MONTH - 1))
             PREV_YEAR=$YEAR
           fi
+
+          # Format previous month as two digits
           PREV_MONTH=$(printf "%02d" $PREV_MONTH)
-          LAST_DAY=$(date -d "$PREV_YEAR-$PREV_MONTH-01 +1 month -1 day" +"%d")
-          LAST_DAY_NUM=$(echo $LAST_DAY | sed 's/^0*//')
-          if [ "$DAY_NUM" -gt "$LAST_DAY_NUM" ]; then
-            DAY_NUM=$LAST_DAY_NUM
+
+          # Find last day of the previous month
+          LAST_DAY_OF_PREV_MONTH=$(date -d "$PREV_YEAR-$PREV_MONTH-01 +1 month -1 day" +"%d")
+
+          # Determine the correct day to use
+          if [ "$DAY" -gt "$LAST_DAY_OF_PREV_MONTH" ]; then
+            FINAL_DAY=$LAST_DAY_OF_PREV_MONTH
+          else
+            FINAL_DAY=$DAY
           fi
-          DAY_NUM=$(printf "%02d" $DAY_NUM)
-          ONE_MONTH_AGO=$(date -d "${PREV_YEAR}-${PREV_MONTH}-${DAY_NUM}" +"%m/%d/%y")
+
+          # Construct the final date in ISO 8601 format
+          ONE_MONTH_AGO=$(date -d "$PREV_YEAR-$PREV_MONTH-$FINAL_DAY 00:00:00 UTC" +"%Y-%m-%dT00:00:00Z")
+
+          echo "Computed one_month_ago: $ONE_MONTH_AGO"
           echo "one_month_ago=$ONE_MONTH_AGO" >> $GITHUB_OUTPUT
 
-      - name: Fetch total commits (past month, any repository)
-        id: total_commits
+      - name: Fetch GitHub Stats (Total Commits, Unique Repos, New Solutions)
+        id: fetch_stats
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          
-          RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            https://api.github.com/graphql \
-            -d "{\"query\": \"query { search(query: \\\"author:nicholasjano author-date:>=$DATE_QUERY\\\", type: COMMIT, first: 1) { totalCount } }\"}")
-          
-          echo "Raw response:"
-          echo "$RESPONSE"
-          
-          # Check for errors in response
-          if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
-            echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
-            exit 1
-          fi
-          
-          TOTAL_COMMITS=$(echo "$RESPONSE" | jq '.data.search.totalCount')
+      
+          # Initialize cursor and pagination variables
+          CURSOR=null
+          NEW_SOLUTION_COUNT=0
+      
+          while :; do
+            # Construct query with pagination (Removed `author: { id: "nicholasjano" }`)
+            QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg cursor "$CURSOR" '
+              {
+                query: "query {
+                  user(login: \"nicholasjano\") {
+                    contributionsCollection(from: \($date_query), to: \"$(date -u +"%Y-%m-%dT00:00:00Z")\") {
+                      totalCommitContributions
+                      commitContributionsByRepository {
+                        repository {
+                          id
+                        }
+                      }
+                    }
+                  }
+                  repository(owner: \"nicholasjano\", name: \"Leetcode-Solutions\") {
+                    defaultBranchRef {
+                      target {
+                        ... on Commit {
+                          history(first: 100, since: \($date_query), after: \($cursor)) {
+                            pageInfo {
+                              hasNextPage
+                              endCursor
+                            }
+                            nodes {
+                              message
+                              author {
+                                user {
+                                  login
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }"
+              }')
+      
+            RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              https://api.github.com/graphql \
+              -d "$QUERY")
+      
+            echo "Raw response:"
+            echo "$RESPONSE"
+      
+            # Check for errors
+            if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
+              echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
+              exit 1
+            fi
+      
+            # Extract commit messages authored only by nicholasjano
+            PAGE_COUNT=$(echo "$RESPONSE" | jq '[.data.repository.defaultBranchRef.target.history.nodes[]
+              | select(.author.user.login == "nicholasjano")
+              | select(.message | test("new"; "i") and test("solution"; "i"))] | length')
+      
+            NEW_SOLUTION_COUNT=$((NEW_SOLUTION_COUNT + PAGE_COUNT))
+      
+            # Get pagination info
+            HAS_NEXT_PAGE=$(echo "$RESPONSE" | jq '.data.repository.defaultBranchRef.target.history.pageInfo.hasNextPage')
+            CURSOR=$(echo "$RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor')
+      
+            # Stop if there are no more pages
+            if [[ "$HAS_NEXT_PAGE" != "true" || "$CURSOR" == "null" ]]; then
+              break
+            fi
+          done
+      
+          # Extract values for total commits & unique repos
+          TOTAL_COMMITS=$(echo "$RESPONSE" | jq '.data.user.contributionsCollection.totalCommitContributions')
+          UNIQUE_REPOS=$(echo "$RESPONSE" | jq '.data.user.contributionsCollection.commitContributionsByRepository | length')
+      
+          echo "Total commits: $TOTAL_COMMITS"
+          echo "Unique repositories: $UNIQUE_REPOS"
+          echo "Final count of new solution commits: $NEW_SOLUTION_COUNT"
+      
+          # Store values in GitHub Actions outputs
           echo "total_commits=$TOTAL_COMMITS" >> $GITHUB_OUTPUT
-      
-      - name: Fetch unique repositories for commits (past month)
-        id: unique_repos
-        run: |
-          DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          
-          RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            https://api.github.com/graphql \
-            -d "{\"query\": \"query { search(query: \\\"author:nicholasjano author-date:>=$DATE_QUERY\\\", type: COMMIT, first: 1) { repositories { totalCount } } }\"}")
-          
-          echo "Raw response:"
-          echo "$RESPONSE"
-          
-          # Check for errors in response
-          if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
-            echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
-            exit 1
-          fi
-          
-          UNIQUE_REPOS=$(echo "$RESPONSE" | jq '.data.search.repositories.totalCount')
           echo "unique_repos=$UNIQUE_REPOS" >> $GITHUB_OUTPUT
-      
-      - name: Fetch 'New Solution' commits from Leetcode-Solutions repo (past month)
-        id: new_solution_commits
-        run: |
-          DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          
-          RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            https://api.github.com/graphql \
-            -d "{\"query\": \"query { search(query: \\\"repo:nicholasjano/Leetcode-Solutions message:new message:solution author-date:>=$DATE_QUERY\\\", type: COMMIT, first: 1) { totalCount } }\"}")
-          
-          echo "Raw response:"
-          echo "$RESPONSE"
-          
-          # Check for errors in response
-          if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
-            echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
-            exit 1
-          fi
-          
-          NEW_SOLUTION_COUNT=$(echo "$RESPONSE" | jq '.data.search.totalCount')
           echo "new_solution_commits=$NEW_SOLUTION_COUNT" >> $GITHUB_OUTPUT
+                 
 
       - name: Create stats JSON file
         run: |
           echo "{" > stats.json
-          echo "  \"totalCommitsPastMonth\": ${{ steps.total_commits.outputs.total_commits }}," >> stats.json
-          echo "  \"uniqueRepositoriesPastMonth\": ${{ steps.unique_repos.outputs.unique_repos }}," >> stats.json
-          echo "  \"newSolutionCommits\": ${{ steps.new_solution_commits.outputs.new_solution_commits }}" >> stats.json
+          echo "  \"totalCommitsPastMonth\": \"${{ steps.fetch_stats.outputs.total_commits }}\"," >> stats.json
+          echo "  \"uniqueRepositoriesPastMonth\": \"${{ steps.fetch_stats.outputs.unique_repos }}\"," >> stats.json
+          echo "  \"newSolutionCommits\": \"${{ steps.fetch_stats.outputs.new_solution_commits }}\"" >> stats.json
           echo "}" >> stats.json
 
       - name: Install AWS CLI

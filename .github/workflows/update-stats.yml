@@ -68,15 +68,22 @@ jobs:
         id: fetch_stats
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
+          CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")  # Precompute current date
 
           # Initialize cursor and pagination variables
-          CURSOR="null"
+          CURSOR=""
           NEW_SOLUTION_COUNT=0
 
           while :; do
-            # Construct query with pagination using jq.
-            QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg current_date "$CURRENT_DATE" --arg cursor "$CURSOR" '
+            # If CURSOR is empty, set it to null for the first request
+            if [[ -z "$CURSOR" || "$CURSOR" == "null" ]]; then
+              AFTER_CURSOR="null"
+            else
+              AFTER_CURSOR="\"$CURSOR\""
+            fi
+
+            # Construct query using jq (Fixed handling of after: null)
+            QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg current_date "$CURRENT_DATE" --arg after_cursor "$AFTER_CURSOR" '
               {
                 query: "query {
                   user(login: \"nicholasjano\") {
@@ -93,7 +100,7 @@ jobs:
                     defaultBranchRef {
                       target {
                         ... on Commit {
-                          history(first: 100, since: \($date_query), after: \($cursor | if . == \"null\" then null else . end)) {
+                          history(first: 100, since: \($date_query), after: " + $after_cursor + ") {
                             pageInfo {
                               hasNextPage
                               endCursor
@@ -113,32 +120,32 @@ jobs:
                   }
                 }"
               }')
-            
+
             RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
               -H "Content-Type: application/json" \
               https://api.github.com/graphql \
               -d "$QUERY")
-            
+
             echo "Raw response:"
             echo "$RESPONSE"
-            
+
             # Check for errors
             if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
               echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
               exit 1
             fi
-            
+
             # Extract commit messages authored only by nicholasjano and matching "new" and "solution" (case-insensitive)
             PAGE_COUNT=$(echo "$RESPONSE" | jq '[.data.repository.defaultBranchRef.target.history.nodes[]
               | select(.author.user.login == "nicholasjano")
               | select(.message | test("new"; "i") and test("solution"; "i"))] | length')
-            
+
             NEW_SOLUTION_COUNT=$((NEW_SOLUTION_COUNT + PAGE_COUNT))
-            
+
             # Get pagination info
             HAS_NEXT_PAGE=$(echo "$RESPONSE" | jq '.data.repository.defaultBranchRef.target.history.pageInfo.hasNextPage')
             CURSOR=$(echo "$RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor')
-            
+
             # Stop if there are no more pages
             if [[ "$HAS_NEXT_PAGE" != "true" || "$CURSOR" == "null" ]]; then
               break

@@ -78,11 +78,10 @@ jobs:
           CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
 
           # First, fetch the non-paginated data (total commits and unique repos)
-          INITIAL_QUERY=$(cat << EOF
-          {
+          INITIAL_QUERY='{
             "query": "query {
               user(login: \"nicholasjano\") {
-                contributionsCollection(from: \"$DATE_QUERY\", to: \"$CURRENT_DATE\") {
+                contributionsCollection(from: \"'"$DATE_QUERY"'\", to: \"'"$CURRENT_DATE"'\") {
                   totalCommitContributions
                   commitContributionsByRepository {
                     repository {
@@ -92,9 +91,7 @@ jobs:
                 }
               }
             }"
-          }
-          EOF
-          )
+          }'
 
           # Execute the initial query
           INITIAL_RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
@@ -121,14 +118,13 @@ jobs:
 
           while [ "$HAS_NEXT_PAGE" = "true" ]; do
             # Construct GraphQL query for commit history with pagination
-            COMMITS_QUERY=$(cat << EOF
-            {
+            COMMITS_QUERY='{
               "query": "query {
                 repository(owner: \"nicholasjano\", name: \"Leetcode-Solutions\") {
                   defaultBranchRef {
                     target {
                       ... on Commit {
-                        history(first: 100, after: $CURSOR, since: \"$DATE_QUERY\") {
+                        history(first: 100, after: '"$CURSOR"', since: \"'"$DATE_QUERY"'\") {
                           pageInfo {
                             hasNextPage
                             endCursor
@@ -147,9 +143,7 @@ jobs:
                   }
                 }
               }"
-            }
-            EOF
-            )
+            }'
 
             # Execute the commits query
             COMMITS_RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \

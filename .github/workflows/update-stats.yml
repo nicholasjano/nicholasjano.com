@@ -93,7 +93,7 @@ jobs:
             exit 1
           fi
 
-          # First check if the data path exists
+          # Check if the data path exists
           if ! echo "$INITIAL_RESPONSE" | jq -e '.data' > /dev/null; then
             echo "Error: No data field in response"
             exit 1
@@ -151,16 +151,18 @@ jobs:
           done
 
           # Store values in GitHub Actions outputs
-          echo "total_commits=$TOTAL_COMMITS" >> $GITHUB_OUTPUT
-          echo "unique_repos=$UNIQUE_REPOS" >> $GITHUB_OUTPUT
-          echo "new_solution_commits=$NEW_SOLUTION_COUNT" >> $GITHUB_OUTPUT
+          {
+            echo "total_commits=$TOTAL_COMMITS"
+            echo "unique_repos=$UNIQUE_REPOS"
+            echo "new_solution_commits=$NEW_SOLUTION_COUNT"
+          } >> $GITHUB_OUTPUT
 
       - name: Create stats JSON file
         run: |
           echo "{" > stats.json
-          echo "  \"totalCommitsPastMonth\": \"${{ steps.fetch_stats.outputs.total_commits }}\"," >> stats.json
-          echo "  \"uniqueRepositoriesPastMonth\": \"${{ steps.fetch_stats.outputs.unique_repos }}\"," >> stats.json
-          echo "  \"newSolutionCommits\": \"${{ steps.fetch_stats.outputs.new_solution_commits }}\"" >> stats.json
+          echo "  \"totalCommitsPastMonth\": ${{ steps.fetch_stats.outputs.total_commits }}," >> stats.json
+          echo "  \"uniqueRepositoriesPastMonth\": ${{ steps.fetch_stats.outputs.unique_repos }}," >> stats.json
+          echo "  \"newSolutionCommits\": ${{ steps.fetch_stats.outputs.new_solution_commits }}" >> stats.json
           echo "}" >> stats.json
 
       - name: Install AWS CLI

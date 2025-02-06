@@ -77,12 +77,8 @@ jobs:
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
           CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
 
-          echo "Using date range: $DATE_QUERY to $CURRENT_DATE"
-
-          # First, fetch the non-paginated data (total commits and unique repos)
+          # Fetch the non-paginated data (total commits and unique repos for the month)
           INITIAL_QUERY='{"query":"query{user(login:\"nicholasjano\"){contributionsCollection(from:\"'"$DATE_QUERY"'\",to:\"'"$CURRENT_DATE"'\"){totalCommitContributions commitContributionsByRepository{repository{id}}}}}"}' 
-
-          echo "Initial query: $INITIAL_QUERY"
 
           # Execute the initial query
           INITIAL_RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
@@ -90,37 +86,24 @@ jobs:
             https://api.github.com/graphql \
             -d "$INITIAL_QUERY")
 
-          echo "Initial response: $INITIAL_RESPONSE"
-
-          # Check if response is null or empty
-          if [ -z "$INITIAL_RESPONSE" ]; then
-            echo "Error: Received empty response from GitHub API"
-            exit 1
-          fi
-
           # Check for errors in initial response
           if echo "$INITIAL_RESPONSE" | jq -e 'has("errors")' > /dev/null; then
             ERROR_MESSAGE=$(echo "$INITIAL_RESPONSE" | jq -r '.errors[0].message')
             echo "Error in initial query: $ERROR_MESSAGE"
-            echo "Query: $INITIAL_QUERY"
             exit 1
           fi
 
           # First check if the data path exists
           if ! echo "$INITIAL_RESPONSE" | jq -e '.data' > /dev/null; then
             echo "Error: No data field in response"
-            echo "Full response: $INITIAL_RESPONSE"
             exit 1
           fi
 
           # Extract total commits and unique repos with null checks
-          TOTAL_COMMITS=$(echo "$INITIAL_RESPONSE" | jq -r '.data.user.contributionsCollection.totalCommitContributions // 0')
-          UNIQUE_REPOS=$(echo "$INITIAL_RESPONSE" | jq -r '.data.user.contributionsCollection.commitContributionsByRepository | length // 0')
+          TOTAL_COMMITS=$(echo "$INITIAL_RESPONSE" | jq '.data.user.contributionsCollection.totalCommitContributions // 0')
+          UNIQUE_REPOS=$(echo "$INITIAL_RESPONSE" | jq '.data.user.contributionsCollection.commitContributionsByRepository | length // 0')
 
-          echo "Found total commits: $TOTAL_COMMITS"
-          echo "Found unique repos: $UNIQUE_REPOS"
-
-          # Now handle the paginated commits query separately
+          # Handle the paginated commits query for Leetcode Solutions separately
           CURSOR="null"
           HAS_NEXT_PAGE="true"
           NEW_SOLUTION_COUNT=0
@@ -129,39 +112,27 @@ jobs:
             # Construct GraphQL query for commit history with pagination
             COMMITS_QUERY='{"query":"query{repository(owner:\"nicholasjano\",name:\"Leetcode-Solutions\"){defaultBranchRef{target{... on Commit{history(first:100,after:'"$CURSOR"',since:\"'"$DATE_QUERY"'\"){pageInfo{hasNextPage endCursor}nodes{message author{user{login}}}}}}}}}"}'
 
-            echo "Commits query: $COMMITS_QUERY"
-
             # Execute the commits query
             COMMITS_RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
               -H "Content-Type: application/json" \
               https://api.github.com/graphql \
               -d "$COMMITS_QUERY")
 
-            echo "Commits response: $COMMITS_RESPONSE"
-
-            # Check if response is null or empty
-            if [ -z "$COMMITS_RESPONSE" ]; then
-              echo "Error: Received empty response from GitHub API"
-              exit 1
-            fi
-
             # Check for errors in response
             if echo "$COMMITS_RESPONSE" | jq -e 'has("errors")' > /dev/null; then
               ERROR_MESSAGE=$(echo "$COMMITS_RESPONSE" | jq -r '.errors[0].message')
               echo "Error in commits query: $ERROR_MESSAGE"
-              echo "Query: $COMMITS_QUERY"
               exit 1
             fi
 
-            # First check if the data path exists
+            # Check if the data path exists
             if ! echo "$COMMITS_RESPONSE" | jq -e '.data' > /dev/null; then
               echo "Error: No data field in response"
-              echo "Full response: $COMMITS_RESPONSE"
               exit 1
             fi
 
             # Extract commit data with null handling
-            PAGE_COUNT=$(echo "$COMMITS_RESPONSE" | jq -r '[.data.repository.defaultBranchRef.target.history.nodes // [] | .[]
+            PAGE_COUNT=$(echo "$COMMITS_RESPONSE" | jq '[.data.repository.defaultBranchRef.target.history.nodes // [] | .[]
               | select(.author.user.login == "nicholasjano")
               | select(.message | test("new"; "i") and test("solution"; "i"))] | length')
 
@@ -171,8 +142,6 @@ jobs:
             HAS_NEXT_PAGE=$(echo "$COMMITS_RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.hasNextPage // false')
             END_CURSOR=$(echo "$COMMITS_RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor // null')
 
-            echo "Processed page with $PAGE_COUNT matching commits. Has next page: $HAS_NEXT_PAGE"
-
             # Update cursor for next iteration if there is a next page
             if [ "$HAS_NEXT_PAGE" = "true" ] && [ "$END_CURSOR" != "null" ]; then
               CURSOR="\"$END_CURSOR\""
@@ -180,10 +149,6 @@ jobs:
               HAS_NEXT_PAGE="false"
             fi
           done
-
-          echo "Total commits: $TOTAL_COMMITS"
-          echo "Unique repositories: $UNIQUE_REPOS"
-          echo "Final count of new solution commits: $NEW_SOLUTION_COUNT"
 
           # Store values in GitHub Actions outputs
           echo "total_commits=$TOTAL_COMMITS" >> $GITHUB_OUTPUT

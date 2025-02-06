@@ -80,20 +80,7 @@ jobs:
           echo "Using date range: $DATE_QUERY to $CURRENT_DATE"
 
           # First, fetch the non-paginated data (total commits and unique repos)
-          INITIAL_QUERY='{
-            "query": "query {
-              user(login: \"nicholasjano\") {
-                contributionsCollection(from: \"'"$DATE_QUERY"'\", to: \"'"$CURRENT_DATE"'\") {
-                  totalCommitContributions
-                  commitContributionsByRepository {
-                    repository {
-                      id
-                    }
-                  }
-                }
-              }
-            }"
-          }'
+          INITIAL_QUERY='{"query":"query{user(login:\"nicholasjano\"){contributionsCollection(from:\"'"$DATE_QUERY"'\",to:\"'"$CURRENT_DATE"'\"){totalCommitContributions commitContributionsByRepository{repository{id}}}}}"}' 
 
           echo "Initial query: $INITIAL_QUERY"
 
@@ -140,32 +127,7 @@ jobs:
 
           while [ "$HAS_NEXT_PAGE" = "true" ]; do
             # Construct GraphQL query for commit history with pagination
-            COMMITS_QUERY='{
-              "query": "query {
-                repository(owner: \"nicholasjano\", name: \"Leetcode-Solutions\") {
-                  defaultBranchRef {
-                    target {
-                      ... on Commit {
-                        history(first: 100, after: '"$CURSOR"', since: \"'"$DATE_QUERY"'\") {
-                          pageInfo {
-                            hasNextPage
-                            endCursor
-                          }
-                          nodes {
-                            message
-                            author {
-                              user {
-                                login
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }"
-            }'
+            COMMITS_QUERY='{"query":"query{repository(owner:\"nicholasjano\",name:\"Leetcode-Solutions\"){defaultBranchRef{target{... on Commit{history(first:100,after:'"$CURSOR"',since:\"'"$DATE_QUERY"'\"){pageInfo{hasNextPage endCursor}nodes{message author{user{login}}}}}}}}}"}'
 
             echo "Commits query: $COMMITS_QUERY"
 

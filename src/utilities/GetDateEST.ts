@@ -1,5 +1,5 @@
 export const getMonthlyDates = () => {
-  const today = new Date();
+  const today = new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"}));
   const estFormatter = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/New_York",
     month: "2-digit",

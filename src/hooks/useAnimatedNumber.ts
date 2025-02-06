@@ -11,10 +11,16 @@ export const useAnimatedNumber = ({
   end,
   duration = 2000,
 }: UseAnimatedNumberProps): UseAnimatedNumberReturn => {
-  const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState<number>(end <= 1 ? end : 0);
   const elementRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    // If end is 0 or 1, don't set up the animation
+    if (end <= 1) {
+      setCount(end);
+      return;
+    }
+
     const handleAnimationStart = () => {
       let startTimestamp: number | null = null;
 

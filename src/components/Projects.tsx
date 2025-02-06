@@ -1,4 +1,4 @@
-import { ProjectInfos } from "@data/pageData";
+import { ProjectInfos, mainInfoRootMargin } from "@data/pageData";
 import ProjectCard from "@components/ProjectCard";
 import FadeInOnView from "@components/FadeInOnView";
 
@@ -14,7 +14,7 @@ const Projects = () => {
             </p>
           </div>
         </FadeInOnView>
-        <FadeInOnView delay={200} threshold={0.02}>
+        <FadeInOnView delay={200} rootMargin={mainInfoRootMargin}>
           <div className="project-list">
             {ProjectInfos.map((project, index) => (
               <ProjectCard key={index} {...project} />

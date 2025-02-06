@@ -71,11 +71,11 @@ jobs:
           CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
 
           # Initialize cursor and pagination variables
-          CURSOR=null
+          CURSOR="null"
           NEW_SOLUTION_COUNT=0
 
           while :; do
-            # Construct query with pagination (Fixed syntax for jq)
+            # Construct query with pagination
             QUERY=$(jq -n --arg date_query "$DATE_QUERY" --arg current_date "$CURRENT_DATE" --arg cursor "$CURSOR" '
               {
                 query: "query {
@@ -93,7 +93,7 @@ jobs:
                     defaultBranchRef {
                       target {
                         ... on Commit {
-                          history(first: 100, since: \($date_query), after: \($cursor)) {
+                          history(first: 100, since: \($date_query), after: " \($cursor) ") {
                             pageInfo {
                               hasNextPage
                               endCursor

@@ -53,6 +53,7 @@ jobs:
         id: total_commits
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
+          echo "Date query: $DATE_QUERY"
           QUERY='query($query: String!) {
             search(query: $query, type: COMMIT, first: 1) {
               commitCount
@@ -72,6 +73,9 @@ jobs:
           
           TOTAL_COMMITS=$(echo "$RESPONSE" | jq '.data.search.commitCount')
           echo "total_commits=$TOTAL_COMMITS" >> $GITHUB_OUTPUT
+
+          echo "Raw response:"
+          echo "$RESPONSE"
 
       - name: Fetch unique repositories for commits (past month)
         id: unique_repos
@@ -120,6 +124,15 @@ jobs:
           
           NEW_SOLUTION_COUNT=$(echo "$RESPONSE" | jq '.data.search.commitCount')
           echo "new_solution_commits=$NEW_SOLUTION_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Debug outputs
+        run: |
+          echo "=== DEBUG START ==="
+          echo "one_month_ago: ${{ steps.datecalc.outputs.one_month_ago }}"
+          echo "total_commits: ${{ steps.total_commits.outputs.total_commits }}"
+          echo "unique_repos: ${{ steps.unique_repos.outputs.unique_repos }}"
+          echo "new_solution_commits: ${{ steps.new_solution_commits.outputs.new_solution_commits }}"
+          echo "=== DEBUG END ==="       
 
       - name: Create stats JSON file
         run: |

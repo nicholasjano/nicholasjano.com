@@ -74,27 +74,27 @@ jobs:
       - name: Fetch GitHub Stats (Total Commits, Unique Repos, New Solutions)
         id: fetch_stats
         run: |
-          DATE_QUERY="${{ steps.datecalc.outputs.one_month_ago }}"
+          DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
           CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
 
           # First, fetch the non-paginated data (total commits and unique repos)
-          INITIAL_QUERY=$(jq -n \
-            --arg from "$DATE_QUERY" \
-            --arg to "$CURRENT_DATE" \
-            '{
-              query: "query {
-                user(login: \"nicholasjano\") {
-                  contributionsCollection(from: \($from), to: \($to)) {
-                    totalCommitContributions
-                    commitContributionsByRepository {
-                      repository {
-                        id
-                      }
+          INITIAL_QUERY=$(cat << EOF
+          {
+            "query": "query {
+              user(login: \"nicholasjano\") {
+                contributionsCollection(from: \"$DATE_QUERY\", to: \"$CURRENT_DATE\") {
+                  totalCommitContributions
+                  commitContributionsByRepository {
+                    repository {
+                      id
                     }
                   }
                 }
-              }"
-            }')
+              }
+            }"
+          }
+          EOF
+          )
 
           # Execute the initial query
           INITIAL_RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
@@ -106,6 +106,7 @@ jobs:
           if echo "$INITIAL_RESPONSE" | jq -e 'has("errors")' > /dev/null; then
             ERROR_MESSAGE=$(echo "$INITIAL_RESPONSE" | jq -r '.errors[0].message')
             echo "Error in initial query: $ERROR_MESSAGE"
+            echo "Query: $INITIAL_QUERY"
             exit 1
           fi
 
@@ -114,31 +115,29 @@ jobs:
           UNIQUE_REPOS=$(echo "$INITIAL_RESPONSE" | jq '.data.user.contributionsCollection.commitContributionsByRepository | length')
 
           # Now handle the paginated commits query separately
-          CURSOR=""
+          CURSOR="null"
+          HAS_NEXT_PAGE="true"
           NEW_SOLUTION_COUNT=0
 
-          while true; do
+          while [ "$HAS_NEXT_PAGE" = "true" ]; do
             # Construct GraphQL query for commit history with pagination
-            COMMITS_QUERY=$(jq -n \
-              --arg since "$DATE_QUERY" \
-              --arg cursor "$CURSOR" \
-              '{
-                query: "query ($cursor: String) {
-                  repository(owner: \"nicholasjano\", name: \"Leetcode-Solutions\") {
-                    defaultBranchRef {
-                      target {
-                        ... on Commit {
-                          history(first: 100, since: \($since), after: $cursor) {
-                            pageInfo {
-                              hasNextPage
-                              endCursor
-                            }
-                            nodes {
-                              message
-                              author {
-                                user {
-                                  login
-                                }
+            COMMITS_QUERY=$(cat << EOF
+            {
+              "query": "query {
+                repository(owner: \"nicholasjano\", name: \"Leetcode-Solutions\") {
+                  defaultBranchRef {
+                    target {
+                      ... on Commit {
+                        history(first: 100, after: $CURSOR, since: \"$DATE_QUERY\") {
+                          pageInfo {
+                            hasNextPage
+                            endCursor
+                          }
+                          nodes {
+                            message
+                            author {
+                              user {
+                                login
                               }
                             }
                           }
@@ -146,11 +145,11 @@ jobs:
                       }
                     }
                   }
-                }",
-                variables: {
-                  cursor: ($cursor | if . == "" then null else . end)
                 }
-              }')
+              }"
+            }
+            EOF
+            )
 
             # Execute the commits query
             COMMITS_RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
@@ -162,6 +161,7 @@ jobs:
             if echo "$COMMITS_RESPONSE" | jq -e 'has("errors")' > /dev/null; then
               ERROR_MESSAGE=$(echo "$COMMITS_RESPONSE" | jq -r '.errors[0].message')
               echo "Error in commits query: $ERROR_MESSAGE"
+              echo "Query: $COMMITS_QUERY"
               exit 1
             fi
 
@@ -172,19 +172,16 @@ jobs:
 
             NEW_SOLUTION_COUNT=$((NEW_SOLUTION_COUNT + PAGE_COUNT))
 
-            # Handle pagination
+            # Extract pagination info
             HAS_NEXT_PAGE=$(echo "$COMMITS_RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.hasNextPage')
-            NEXT_CURSOR=$(echo "$COMMITS_RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor')
+            END_CURSOR=$(echo "$COMMITS_RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor')
 
             echo "Processed page with $PAGE_COUNT matching commits. Has next page: $HAS_NEXT_PAGE"
 
-            # Break if we've reached the last page
-            if [[ "$HAS_NEXT_PAGE" != "true" || "$NEXT_CURSOR" == "null" ]]; then
-              break
+            # Update cursor for next iteration if there is a next page
+            if [ "$HAS_NEXT_PAGE" = "true" ]; then
+              CURSOR="\"$END_CURSOR\""
             fi
-
-            # Update cursor for next iteration
-            CURSOR="$NEXT_CURSOR"
           done
 
           echo "Total commits: $TOTAL_COMMITS"

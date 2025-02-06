@@ -16,8 +16,15 @@ jobs:
       - name: Check GitHub API Rate Limits
         id: rate_limit
         run: |
-          RATE_LIMIT=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+          RATE_LIMIT=$(curl -s -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
             "https://api.github.com/rate_limit" | jq '.rate.remaining')
+
+          # Add error checking for the rate limit query
+          if [ -z "$RATE_LIMIT" ] || [ "$RATE_LIMIT" = "null" ]; then
+            echo "Error: Could not fetch rate limit. Check your token."
+            exit 1
+          fi
+
           if [ "$RATE_LIMIT" -lt 100 ]; then
             echo "GitHub API rate limit too low: $RATE_LIMIT"
             exit 1
@@ -93,6 +100,13 @@ jobs:
             https://api.github.com/graphql \
             -d "$INITIAL_QUERY")
 
+          # Check for errors in initial response
+          if echo "$INITIAL_RESPONSE" | jq -e 'has("errors")' > /dev/null; then
+            ERROR_MESSAGE=$(echo "$INITIAL_RESPONSE" | jq -r '.errors[0].message')
+            echo "Error in initial query: $ERROR_MESSAGE"
+            exit 1
+          fi
+
           # Extract total commits and unique repos
           TOTAL_COMMITS=$(echo "$INITIAL_RESPONSE" | jq '.data.user.contributionsCollection.totalCommitContributions')
           UNIQUE_REPOS=$(echo "$INITIAL_RESPONSE" | jq '.data.user.contributionsCollection.commitContributionsByRepository | length')
@@ -143,7 +157,7 @@ jobs:
             # Check for errors in response
             if echo "$COMMITS_RESPONSE" | jq -e 'has("errors")' > /dev/null; then
               ERROR_MESSAGE=$(echo "$COMMITS_RESPONSE" | jq -r '.errors[0].message')
-              echo "Error: $ERROR_MESSAGE"
+              echo "Error in commits query: $ERROR_MESSAGE"
               exit 1
             fi
 

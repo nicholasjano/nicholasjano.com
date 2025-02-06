@@ -54,50 +54,39 @@ jobs:
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
           echo "Date query: $DATE_QUERY"
-          QUERY='query($query: String!) {
-            search(query: $query, type: COMMIT, first: 1) {
-              commitCount
-            }
-          }'
-          
+          QUERY='query($query: String!) { search(query: $query, type: COMMIT, first: 1) { commitCount } }'
+
           RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Content-Type: application/json" \
             https://api.github.com/graphql \
             -d "{\"query\":\"$QUERY\",\"variables\":{\"query\":\"author:nicholasjano author-date:>=$DATE_QUERY\"}}")
-          
+
           # Check for errors in response
           if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
             echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
             exit 1
           fi
-          
+
           TOTAL_COMMITS=$(echo "$RESPONSE" | jq '.data.search.commitCount')
           echo "total_commits=$TOTAL_COMMITS" >> $GITHUB_OUTPUT
-
-          echo "Raw response:"
-          echo "$RESPONSE"
 
       - name: Fetch unique repositories for commits (past month)
         id: unique_repos
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          QUERY='query($query: String!) {
-            search(query: $query, type: COMMIT, first: 1) {
-              repositoryCount
-            }
-          }'
-          
+          QUERY='query($query: String!) { search(query: $query, type: COMMIT, first: 1) { repositoryCount } }'
+
           RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Content-Type: application/json" \
             https://api.github.com/graphql \
             -d "{\"query\":\"$QUERY\",\"variables\":{\"query\":\"author:nicholasjano author-date:>=$DATE_QUERY\"}}")
-          
+
           # Check for errors in response
           if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
             echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
             exit 1
           fi
-          
+
           UNIQUE_REPOS=$(echo "$RESPONSE" | jq '.data.search.repositoryCount')
           echo "unique_repos=$UNIQUE_REPOS" >> $GITHUB_OUTPUT
 
@@ -105,34 +94,21 @@ jobs:
         id: new_solution_commits
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
-          QUERY='query($query: String!) {
-            search(query: $query, type: COMMIT, first: 1) {
-              commitCount
-            }
-          }'
-          
+          QUERY='query($query: String!) { search(query: $query, type: COMMIT, first: 1) { commitCount } }'
+
           RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Content-Type: application/json" \
             https://api.github.com/graphql \
             -d "{\"query\":\"$QUERY\",\"variables\":{\"query\":\"repo:nicholasjano/Leetcode-Solutions message:new message:solution author-date:>=$DATE_QUERY\"}}")
-          
+
           # Check for errors in response
           if [[ $(echo "$RESPONSE" | jq -r 'if has("errors") then .errors[0].message else empty end') ]]; then
             echo "Error: $(echo "$RESPONSE" | jq -r '.errors[0].message')"
             exit 1
           fi
-          
+
           NEW_SOLUTION_COUNT=$(echo "$RESPONSE" | jq '.data.search.commitCount')
           echo "new_solution_commits=$NEW_SOLUTION_COUNT" >> $GITHUB_OUTPUT
-
-      - name: Debug outputs
-        run: |
-          echo "=== DEBUG START ==="
-          echo "one_month_ago: ${{ steps.datecalc.outputs.one_month_ago }}"
-          echo "total_commits: ${{ steps.total_commits.outputs.total_commits }}"
-          echo "unique_repos: ${{ steps.unique_repos.outputs.unique_repos }}"
-          echo "new_solution_commits: ${{ steps.new_solution_commits.outputs.new_solution_commits }}"
-          echo "=== DEBUG END ==="       
 
       - name: Create stats JSON file
         run: |

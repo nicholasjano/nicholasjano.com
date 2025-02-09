@@ -75,6 +75,7 @@ const languages: readonly StackItemsType[] = [
   { name: "C", icon: "devicon-c-plain" },
   { name: "C++", icon: "devicon-cplusplus-plain" },
   { name: "C#", icon: "devicon-csharp-plain" },
+  { name: "Visual Basic", icon: "devicon-visualbasic-plain" },
   { name: "HTML", icon: "devicon-html5-plain" },
   { name: "CSS", icon: "devicon-css3-plain" },
   { name: "JavaScript", icon: "devicon-javascript-plain" },
@@ -90,6 +91,7 @@ const frameworksAndLibraries: readonly StackItemsType[] = [
   { name: "Node.js", icon: "devicon-nodejs-plain" },
   { name: "Express", icon: "devicon-express-original" },
   { name: "Spring Boot", icon: "devicon-spring-original" },
+  { name: ".NET", icon: "devicon-dotnetcore-plain" },
   { name: "Flask", icon: "devicon-flask-original" },
   { name: "PyTorch", icon: "devicon-pytorch-original" },
   { name: "SQLAlchemy", icon: "devicon-sqlalchemy-plain" },
@@ -286,7 +288,6 @@ export const defaultStats: Readonly<DynamicStatsType> = {
   newSolutionCommits: 20,
 };
 
-export const API_URL =
-  "https://stats.nicholasjano.com/stats.json" as const;
+export const API_URL = "https://stats.nicholasjano.com/stats.json" as const;
 
 export const mainInfoRootMargin = 40 as const;

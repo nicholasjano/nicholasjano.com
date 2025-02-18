@@ -31,6 +31,7 @@ export type UseResizeHeightsProp = {
 
 export type UseResizeHeightsReturn = {
   maxHeight: number;
+  isResizing: boolean;
 };
 
 export type SymbolInformation = {

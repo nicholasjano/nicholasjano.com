@@ -8,6 +8,7 @@ export const useResizeHeight = ({
   contentRef,
 }: UseResizeHeightsProp): UseResizeHeightsReturn => {
   const [maxHeight, setMaxHeight] = useState<number>(0);
+  const [isResizing, setIsResizing] = useState<boolean>(false);
 
   useLayoutEffect(() => {
     if (!contentRef.current) return;
@@ -18,13 +19,28 @@ export const useResizeHeight = ({
 
     observer.observe(contentRef.current);
 
-    // Initial measurement
     setMaxHeight(contentRef.current.scrollHeight);
+
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    const handleWindowResize = () => {
+      setIsResizing(true);
+      if (contentRef.current) {
+        setMaxHeight(contentRef.current.scrollHeight);
+      }
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        setIsResizing(false);
+      }, 50);
+    };
+
+    window.addEventListener("resize", handleWindowResize);
 
     return () => {
       observer.disconnect();
+      window.removeEventListener("resize", handleWindowResize);
+      clearTimeout(resizeTimeout);
     };
   }, [contentRef]);
 
-  return { maxHeight };
+  return { maxHeight, isResizing };
 };

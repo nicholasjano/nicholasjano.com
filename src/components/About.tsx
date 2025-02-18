@@ -30,7 +30,7 @@ const About = () => {
             </div>
             <div>
               {paragraphs.map((paragraph, index) => (
-                <p key={index} className="mb-6 last:mb-0">
+                <p key={index} className="mb-6 last:mb-0 text-base xl:text-lg">
                   {paragraph}
                 </p>
               ))}

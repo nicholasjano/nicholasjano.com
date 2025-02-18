@@ -14,7 +14,7 @@ const ExperienceCard = ({
   const paragraphs = highlights.trim().split("\n\n");
   const [isExpanded, setIsExpanded] = useState(false);
   const contentRef = useRef<HTMLDivElement | null>(null);
-  const { maxHeight, isResizing } = useResizeHeight({ contentRef });
+  const { maxHeight } = useResizeHeight({ contentRef });
 
   return (
     <div className="bg-surface-primary p-6 rounded-[2.25rem] flex flex-col space-y-4">
@@ -27,17 +27,15 @@ const ExperienceCard = ({
       </div>
       <div className="w-full flex flex-col">
         <div className="flex flex-col space-y-1 pb-4 border-b border-header-stroke/50">
-          <h3 className="under-header text-brand-green">
-            {role}
-          </h3>
+          <h3 className="under-header text-brand-green">{role}</h3>
           <p>{company}</p>
           <p>{period}</p>
         </div>
         <div
           style={{ maxHeight: isExpanded ? `${maxHeight}px` : 0 }}
-          className={`overflow-hidden ${
-            isResizing ? "" : "transition-all duration-1000 ease-in-out"
-          } ${isExpanded ? "opacity-100" : "opacity-0"}`}
+          className={`overflow-hidden transition-all duration-1000 ease-in-out ${
+            isExpanded ? "opacity-100" : "opacity-0"
+          }`}
           ref={contentRef}
         >
           <div className="flex flex-col py-4 border-b border-header-stroke/50">

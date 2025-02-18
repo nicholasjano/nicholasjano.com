@@ -8,6 +8,7 @@ import type { refType } from "@pageTypes/pageTypes";
 
 const Navbar = ({ introRef }: refType) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [instantClose, setInstantClose] = useState(false);
   const isLargeScreen = useScreenSize();
 
   const { linkRefs: linkRefsNavBar, paddings: paddingsNavBar } = useIconPadding(
@@ -20,7 +21,7 @@ const Navbar = ({ introRef }: refType) => {
   return (
     <>
       {isLargeScreen ? (
-        // Navbar
+        // Navbar for large screens
         <nav className="w-screen h-12 flex justify-center items-center">
           <div className="h-full width-scaled flex items-center justify-between">
             <ul className="nav-items">
@@ -61,29 +62,38 @@ const Navbar = ({ introRef }: refType) => {
           </div>
         </nav>
       ) : (
-        // Hamburger Menu
+        // Hamburger Menu for small screens
         <>
           <button
             className="safe fixed top-0 right-0 w-12 h-12 flex flex-col items-center justify-center gap-1.5 z-50 group"
             aria-label="Toggle navigation menu"
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => {
+              if (!isOpen) {
+                setInstantClose(false);
+              }
+              setIsOpen(!isOpen);
+            }}
           >
             <div
-              className={`hamburger-line ${
-                isOpen ? "rotate-45 translate-y-2" : ""
-              }`}
+              className={`hamburger-line transition-transform ${
+                instantClose ? "duration-0" : "duration-300"
+              } ${isOpen ? "rotate-45 translate-y-2" : ""}`}
             />
-            <div className={`hamburger-line ${isOpen ? "opacity-0" : ""}`} />
             <div
-              className={`hamburger-line ${
-                isOpen ? "-rotate-45 -translate-y-2" : ""
-              }`}
+              className={`hamburger-line transition-opacity ${
+                instantClose ? "duration-0" : "duration-300"
+              } ${isOpen ? "opacity-0" : ""}`}
+            />
+            <div
+              className={`hamburger-line transition-transform ${
+                instantClose ? "duration-0" : "duration-300"
+              } ${isOpen ? "-rotate-45 -translate-y-2" : ""}`}
             />
           </button>
           <nav
-            className={`safe w-full border-b-2 border-header-stroke transition-transform duration-300 ease-in-out ${
-              isOpen ? "translate-y-0" : "-translate-y-full"
-            }`}
+            className={`safe w-full border-b-2 border-header-stroke transition-transform ${
+              instantClose ? "duration-0" : "duration-300 ease-in-out"
+            } ${isOpen ? "translate-y-0" : "-translate-y-full"}`}
           >
             <div className="mt-4 navmenu-xs:mt-12">
               <ul className="flex flex-col items-center">
@@ -112,7 +122,10 @@ const Navbar = ({ introRef }: refType) => {
                       href={navItemsLeftURL[index]}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() => setIsOpen(false)}
+                      onClick={() => {
+                        setInstantClose(true);
+                        setIsOpen(false);
+                      }}
                       className="flex items-center justify-center w-12 h-12 text-[2rem] hover-colour transition-colors duration-200 focus:outline-none"
                       aria-label={`Navigate to ${item.iconName}`}
                     >

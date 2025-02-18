@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import type {
   UseResizeHeightsProp,
   UseResizeHeightsReturn,
@@ -8,31 +8,23 @@ export const useResizeHeight = ({
   contentRef,
 }: UseResizeHeightsProp): UseResizeHeightsReturn => {
   const [maxHeight, setMaxHeight] = useState<number>(0);
-  const [isResizing, setIsResizing] = useState<boolean>(false);
 
-  useEffect(() => {
-    const updateHeight = (): void => {
-      if (contentRef.current) {
-        setIsResizing(true);
-        const height = contentRef.current.scrollHeight + 2;
-        setMaxHeight(height);
-        setTimeout(() => setIsResizing(false), 50);
-      }
-    };
+  useLayoutEffect(() => {
+    if (!contentRef.current) return;
+
+    const observer = new ResizeObserver(() => {
+      setMaxHeight(contentRef.current!.scrollHeight);
+    });
+
+    observer.observe(contentRef.current);
 
     // Initial measurement
-    updateHeight();
-    // Secondary measurement to catch any late layout changes
-    const initialTimeout = setTimeout(updateHeight, 50);
+    setMaxHeight(contentRef.current.scrollHeight);
 
-    // Update on window resize
-    window.addEventListener("resize", updateHeight);
-
-    return (): void => {
-      window.removeEventListener("resize", updateHeight);
-      clearTimeout(initialTimeout);
+    return () => {
+      observer.disconnect();
     };
   }, [contentRef]);
 
-  return { maxHeight, isResizing };
+  return { maxHeight };
 };

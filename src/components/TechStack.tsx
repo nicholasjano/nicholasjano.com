@@ -7,7 +7,7 @@ import FadeInOnView from "@components/FadeInOnView";
 const TechStack = () => {
   return (
     <section className="relative w-screen bg-surface-primary">
-      <div className="width-scaled max-w-screen-2xl h-full mx-auto py-16 space-y-12">
+      <div className="safe width-scaled max-w-screen-2xl h-full mx-auto py-16 space-y-12">
         <FadeInOnView delay={100} className="w-full">
           <h3 className="w-full under-header text-center xs:text-left">
             My Tech Stack

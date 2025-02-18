@@ -5,7 +5,7 @@ import FadeInOnView from "@components/FadeInOnView";
 const Projects = () => {
   return (
     <section id="projects" className="relative w-screen bg-surface-primary">
-      <div className="component-base">
+      <div className="safe component-base">
         <FadeInOnView delay={100} className="w-full">
           <div className="header-texts">
             <h2>My Projects</h2>

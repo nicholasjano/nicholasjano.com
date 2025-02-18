@@ -17,7 +17,7 @@ const Stats = () => {
   return (
     <section id="stats" className="overflow-x-clip absolute inset-x-0 top-0">
       <div className="absolute inset-0 w-screen h-screen-lvh overflow-hidden bg-surface-dark transform translate-y-full z-30">
-        <div className="h-full w-full flex flex-col justify-center items-center space-y-4 stats-xs:space-y-20">
+        <div className="safe h-full w-full flex flex-col justify-center items-center space-y-4 stats-xs:space-y-20">
           <div className="flex flex-col justify-center items-center text-center space-y-2">
             <h2>My Monthly Stats</h2>
             <p className="under-header">

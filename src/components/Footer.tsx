@@ -12,7 +12,7 @@ const Footer = () => {
 
   return (
     <footer id="contact" className="relative w-screen bg-surface-dark">
-      <div className="width-scaled max-w-screen-2xl mx-auto pt-24 pb-6 flex flex-col items-center">
+      <div className="safe width-scaled max-w-screen-2xl mx-auto pt-24 pb-6 flex flex-col items-center">
         <div className="header-texts">
           <h2>Contact Me</h2>
           <p className="under-header">Let's write the next chapter together.</p>

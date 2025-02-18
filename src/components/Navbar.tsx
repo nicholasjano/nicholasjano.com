@@ -47,7 +47,9 @@ const Navbar = ({ introRef }: refType) => {
               {navItemsRight.map((item) => (
                 <li className="h-full flex items-center" key={item}>
                   <button
-                    onClick={() => handleScroll({id: item.toLowerCase(), ref: introRef})}
+                    onClick={() =>
+                      handleScroll({ id: item.toLowerCase(), ref: introRef })
+                    }
                     className="h-full text-sm hover-colour transition-colors duration-200 focus:outline-none"
                     aria-label={`Navigate to ${item}`}
                   >
@@ -62,7 +64,7 @@ const Navbar = ({ introRef }: refType) => {
         // Hamburger Menu
         <>
           <button
-            className="fixed top-0 right-0 w-12 h-12 flex flex-col items-center justify-center gap-1.5 z-50 group"
+            className="safe fixed top-0 right-0 w-12 h-12 flex flex-col items-center justify-center gap-1.5 z-50 group"
             aria-label="Toggle navigation menu"
             onClick={() => setIsOpen(!isOpen)}
           >
@@ -79,7 +81,7 @@ const Navbar = ({ introRef }: refType) => {
             />
           </button>
           <nav
-            className={`w-full border-b-2 border-header-stroke transition-transform duration-300 ease-in-out ${
+            className={`safe w-full border-b-2 border-header-stroke transition-transform duration-300 ease-in-out ${
               isOpen ? "translate-y-0" : "-translate-y-full"
             }`}
           >
@@ -90,7 +92,7 @@ const Navbar = ({ introRef }: refType) => {
                     key={item}
                     className="width-scaled border-b border-header-stroke/50 cursor-pointer"
                     onClick={() => {
-                      handleScroll({id: item.toLowerCase(), ref: introRef});
+                      handleScroll({ id: item.toLowerCase(), ref: introRef });
                       setIsOpen(false);
                     }}
                   >
@@ -103,7 +105,7 @@ const Navbar = ({ introRef }: refType) => {
                   </li>
                 ))}
               </ul>
-              <ul className="w-screen flex flex-row items-center justify-center gap-12 py-2">
+              <ul className="w-full flex flex-row items-center justify-center gap-12 py-2">
                 {navItemsLeft.map((item, index) => (
                   <li key={index}>
                     <a

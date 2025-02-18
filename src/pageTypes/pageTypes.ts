@@ -143,3 +143,9 @@ export type UseFetchStatsReturn = {
   stats: DynamicStatsType;
   isLoaded: boolean;
 };
+
+export type useNavVisibilityProps = {
+  isOpen: boolean;
+  instantClose: boolean;
+  duration?: number;
+};

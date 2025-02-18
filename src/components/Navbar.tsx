@@ -4,11 +4,12 @@ import { navItemsRight, navItemsLeft, navItemsLeftURL } from "@data/pageData";
 import { handleScroll } from "@utilities/ScrollingUtilities";
 import { useState } from "react";
 import { useIconPadding } from "@hooks/useIconPadding";
+import { useNavVisibility } from "@hooks/useNavVisibility";
 import type { refType } from "@pageTypes/pageTypes";
 
 const Navbar = ({ introRef }: refType) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [instantClose, setInstantClose] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [instantClose, setInstantClose] = useState<boolean>(false);
   const isLargeScreen = useScreenSize();
 
   const { linkRefs: linkRefsNavBar, paddings: paddingsNavBar } = useIconPadding(
@@ -17,6 +18,8 @@ const Navbar = ({ introRef }: refType) => {
       fullSize: 40,
     }
   );
+
+  const navVisible = useNavVisibility({ isOpen, instantClose });
 
   return (
     <>
@@ -93,7 +96,9 @@ const Navbar = ({ introRef }: refType) => {
           <nav
             className={`safe w-full border-b-2 border-header-stroke transition-transform ${
               instantClose ? "duration-0" : "duration-300 ease-in-out"
-            } ${isOpen ? "translate-y-0" : "-translate-y-full"}`}
+            } ${isOpen ? "translate-y-0" : "-translate-y-full"} ${
+              navVisible ? "opacity-100" : "opacity-0"
+            }`}
           >
             <div className="mt-4 navmenu-xs:mt-12">
               <ul className="flex flex-col items-center">

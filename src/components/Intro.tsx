@@ -22,9 +22,10 @@ const Intro = ({ introRef }: refType) => {
         <div className="flex flex-col items-center justify-center text-center space-y-2 z-20">
           <h1>Nicholas Jano</h1>
           <p className="text-base xs-wh:text-xl">
-            Student at Queen's University
+            <span className="sm:hidden">SWE</span>
+            <span className="hidden sm:inline">Software Engineer</span>
+            <span> I at Marmon Rail</span>
           </p>
-          <p className="text-base xs-wh:text-xl">Software Engineer</p>
         </div>
       </div>
     </header>

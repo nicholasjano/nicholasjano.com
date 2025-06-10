@@ -20,9 +20,9 @@ import type {
 import MarmonRail from "@assets/MarmonRail.webp";
 import NetSolutionsTime from "@assets/NetSolutionsTime.webp";
 import LeetBuddy from "@assets/LeetBuddy.webp";
+import BeadHive from "@assets/BeadHive.webp";
 import Villara from "@assets/Villara.webp";
 import KeepUpChampions from "@assets/KeepUpChampions.webp";
-import IndigenousArtGallery from "@assets/IndigenousArtGallery.webp";
 import LavishDiscordChatBot from "@assets/LavishDiscordChatBot.webp";
 
 export const latestProject = "LeetBuddy";
@@ -64,7 +64,7 @@ export const navItemsLeftURL: readonly string[] = [
 ];
 
 export const personalDescription: string = `
-Hi, I'm Nicholas Jano, a Software Engineer and final-year Bachelor of Computer Science student at Queen's University in Ontario, Canada. Ever since I was a kid, I've been fascinated by computers and how they work. I started in elementary school, creating mini-applications with JavaScript and ActionScript. This early passion led me to keep learning and constantly expand my technical skills, shaping me into the engineer I am today.
+Hi, I'm Nicholas Jano, a Software Engineer I at Marmon Rail and a Bachelor of Computer Science (Honours) graduate from Queen's University in Ontario, Canada. Ever since I was a kid, I've been fascinated by computers and how they work. I started in elementary school, creating mini-applications with JavaScript and ActionScript. This early passion led me to keep learning and constantly expand my technical skills, shaping me into the engineer I am today.
 
 In the ever-evolving field of Software Engineering, I strive to stay in a consistent state of learning and innovation so I can develop software solutions that make a meaningful impact. I'm driven by the challenge of tackling new problems and exploring emerging technologies. From working on personal projects to participating in hackathons, I always seek new opportunities to learn and develop. Over the years, I've gained experience across the full development stack, including designing system architecture, developing responsive frontend applications, and building scalable backend services. By combining my creativity with my technical skills, I can create innovative applications that solve everyday problems.
 `;
@@ -152,13 +152,13 @@ export const stackItems: readonly [
 
 const MarmonRailInfo: RoleInfo = {
   image: MarmonRail,
-  role: "Data Engineer Intern",
+  role: "Software Engineer I",
   company: "Marmon Rail and Leasing Group",
-  period: "June 2024 - August 2024",
+  period: "June 2024 - Present",
   highlights: `
-In this position, I evaluated and utilized the ontology-powered Palantir Foundry platform to build ETL pipelines with Pipeline Builder, create LLM functions using AIP Assist, and design dashboards with Workshop and Quiver. One of my key achievements was developing a custom dashboard from scratch in just three days using Pipeline Builder, Workshop, and Quiver, which significantly improved data visualization and supported better decision-making processes.
+In this position, I evaluated and utilized the ontology-powered Palantir Foundry platform to build ETL pipelines with Pipeline Builder, create custom LLM functions using AIP Assist, and design dashboards with Workshop and Quiver. One of my key achievements to date was developing a custom dashboard from scratch in just three days using Pipeline Builder, Workshop, and Quiver, which improves data visualization and supports better decision-making.
 
-I also engineered and optimized Azure Synapse data pipelines to perform ETL from raw data into an Azure Data Lake. Additionally, I designed and implemented Power BI dashboards that were utilized by over 100 business users, enhancing operational efficiency and supporting data-driven decision-making through insightful visualizations.
+I also engineered and optimized Azure Synapse data pipelines using Spark-based Data Flows and PySpark notebooks, reducing pipeline runtime by 40%, and leveraged GitHub for version control and code collaboration. Additionally, I designed and implemented Power BI dashboards that are used daily by over 1,000 business users, enhancing operational efficiency and supporting data-driven decision-making through insightful visualizations.
 `,
 };
 
@@ -183,11 +183,22 @@ const LeetBuddyInfo: ProjectInfo = {
   image: LeetBuddy,
   title: "LeetBuddy",
   description:
-    "LeetBuddy is a Google Chrome Extension that enhances LeetCode problem-solving with AI-powered explanations, hints, and coding assistance. It provides a built-in whiteboard for visualizing problems and supports real-time guidance during coding sessions. The extension also tracks the conversation history to offer a seamless and personalized learning experience, leveraging Google Gemini's multimodal capabilities for both text and image-based inputs.",
+    "LeetBuddy is a Google Chrome Extension that enhances LeetCode problem-solving with AI-powered explanations, hints, and coding assistance. It provides a built-in whiteboard for visualizing problems and supports real-time guidance during coding sessions. The extension also tracks the conversation history to offer a seamless and personalized learning experience, leveraging Google Gemini's multimodal capabilities for both text and image-based inputs. With over 2,000 active users globally and a 4.8/5 star rating from 46 reviews, LeetBuddy has proven to be a valuable tool for the coding community.",
   links: {
     github: "https://github.com/LeetBuddyAI/LeetBuddy",
     preview:
-      "https://chromewebstore.google.com/detail/leetbuddy/nlemdecocfoaimdbfgpilfgdmcllhphn",
+      "https://chromewebstore.google.com/detail/nlemdecocfoaimdbfgpilfgdmcllhphn",
+  },
+};
+
+const BeadHiveInfo: ProjectInfo = {
+  image: BeadHive,
+  title: "The Bead Hive",
+  description:
+    "The Bead Hive is an interactive Indigenous Art Gallery that preserves Indigenous history and showcases Indigenous artwork through a modern, engaging web experience. It enables artists to share their creations and stories while providing students and researchers with an accessible platform to explore rich multimedia exhibits. The Bead Hive fosters cultural education and community connection, supporting both preservation and celebration of Indigenous art and heritage.",
+  links: {
+    preview:
+      "https://beadhive.ca",
   },
 };
 
@@ -196,14 +207,6 @@ const VillaraInfo: ProjectInfo = {
   title: "Villara",
   description:
     "Villara is a full-stack web application to connect those with talents in freelancing and trade skills to potential customers and clients within a community. Services include haircuts, nails, automotive repairs, and more in the coming future. Villara is currently still in development.",
-  links: {},
-};
-
-const IndigenousArtGalleyInfo: ProjectInfo = {
-  image: IndigenousArtGallery,
-  title: "Indigenous Art Gallery",
-  description:
-    "I'm currently developing an interactive Indigenous Art Gallery to preserve Indigenous history and educate students and researchers on Indigenous artwork and history. The art gallery is a full-stack web application that utilizes various forms of media and has built-in accessibility features. The application will be complete on March 31st, 2025.",
   links: {},
 };
 
@@ -230,8 +233,8 @@ const LavishDiscordChatBotInfo: ProjectInfo = {
 
 export const ProjectInfos: ProjectInfo[] = [
   LeetBuddyInfo,
+  BeadHiveInfo,
   VillaraInfo,
-  IndigenousArtGalleyInfo,
   KeepUpChampionsInfo,
   LavishDiscordChatBotInfo,
 ];

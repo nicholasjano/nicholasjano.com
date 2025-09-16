@@ -104,14 +104,14 @@ jobs:
           echo "Computed one_month_ago: $ONE_MONTH_AGO"
           echo "one_month_ago=$ONE_MONTH_AGO" >> $GITHUB_OUTPUT
 
-      - name: Fetch GitHub Stats (Total Commits, Unique Repos, New Solutions)
+      - name: Fetch GitHub Stats (Total Commits, Unique Repos)
         id: fetch_stats
         run: |
           DATE_QUERY=${{ steps.datecalc.outputs.one_month_ago }}
           CURRENT_DATE=$(date -u +"%Y-%m-%dT00:00:00Z")
 
           # Fetch the non-paginated data (total commits and unique repos for the month)
-          INITIAL_QUERY='{"query":"query{user(login:\"nicholasjano\"){contributionsCollection(from:\"'"$DATE_QUERY"'\",to:\"'"$CURRENT_DATE"'\"){totalCommitContributions commitContributionsByRepository{repository{id}}}}}"}' 
+          INITIAL_QUERY='{"query":"query{user(login:\"nicholasjano\"){contributionsCollection(from:\"'"$DATE_QUERY"'\",to:\"'"$CURRENT_DATE"'\"){totalCommitContributions commitContributionsByRepository{repository{id}}}}}"}'
 
           # Execute the initial query
           INITIAL_RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
@@ -136,66 +136,17 @@ jobs:
           TOTAL_COMMITS=$(echo "$INITIAL_RESPONSE" | jq '.data.user.contributionsCollection.totalCommitContributions // 0')
           UNIQUE_REPOS=$(echo "$INITIAL_RESPONSE" | jq '.data.user.contributionsCollection.commitContributionsByRepository | length // 0')
 
-          # Handle the paginated commits query for Leetcode Solutions separately
-          CURSOR="null"
-          HAS_NEXT_PAGE="true"
-          NEW_SOLUTION_COUNT=0
-
-          while [ "$HAS_NEXT_PAGE" = "true" ]; do
-            # Construct GraphQL query for commit history with pagination
-            COMMITS_QUERY='{"query":"query{repository(owner:\"nicholasjano\",name:\"Leetcode-Solutions\"){defaultBranchRef{target{... on Commit{history(first:100,after:'"$CURSOR"',since:\"'"$DATE_QUERY"'\"){pageInfo{hasNextPage endCursor}nodes{message author{user{login}}}}}}}}}"}'
-
-            # Execute the commits query
-            COMMITS_RESPONSE=$(curl -s -X POST -H "Authorization: bearer ${{ secrets.PAT_TOKEN }}" \
-              -H "Content-Type: application/json" \
-              https://api.github.com/graphql \
-              -d "$COMMITS_QUERY")
-
-            # Check for errors in response
-            if echo "$COMMITS_RESPONSE" | jq -e 'has("errors")' > /dev/null; then
-              ERROR_MESSAGE=$(echo "$COMMITS_RESPONSE" | jq -r '.errors[0].message')
-              echo "Error in commits query: $ERROR_MESSAGE"
-              exit 1
-            fi
-
-            # Check if the data path exists
-            if ! echo "$COMMITS_RESPONSE" | jq -e '.data' > /dev/null; then
-              echo "Error: No data field in response"
-              exit 1
-            fi
-
-            # Extract commit data with null handling
-            PAGE_COUNT=$(echo "$COMMITS_RESPONSE" | jq '[.data.repository.defaultBranchRef.target.history.nodes // [] | .[]
-              | select(.author.user.login == "nicholasjano")
-              | select(.message | test("new"; "i") and test("solution"; "i"))] | length')
-
-            NEW_SOLUTION_COUNT=$((NEW_SOLUTION_COUNT + PAGE_COUNT))
-
-            # Extract pagination info with null handling
-            HAS_NEXT_PAGE=$(echo "$COMMITS_RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.hasNextPage // false')
-            END_CURSOR=$(echo "$COMMITS_RESPONSE" | jq -r '.data.repository.defaultBranchRef.target.history.pageInfo.endCursor // null')
-
-            # Update cursor for next iteration if there is a next page
-            if [ "$HAS_NEXT_PAGE" = "true" ] && [ "$END_CURSOR" != "null" ]; then
-              CURSOR="\"$END_CURSOR\""
-            else
-              HAS_NEXT_PAGE="false"
-            fi
-          done
-
           # Store values in GitHub Actions outputs
           {
             echo "total_commits=$TOTAL_COMMITS"
             echo "unique_repos=$UNIQUE_REPOS"
-            echo "new_solution_commits=$NEW_SOLUTION_COUNT"
           } >> $GITHUB_OUTPUT
 
       - name: Create stats JSON file
         run: |
           echo "{" > stats.json
           echo "  \"totalCommitsPastMonth\": ${{ steps.fetch_stats.outputs.total_commits }}," >> stats.json
-          echo "  \"uniqueRepositoriesPastMonth\": ${{ steps.fetch_stats.outputs.unique_repos }}," >> stats.json
-          echo "  \"newSolutionCommits\": ${{ steps.fetch_stats.outputs.new_solution_commits }}" >> stats.json
+          echo "  \"uniqueRepositoriesPastMonth\": ${{ steps.fetch_stats.outputs.unique_repos }}" >> stats.json
           echo "}" >> stats.json
 
       - name: Install AWS CLI

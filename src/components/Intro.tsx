@@ -24,7 +24,7 @@ const Intro = ({ introRef }: refType) => {
           <p className="text-base xs-wh:text-xl">
             <span className="sm:hidden">SWE</span>
             <span className="hidden sm:inline">Software Engineer</span>
-            <span> I at Marmon Rail</span>
+            <span> at Marmon Rail</span>
           </p>
         </div>
       </div>

@@ -136,7 +136,7 @@ export type UseResponsiveThresholdProps = {
 export type DynamicStatsType = {
   totalCommitsPastMonth: number;
   uniqueRepositoriesPastMonth: number;
-  newSolutionCommits: number;
+  monthlyActiveUsers: number;
 };
 
 export type UseFetchStatsReturn = {

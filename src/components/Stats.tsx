@@ -61,10 +61,9 @@ const Stats = () => {
               </div>
             </div>
             <div className="stats-info">
-              <p className="font-medium">LeetCode</p>
+              <p className="font-medium">Monthly Active Users</p>
               <p>
-                <AnimatedNumber number={stats.newSolutionCommits} />{" "}
-                {stats.newSolutionCommits === 1 ? "Problem" : "Problems"} Solved
+                <AnimatedNumber number={stats.monthlyActiveUsers} /> across all apps
               </p>
             </div>
           </div>

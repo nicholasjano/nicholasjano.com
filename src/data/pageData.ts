@@ -1,5 +1,4 @@
 import {
-  faFile,
   faEnvelope,
   faPhone,
   faCode,
@@ -20,6 +19,7 @@ import type {
 import MarmonRail from "@assets/MarmonRail.webp";
 import NetSolutionsTime from "@assets/NetSolutionsTime.webp";
 import LeetBuddy from "@assets/LeetBuddy.webp";
+import RecapMe from "@assets/RecapMe.webp";
 import BeadHive from "@assets/BeadHive.webp";
 import Villara from "@assets/Villara.webp";
 import KeepUpChampions from "@assets/KeepUpChampions.webp";
@@ -52,19 +52,17 @@ export const navItemsRight: readonly string[] = [
 ];
 
 export const navItemsLeft: readonly IconDefinition[] = [
-  faFile,
   faLinkedin,
   faGithub,
 ];
 
 export const navItemsLeftURL: readonly string[] = [
-  "/resume.pdf",
   "https://www.linkedin.com/in/nicholasjano/",
   "https://github.com/nicholasjano",
 ];
 
 export const personalDescription: string = `
-Hi, I'm Nicholas Jano, a Software Engineer I at Marmon Rail and a Bachelor of Computer Science (Honours) graduate from Queen's University in Ontario, Canada. Ever since I was a kid, I've been fascinated by computers and how they work. I started in elementary school, creating mini-applications with JavaScript and ActionScript. This early passion led me to keep learning and constantly expand my technical skills, shaping me into the engineer I am today.
+Hi, I'm Nicholas Jano, a Software Engineer at Marmon Rail with a Bachelor of Computer Science (Honours) background from Queen's University in Ontario, Canada. Ever since I was a kid, I've been fascinated by computers and how they work. I started in elementary school, creating mini-applications with JavaScript and ActionScript. This early passion led me to keep learning and constantly expand my technical skills, shaping me into the engineer I am today.
 
 In the ever-evolving field of Software Engineering, I strive to stay in a consistent state of learning and innovation so I can develop software solutions that make a meaningful impact. I'm driven by the challenge of tackling new problems and exploring emerging technologies. From working on personal projects to participating in hackathons, I always seek new opportunities to learn and develop. Over the years, I've gained experience across the full development stack, including designing system architecture, developing responsive frontend applications, and building scalable backend services. By combining my creativity with my technical skills, I can create innovative applications that solve everyday problems.
 `;
@@ -152,25 +150,31 @@ export const stackItems: readonly [
 
 const MarmonRailInfo: RoleInfo = {
   image: MarmonRail,
-  role: "Software Engineer I",
+  role: "Software Engineer",
   company: "Marmon Rail and Leasing Group",
   period: "June 2024 - Present",
   highlights: `
-In this position, I evaluated and utilized the ontology-powered Palantir Foundry platform to build ETL pipelines with Pipeline Builder, create custom LLM functions using AIP Assist, and design dashboards with Workshop and Quiver. One of my key achievements to date was developing a custom dashboard from scratch in just three days using Pipeline Builder, Workshop, and Quiver, which improves data visualization and supports better decision-making.
+In this role, I leveraged the ontology-powered Palantir Foundry platform to design scalable ETL pipelines with Pipeline Builder, create custom LLM-powered functions using AIP Assist, and deliver interactive dashboards with Workshop and Quiver.
 
-I also engineered and optimized Azure Synapse data pipelines using Spark-based Data Flows and PySpark notebooks, reducing pipeline runtime by 40%, and leveraged GitHub for version control and code collaboration. Additionally, I designed and implemented Power BI dashboards that are used daily by over 1,000 business users, enhancing operational efficiency and supporting data-driven decision-making through insightful visualizations.
+I also optimized Azure Synapse data pipelines using Spark-based Data Flows and PySpark notebooks, cutting runtime by 40% while using GitHub for streamlined collaboration and code reviews.
+
+In addition, I delivered Power BI dashboards consumed daily by over 1,000 business users, driving operational efficiency and enabling faster, data-driven decisions by collaborating closely with stakeholders to gather requirements.
+
+Finally, I developed and deployed enterprise-grade Spring Boot services with REST APIs, improving backend performance by 35% and scaling seamlessly to over 1,200 daily active users.
 `,
 };
 
 const NetSolutionsTimeInfo: RoleInfo = {
   image: NetSolutionsTime,
-  role: "Software Engineer Intern",
+  role: "Software Engineer",
   company: "NetSolutionsTime",
   period: "May 2023 - August 2023",
   highlights: `
-During this role, I collaborated closely with internal stakeholders to gather functional requirements, develop technical specifications, and implement comprehensive test plans.
+During this role, I collaborated with internal partners to gather functional requirements, develop technical specifications, and implement comprehensive test plans, contributing to a 17% reduction in post-release defects.
 
-A significant achievement of mine was implementing RESTful APIs and microservices for enterprise integration applications that consolidated data for over 15 million customers of a major North American financial institution. This implementation enabled a comprehensive Customer 360 view using Informatica MDM technologies. I also customized and deployed code to a Microsoft Azure Cloud Database, incorporating robust error handling and monitoring systems to ensure reliable performance.
+A key achievement was implementing RESTful APIs and microservices for enterprise integration applications that consolidated data for over 15 million customers of a major financial institution, enabling a comprehensive Customer 360 view.
+
+In addition, I customized and deployed code to a Microsoft Azure Cloud Database, incorporating error handling and monitoring systems to ensure reliable performance.
 `,
 };
 
@@ -183,7 +187,7 @@ const LeetBuddyInfo: ProjectInfo = {
   image: LeetBuddy,
   title: "LeetBuddy",
   description:
-    "LeetBuddy is a Google Chrome Extension that enhances LeetCode problem-solving with AI-powered explanations, hints, and coding assistance. It provides a built-in whiteboard for visualizing problems and supports real-time guidance during coding sessions. The extension also tracks the conversation history to offer a seamless and personalized learning experience, leveraging Google Gemini's multimodal capabilities for both text and image-based inputs. With over 2,000 active users globally and a 4.8/5 star rating from 46 reviews, LeetBuddy has proven to be a valuable tool for the coding community.",
+    "LeetBuddy is a Google Chrome Extension that enhances LeetCode problem-solving with AI-powered explanations, hints, and coding assistance. It provides a built-in whiteboard for visualizing problems and supports real-time guidance during coding sessions. The extension also tracks the conversation history to offer a seamless and personalized learning experience, leveraging Google Gemini's multimodal capabilities for both text and image-based inputs. With over 3,000 active users globally and a 4.6/5 star rating from over 50 reviews, LeetBuddy has proven to be a valuable tool for the coding community.",
   links: {
     github: "https://github.com/LeetBuddyAI/LeetBuddy",
     preview:
@@ -200,6 +204,14 @@ const BeadHiveInfo: ProjectInfo = {
     preview:
       "https://beadhive.ca",
   },
+};
+
+const RecapMeInfo: ProjectInfo = {
+  image: RecapMe,
+  title: "RecapMe",
+  description:
+    "RecapMe is a mobile application built with Kotlin and Jetpack Compose that automatically generates concise, context-aware summaries of chat conversations. Powered by a scalable Spring Boot backend with REST APIs, it reliably supports over 500 concurrent sessions with low-latency performance and seamless data exchange. The app integrates the Google Gemini API to deliver LLM-powered summarization, cutting average recap generation time by 40% while improving content retention and accuracy. Since launch, RecapMe has grown to over 3,000 users with consistent engagement, providing an efficient way for people to quickly digest and revisit their conversations.",
+  links: {},
 };
 
 const VillaraInfo: ProjectInfo = {
@@ -234,6 +246,7 @@ const LavishDiscordChatBotInfo: ProjectInfo = {
 export const ProjectInfos: ProjectInfo[] = [
   LeetBuddyInfo,
   BeadHiveInfo,
+  RecapMeInfo,
   VillaraInfo,
   KeepUpChampionsInfo,
   LavishDiscordChatBotInfo,
@@ -288,7 +301,7 @@ export const FooterInfo: FooterType = {
 export const defaultStats: Readonly<DynamicStatsType> = {
   totalCommitsPastMonth: 88,
   uniqueRepositoriesPastMonth: 4,
-  newSolutionCommits: 20,
+  monthlyActiveUsers: 32000,
 };
 
 export const API_URL = "https://stats.nicholasjano.com/stats.json" as const;

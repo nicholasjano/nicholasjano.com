@@ -7,7 +7,6 @@ export const isValidStats = (data: unknown): data is DynamicStatsType => {
 
   return (
     typeof typedData.totalCommitsPastMonth === "number" &&
-    typeof typedData.uniqueRepositoriesPastMonth === "number" &&
-    typeof typedData.newSolutionCommits === "number"
+    typeof typedData.uniqueRepositoriesPastMonth === "number"
   );
 };

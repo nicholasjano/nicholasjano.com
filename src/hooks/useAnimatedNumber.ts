@@ -28,8 +28,9 @@ export const useAnimatedNumber = ({
         if (!startTimestamp) startTimestamp = timestamp;
         const progress = timestamp - startTimestamp;
 
-        const easeOutQuad = (x: number): number => 1 - Math.pow(1 - x, 2);
-        const percentage = easeOutQuad(Math.min(progress / duration, 1));
+        // Very aggressive easing that slows down dramatically at the end for large numbers
+        const easeOutExpo = (x: number): number => x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
+        const percentage = easeOutExpo(Math.min(progress / duration, 1));
 
         setCount(Math.floor(percentage * end));
 

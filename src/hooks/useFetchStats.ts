@@ -24,7 +24,9 @@ export const useFetchStats = (): UseFetchStatsReturn => {
         if (!isValidStats(data)) {
           setStats(defaultStats);
         } else {
-          setStats(data);
+          // Merge API data with default stats to ensure all fields are present
+          const mergedStats = { ...defaultStats, ...data };
+          setStats(mergedStats);
           localStorage.setItem("githubStats", JSON.stringify(data));
           localStorage.setItem("lastFetchTime", Date.now().toString());
         }
@@ -46,7 +48,10 @@ export const useFetchStats = (): UseFetchStatsReturn => {
     ) {
       fetchStats();
     } else {
-      setStats(JSON.parse(cachedStats));
+      // Merge cached API data with default stats to ensure all fields are present
+      const cachedData = JSON.parse(cachedStats);
+      const mergedStats = { ...defaultStats, ...cachedData };
+      setStats(mergedStats);
       setIsLoaded(true);
     }
   }, []);

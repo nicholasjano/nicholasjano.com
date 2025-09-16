@@ -63,7 +63,7 @@ const Stats = () => {
             <div className="stats-info">
               <p className="font-medium">Monthly Active Users</p>
               <p>
-                <AnimatedNumber number={stats.monthlyActiveUsers} /> across all apps
+                Over <AnimatedNumber number={stats.monthlyActiveUsers} /> users across all apps
               </p>
             </div>
           </div>

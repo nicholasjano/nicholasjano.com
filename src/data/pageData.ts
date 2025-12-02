@@ -25,7 +25,7 @@ import Villara from "@assets/Villara.webp";
 import KeepUpChampions from "@assets/KeepUpChampions.webp";
 import LavishDiscordChatBot from "@assets/LavishDiscordChatBot.webp";
 
-export const latestProject = "LeetBuddy";
+export const latestProject = "RecapMe";
 
 export const baseSymbols: readonly string[] = [
   "{}",
@@ -154,13 +154,13 @@ const MarmonRailInfo: RoleInfo = {
   company: "Marmon Rail and Leasing Group",
   period: "June 2024 - Present",
   highlights: `
-In this role, I leveraged the ontology-powered Palantir Foundry platform to design scalable ETL pipelines with Pipeline Builder, create custom LLM-powered functions using AIP Assist, and deliver interactive dashboards with Workshop and Quiver.
+In this role, I leveraged the ontology-powered Palantir Foundry platform to design and build over 15 automated data pipelines using transforms and ontology objects. These pipelines streamlined data ingestion workflows, processing over 1 million records daily and reducing manual data preparation time by 70%, which significantly improved efficiency across the team.
 
-I also optimized Azure Synapse data pipelines using Spark-based Data Flows and PySpark notebooks, cutting runtime by 40% while using GitHub for streamlined collaboration and code reviews.
+I also optimized Azure Synapse data pipelines using Spark-based Data Flows and PySpark notebooks, achieving a 40% reduction in runtime and enabling faster, more reliable data processing at scale.
 
-In addition, I delivered Power BI dashboards consumed daily by over 1,000 business users, driving operational efficiency and enabling faster, data-driven decisions by collaborating closely with stakeholders to gather requirements.
+On the backend, I developed and deployed Spring Boot microservices with REST APIs, implementing database query optimization and caching strategies that improved response times by 35% and maintained 99.95% uptime for over 1,200 daily users. I also enhanced service reliability by implementing custom exception handlers and validation logic across multiple services, which reduced API error rates by 56% and cut mean time to resolution by 30%.
 
-Finally, I developed and deployed enterprise-grade Spring Boot services with REST APIs, improving backend performance by 35% and scaling seamlessly to over 1,200 daily active users.
+Finally, I built Power BI dashboards with DAX and SQL that are used daily by over 1,000 business users to track KPIs and business metrics, enabling faster, data-driven decision-making across the organization.
 `,
 };
 
@@ -170,11 +170,11 @@ const NetSolutionsTimeInfo: RoleInfo = {
   company: "NetSolutionsTime",
   period: "May 2023 - August 2023",
   highlights: `
-During this role, I collaborated with internal partners to gather functional requirements, develop technical specifications, and implement comprehensive test plans, contributing to a 17% reduction in post-release defects.
+During this role, I built comprehensive automated test suites using pytest and unittest across multiple services, which contributed to a 17% reduction in post-release defects and improved overall code quality and reliability.
 
-A key achievement was implementing RESTful APIs and microservices for enterprise integration applications that consolidated data for over 15 million customers of a major financial institution, enabling a comprehensive Customer 360 view.
+A key achievement was engineering RESTful APIs and microservices using Flask and SQLAlchemy to aggregate and transform customer data from over 10 source systems. This work served more than 15 million customers at a major financial institution, reducing data retrieval time by 45% and enabling a comprehensive Customer 360 view that consolidated critical information across the organization.
 
-In addition, I customized and deployed code to a Microsoft Azure Cloud Database, incorporating error handling and monitoring systems to ensure reliable performance.
+In addition, I deployed and managed multiple Azure SQL databases with automated backup policies and integrated Application Insights for query performance monitoring. This implementation achieved 99.9% uptime and reduced incident response time by 50%, ensuring reliable performance and faster issue resolution.
 `,
 };
 
@@ -183,11 +183,23 @@ export const ExperienceInfos: RoleInfo[] = [
   NetSolutionsTimeInfo,
 ];
 
+const RecapMeInfo: ProjectInfo = {
+  image: RecapMe,
+  title: "RecapMe",
+  description:
+    "RecapMe is a mobile application built with Kotlin and Jetpack Compose that automatically generates concise, context-aware summaries of chat conversations. Powered by a scalable Spring Boot backend, it reliably supports over 10,000 concurrent sessions with low-latency performance and seamless data exchange. The app integrates the Google Gemini API to deliver LLM-powered summarization, cutting average recap generation time by 40% while improving content retention and accuracy. Since launch, RecapMe has scaled to over 50,000 users with a 60% weekly active user retention rate, providing an efficient way for people to quickly digest and revisit their conversations.",
+  links: {
+    github: "https://github.com/nicholasjano/RecapMe",
+    preview:
+      "https://play.google.com/store/apps/details?id=com.nicholasjano.recapme",
+  },
+};
+
 const LeetBuddyInfo: ProjectInfo = {
   image: LeetBuddy,
   title: "LeetBuddy",
   description:
-    "LeetBuddy is a Google Chrome Extension that enhances LeetCode problem-solving with AI-powered explanations, hints, and coding assistance. It provides a built-in whiteboard for visualizing problems and supports real-time guidance during coding sessions. The extension also tracks the conversation history to offer a seamless and personalized learning experience, leveraging Google Gemini's multimodal capabilities for both text and image-based inputs. With over 3,000 active users globally and a 4.6/5 star rating from over 50 reviews, LeetBuddy has proven to be a valuable tool for the coding community.",
+    "LeetBuddy is a Google Chrome Extension that enhances LeetCode problem-solving with AI-powered explanations, hints, and coding assistance. It provides a built-in whiteboard for visualizing problems and supports real-time guidance during coding sessions. The extension also tracks the conversation history to offer a seamless and personalized learning experience, leveraging Google Gemini's multimodal capabilities for both text and image-based inputs. With over 2,000 active users globally and a 4.6/5 star rating from over 50 reviews, LeetBuddy has proven to be a valuable tool for the coding community.",
   links: {
     github: "https://github.com/LeetBuddyAI/LeetBuddy",
     preview:
@@ -204,14 +216,6 @@ const BeadHiveInfo: ProjectInfo = {
     preview:
       "https://beadhive.ca",
   },
-};
-
-const RecapMeInfo: ProjectInfo = {
-  image: RecapMe,
-  title: "RecapMe",
-  description:
-    "RecapMe is a mobile application built with Kotlin and Jetpack Compose that automatically generates concise, context-aware summaries of chat conversations. Powered by a scalable Spring Boot backend with REST APIs, it reliably supports over 500 concurrent sessions with low-latency performance and seamless data exchange. The app integrates the Google Gemini API to deliver LLM-powered summarization, cutting average recap generation time by 40% while improving content retention and accuracy. Since launch, RecapMe has grown to over 3,000 users with consistent engagement, providing an efficient way for people to quickly digest and revisit their conversations.",
-  links: {},
 };
 
 const VillaraInfo: ProjectInfo = {
@@ -244,11 +248,11 @@ const LavishDiscordChatBotInfo: ProjectInfo = {
 };
 
 export const ProjectInfos: ProjectInfo[] = [
+  RecapMeInfo,
   LeetBuddyInfo,
   BeadHiveInfo,
-  RecapMeInfo,
-  VillaraInfo,
   KeepUpChampionsInfo,
+  VillaraInfo,
   LavishDiscordChatBotInfo,
 ];
 
@@ -301,7 +305,7 @@ export const FooterInfo: FooterType = {
 export const defaultStats: Readonly<DynamicStatsType> = {
   totalCommitsPastMonth: 88,
   uniqueRepositoriesPastMonth: 4,
-  monthlyActiveUsers: 32000,
+  monthlyActiveUsers: 72000,
 };
 
 export const API_URL = "https://stats.nicholasjano.com/stats.json" as const;

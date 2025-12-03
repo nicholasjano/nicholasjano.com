@@ -158,7 +158,9 @@ In this role, I leveraged the ontology-powered Palantir Foundry platform to desi
 
 I also optimized Azure Synapse data pipelines using Spark-based Data Flows and PySpark notebooks, achieving a 40% reduction in runtime and enabling faster, more reliable data processing at scale.
 
-On the backend, I developed and deployed Spring Boot microservices with REST APIs, implementing database query optimization and caching strategies that improved response times by 35% and maintained 99.95% uptime for over 1,200 daily users. I also enhanced service reliability by implementing custom exception handlers and validation logic across multiple services, which reduced API error rates by 56% and cut mean time to resolution by 30%.
+On the backend, I developed and deployed Spring Boot microservices with REST APIs, implementing database query optimization and caching strategies that improved response times by 35% and maintained 99.95% uptime for over 1,200 daily users. I enhanced service reliability by implementing custom exception handlers and Bean Validation annotations across multiple Spring Boot services, which reduced API error rates by 56% and cut mean time to resolution by 30% through improved error logging.
+
+To secure these services, I integrated Spring Security with API key authentication and role-based access control across multiple microservices, implementing JWT token validation to protect 15+ REST endpoints that serve over 10,000 daily API requests.
 
 Finally, I built Power BI dashboards with DAX and SQL that are used daily by over 1,000 business users to track KPIs and business metrics, enabling faster, data-driven decision-making across the organization.
 `,
@@ -174,7 +176,9 @@ During this role, I built comprehensive automated test suites using pytest and u
 
 A key achievement was engineering RESTful APIs and microservices using Flask and SQLAlchemy to aggregate and transform customer data from over 10 source systems. This work served more than 15 million customers at a major financial institution, reducing data retrieval time by 45% and enabling a comprehensive Customer 360 view that consolidated critical information across the organization.
 
-In addition, I deployed and managed multiple Azure SQL databases with automated backup policies and integrated Application Insights for query performance monitoring. This implementation achieved 99.9% uptime and reduced incident response time by 50%, ensuring reliable performance and faster issue resolution.
+To further optimize performance, I implemented a Redis caching layer for the Flask APIs to store frequently accessed customer data. This reduced database load by 60% and improved API response times from 800ms to 200ms for 80% of requests, significantly enhancing the user experience.
+
+In addition, I deployed and managed multiple Azure SQL databases with automated backup policies, query performance monitoring, and Application Insights integration. This implementation achieved 99.9% uptime and reduced incident response time by 50%, ensuring reliable performance and faster issue resolution.
 `,
 };
 

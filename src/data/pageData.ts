@@ -73,6 +73,7 @@ const languages: readonly StackItemsType[] = [
   { name: "C", icon: "devicon-c-plain" },
   { name: "C++", icon: "devicon-cplusplus-plain" },
   { name: "C#", icon: "devicon-csharp-plain" },
+  { name: "Go", icon: "devicon-go-original-wordmark" },
   { name: "Visual Basic", icon: "devicon-visualbasic-plain" },
   { name: "HTML", icon: "devicon-html5-plain" },
   { name: "CSS", icon: "devicon-css3-plain" },

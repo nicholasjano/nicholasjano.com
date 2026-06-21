@@ -10,6 +10,8 @@ export const useAnimationTrigger = ({
   const [inView, setInView] = useState(false);
 
   useEffect(() => {
+    const element = elementRef.current;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         setInView(entry.isIntersecting);
@@ -21,13 +23,13 @@ export const useAnimationTrigger = ({
       { threshold: 0.1 }
     );
 
-    if (elementRef.current) {
-      observer.observe(elementRef.current);
+    if (element) {
+      observer.observe(element);
     }
 
     return () => {
-      if (elementRef.current) {
-        observer.unobserve(elementRef.current);
+      if (element) {
+        observer.unobserve(element);
       }
     };
   }, [elementRef, hasStartedAnimation, isLoaded, eventName]);

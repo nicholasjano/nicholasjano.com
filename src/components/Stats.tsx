@@ -3,16 +3,18 @@ import { faDownLong } from "@fortawesome/free-solid-svg-icons";
 import { useRef, RefObject } from "react";
 import AnimatedNumber from "@components/AnimatedNumber";
 import { useAnimationTrigger } from "@hooks/useAnimationTrigger";
-import { useFetchStats } from "@hooks/useFetchStats";
-import { latestProject } from "@data/pageData";
+import {
+  latestProject,
+  countriesReached,
+  monthlyActiveUsers,
+} from "@data/pageData";
 import { getMonthlyDates } from "@utilities/GetDateEST";
 import { handleScroll } from "@utilities/ScrollingUtilities";
 
 const Stats = () => {
-  const { stats, isLoaded } = useFetchStats();
   const { prevMonth, currMonth } = getMonthlyDates();
   const sectionRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-  useAnimationTrigger({ elementRef: sectionRef, isLoaded });
+  useAnimationTrigger({ elementRef: sectionRef, isLoaded: true });
 
   return (
     <section id="stats" className="overflow-x-clip absolute inset-x-0 top-0">
@@ -29,15 +31,10 @@ const Stats = () => {
             className="w-fit stats-cols:width-scaled max-w-screen-2xl grid grid-rows-3 stats-cols:grid-rows-none stats-cols:grid-cols-3 gap-2 stats-xs:gap-4 text-center text-base sm:text-lg mx-12 stats-cols:mx-0"
           >
             <div className="stats-info">
-              <p className="font-medium">GitHub</p>
+              <p className="font-medium">Countries Reached</p>
               <p>
-                <AnimatedNumber number={stats.totalCommitsPastMonth} />{" "}
-                {stats.totalCommitsPastMonth === 1 ? "Commit" : "Commits"} made
-                across{" "}
-                <AnimatedNumber number={stats.uniqueRepositoriesPastMonth} />{" "}
-                {stats.uniqueRepositoriesPastMonth === 1
-                  ? "Repository"
-                  : "Repositories"}
+                Users across <AnimatedNumber number={countriesReached} />{" "}
+                countries
               </p>
             </div>
             <div className="stats-info">
@@ -63,7 +60,8 @@ const Stats = () => {
             <div className="stats-info">
               <p className="font-medium">Monthly Active Users</p>
               <p>
-                Over <AnimatedNumber number={stats.monthlyActiveUsers} /> users across all apps
+                Over <AnimatedNumber number={monthlyActiveUsers} /> users across
+                all apps
               </p>
             </div>
           </div>

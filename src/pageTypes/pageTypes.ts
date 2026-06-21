@@ -75,7 +75,7 @@ export type IconPaddingProps = {
 };
 
 export type IconPaddingReturn = {
-  linkRefs: RefObject<HTMLAnchorElement>[];
+  linkRefs: ((element: HTMLAnchorElement | null) => void)[];
   paddings: { x: string; y: string }[];
 };
 
@@ -131,17 +131,6 @@ export type UseResponsiveThresholdProps = {
   default?: number;
   large?: number;
   breakpoint?: number;
-};
-
-export type DynamicStatsType = {
-  totalCommitsPastMonth: number;
-  uniqueRepositoriesPastMonth: number;
-  monthlyActiveUsers: number;
-};
-
-export type UseFetchStatsReturn = {
-  stats: DynamicStatsType;
-  isLoaded: boolean;
 };
 
 export type useNavVisibilityProps = {

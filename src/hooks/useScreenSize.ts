@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export const useScreenSize = (
   minWidth: number = 768,
   minHeight: number = 480
 ): boolean => {
-  const getIsLargeScreen = (): boolean =>
-    window.innerWidth >= minWidth && window.innerHeight >= minHeight;
+  const getIsLargeScreen = useCallback(
+    (): boolean =>
+      window.innerWidth >= minWidth && window.innerHeight >= minHeight,
+    [minWidth, minHeight]
+  );
 
   // Initialize with the current screen size
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(getIsLargeScreen);
@@ -19,7 +22,7 @@ export const useScreenSize = (
 
     // Cleanup
     return (): void => window.removeEventListener("resize", checkSize);
-  }, [minWidth, minHeight]);
+  }, [getIsLargeScreen]);
 
   return isLargeScreen;
 };

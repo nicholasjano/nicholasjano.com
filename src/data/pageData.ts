@@ -14,18 +14,20 @@ import type {
   FooterRightInfo,
   FooterLeftInfo,
   FooterType,
-  DynamicStatsType,
 } from "@pageTypes/pageTypes";
 import MarmonRail from "@assets/MarmonRail.webp";
 import NetSolutionsTime from "@assets/NetSolutionsTime.webp";
 import LeetBuddy from "@assets/LeetBuddy.webp";
 import RecapMe from "@assets/RecapMe.webp";
+import ClearMark from "@assets/ClearMark.webp";
 import BeadHive from "@assets/BeadHive.webp";
 import Villara from "@assets/Villara.webp";
 import KeepUpChampions from "@assets/KeepUpChampions.webp";
 import LavishDiscordChatBot from "@assets/LavishDiscordChatBot.webp";
 
 export const latestProject = "RecapMe";
+export const countriesReached = 113;
+export const monthlyActiveUsers = 72000;
 
 export const baseSymbols: readonly string[] = [
   "{}",
@@ -212,6 +214,16 @@ const LeetBuddyInfo: ProjectInfo = {
   },
 };
 
+const ClearMarkInfo: ProjectInfo = {
+  image: ClearMark,
+  title: "ClearMark",
+  description:
+    "ClearMark is a native iOS app that streamlines test/assignment grading using AI. Scan a set of documents directly on your phone, provide the necessary grading criteria, and the AI powered by Google Gemini will automatically grade all of the work and the app will provide an option to export the entire class's grades into a spreadsheet.",
+  links: {
+    github: "https://github.com/ClearMarkApp",
+  },
+};
+
 const BeadHiveInfo: ProjectInfo = {
   image: BeadHive,
   title: "The Bead Hive",
@@ -255,6 +267,7 @@ const LavishDiscordChatBotInfo: ProjectInfo = {
 export const ProjectInfos: ProjectInfo[] = [
   RecapMeInfo,
   LeetBuddyInfo,
+  ClearMarkInfo,
   BeadHiveInfo,
   KeepUpChampionsInfo,
   VillaraInfo,
@@ -305,14 +318,5 @@ export const FooterInfo: FooterType = {
   internal: [FooterRoleInfo, FooterSchoolInfo, FooterLocationInfo],
   external: [EmailInfo, PhoneInfo, LinkedInInfo, GitHubInfo],
 };
-
-// Average
-export const defaultStats: Readonly<DynamicStatsType> = {
-  totalCommitsPastMonth: 88,
-  uniqueRepositoriesPastMonth: 4,
-  monthlyActiveUsers: 72000,
-};
-
-export const API_URL = "https://stats.nicholasjano.com/stats.json" as const;
 
 export const mainInfoRootMargin = 40 as const;

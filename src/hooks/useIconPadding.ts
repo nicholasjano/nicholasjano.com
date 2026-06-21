@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import type { IconPaddingReturn, IconPaddingProps } from "@pageTypes/pageTypes";
 
 // Generates values to create square paddings around icons.
@@ -7,9 +7,7 @@ export const useIconPadding = ({
   fullSize,
   minimumPadding = 0,
 }: IconPaddingProps): IconPaddingReturn => {
-  const refs = Array.from({ length: iconCount }, () =>
-    useRef<HTMLAnchorElement>(null)
-  );
+  const refs = useRef<(HTMLAnchorElement | null)[]>([]);
   const [paddings, setPaddings] = useState(
     Array.from({ length: iconCount }, () => ({
       x: `${minimumPadding}`,
@@ -17,12 +15,25 @@ export const useIconPadding = ({
     }))
   );
 
+  // Stable callback refs (one per icon) that populates the refs array
+  const linkRefs = useMemo(
+    () =>
+      Array.from(
+        { length: iconCount },
+        (_, index) =>
+          (element: HTMLAnchorElement | null): void => {
+            refs.current[index] = element;
+          }
+      ),
+    [iconCount]
+  );
+
   useEffect(() => {
     const observers: ResizeObserver[] = [];
 
-    refs.forEach((ref, index) => {
-      if (ref.current) {
-        const svg = ref.current.querySelector("svg");
+    refs.current.forEach((element, index) => {
+      if (element) {
+        const svg = element.querySelector("svg");
 
         if (svg) {
           const updatePadding = () => {
@@ -63,5 +74,5 @@ export const useIconPadding = ({
     };
   }, [iconCount, fullSize, minimumPadding]);
 
-  return { linkRefs: refs, paddings };
+  return { linkRefs, paddings };
 };

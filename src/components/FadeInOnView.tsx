@@ -13,6 +13,8 @@ const FadeInOnView = ({
   const elementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const element = elementRef.current;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -24,12 +26,12 @@ const FadeInOnView = ({
       }
     );
 
-    if (elementRef.current) {
-      observer.observe(elementRef.current);
+    if (element) {
+      observer.observe(element);
     }
 
     return (): void => {
-      if (elementRef.current) {
+      if (element) {
         observer.disconnect();
       }
     };

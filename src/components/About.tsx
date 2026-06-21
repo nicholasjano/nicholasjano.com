@@ -10,7 +10,7 @@ const About = () => {
         <div className="component-base border-b border-header-stroke/50">
           <FadeInOnView delay={100} className="w-full">
             <div className="header-texts">
-              <h2>About me</h2>
+              <h2>About Me</h2>
               <p className="under-header">
                 Every developer has a story -{" "}
                 <span className="block sm:inline text-brand-green">

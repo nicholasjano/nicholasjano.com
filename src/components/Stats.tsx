@@ -8,11 +8,9 @@ import {
   countriesReached,
   monthlyActiveUsers,
 } from "@data/pageData";
-import { getMonthlyDates } from "@utilities/GetDateEST";
 import { handleScroll } from "@utilities/ScrollingUtilities";
 
 const Stats = () => {
-  const { prevMonth, currMonth } = getMonthlyDates();
   const sectionRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   useAnimationTrigger({ elementRef: sectionRef, isLoaded: true });
 
@@ -21,10 +19,8 @@ const Stats = () => {
       <div className="absolute inset-0 w-screen h-screen-lvh overflow-hidden bg-surface-dark transform translate-y-full z-30">
         <div className="safe h-full w-full flex flex-col justify-center items-center space-y-4 stats-xs:space-y-20">
           <div className="flex flex-col justify-center items-center text-center space-y-2">
-            <h2>My Monthly Stats</h2>
-            <p className="under-header">
-              {prevMonth} - {currMonth}
-            </p>
+            <h2>My Personal Stats</h2>
+            <p className="under-header">The numbers behind the work.</p>
           </div>
           <div
             ref={sectionRef}

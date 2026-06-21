@@ -8,7 +8,7 @@ const IntroSymbols = ({ size }: IntroSymbolsProp) => {
 
   return (
     <div
-      className="absolute z-10"
+      className="absolute z-10 select-none"
       style={{
         width: `${size}px`,
         height: `${size}px`,

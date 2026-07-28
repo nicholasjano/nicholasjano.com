@@ -26,7 +26,7 @@ import KeepUpChampions from "@assets/KeepUpChampions.webp";
 import LavishDiscordChatBot from "@assets/LavishDiscordChatBot.webp";
 
 export const latestProject = "RecapMe";
-export const countriesReached = 113;
+export const countriesReached = 127;
 export const monthlyActiveUsers = 72000;
 
 export const baseSymbols: readonly string[] = [

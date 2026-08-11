@@ -15,8 +15,8 @@ import type {
   FooterLeftInfo,
   FooterType,
 } from "@pageTypes/pageTypes";
+import TDSecurities from "@assets/TDSecurities.webp";
 import MarmonRail from "@assets/MarmonRail.webp";
-import NetSolutionsTime from "@assets/NetSolutionsTime.webp";
 import LeetBuddy from "@assets/LeetBuddy.webp";
 import RecapMe from "@assets/RecapMe.webp";
 import ClearMark from "@assets/ClearMark.webp";
@@ -64,7 +64,7 @@ export const navItemsLeftURL: readonly string[] = [
 ];
 
 export const personalDescription: string = `
-Hi, I'm Nicholas Jano, a Software Engineer at Marmon Rail with a Bachelor of Computer Science (Honours) background from Queen's University in Ontario, Canada. Ever since I was a kid, I've been fascinated by computers and how they work. I started in elementary school, creating mini-applications with JavaScript and ActionScript. This early passion led me to keep learning and constantly expand my technical skills, shaping me into the engineer I am today.
+Hi, I'm Nicholas Jano, a Software Engineer at TD Securities with a Bachelor of Computing (Honours) background from Queen's University in Ontario, Canada. Ever since I was a kid, I've been fascinated by computers and how they work. I started in elementary school, creating mini-applications with JavaScript and ActionScript. This early passion led me to keep learning and constantly expand my technical skills, shaping me into the engineer I am today.
 
 In the ever-evolving field of Software Engineering, I strive to stay in a consistent state of learning and innovation so I can develop software solutions that make a meaningful impact. I'm driven by the challenge of tackling new problems and exploring emerging technologies. From working on personal projects to participating in hackathons, I always seek new opportunities to learn and develop. Over the years, I've gained experience across the full development stack, including designing system architecture, developing responsive frontend applications, and building scalable backend services. By combining my creativity with my technical skills, I can create innovative applications that solve everyday problems.
 `;
@@ -151,11 +151,21 @@ export const stackItems: readonly [
   developerTools,
 ];
 
+const TDSecuritiesInfo: RoleInfo = {
+  image: TDSecurities,
+  role: "Software Engineer",
+  company: "TD Securities",
+  period: "August 2026 - Present",
+  highlights: `
+In this role, I will be working on Enterprise Payments.
+`,
+};
+
 const MarmonRailInfo: RoleInfo = {
   image: MarmonRail,
   role: "Software Engineer",
   company: "Marmon Rail and Leasing Group",
-  period: "June 2024 - Present",
+  period: "June 2024 - July 2026",
   highlights: `
 In this role, I leveraged the ontology-powered Palantir Foundry platform to design and build over 15 automated data pipelines using transforms and ontology objects. These pipelines streamlined data ingestion workflows, processing over 1 million records daily and reducing manual data preparation time by 70%, which significantly improved efficiency across the team.
 
@@ -169,25 +179,9 @@ Finally, I built Power BI dashboards with DAX and SQL that are used daily by ove
 `,
 };
 
-const NetSolutionsTimeInfo: RoleInfo = {
-  image: NetSolutionsTime,
-  role: "Software Engineer",
-  company: "NetSolutionsTime",
-  period: "May 2023 - August 2023",
-  highlights: `
-During this role, I built comprehensive automated test suites using pytest and unittest across multiple services, which contributed to a 17% reduction in post-release defects and improved overall code quality and reliability.
-
-A key achievement was engineering RESTful APIs and microservices using Flask and SQLAlchemy to aggregate and transform customer data from over 10 source systems. This work served more than 15 million customers at a major financial institution, reducing data retrieval time by 45% and enabling a comprehensive Customer 360 view that consolidated critical information across the organization.
-
-To further optimize performance, I implemented a Redis caching layer for the Flask APIs to store frequently accessed customer data. This reduced database load by 60% and improved API response times from 800ms to 200ms for 80% of requests, significantly enhancing the user experience.
-
-In addition, I deployed and managed multiple Azure SQL databases with automated backup policies, query performance monitoring, and Application Insights integration. This implementation achieved 99.9% uptime and reduced incident response time by 50%, ensuring reliable performance and faster issue resolution.
-`,
-};
-
 export const ExperienceInfos: RoleInfo[] = [
+  TDSecuritiesInfo,
   MarmonRailInfo,
-  NetSolutionsTimeInfo,
 ];
 
 const RecapMeInfo: ProjectInfo = {
@@ -285,7 +279,7 @@ const FooterSchoolInfo: FooterLeftInfo = {
 };
 
 const FooterLocationInfo: FooterLeftInfo = {
-  title: "Richmond Hill, Ontario, Canada",
+  title: "Toronto, Ontario, Canada",
   icon: faLocationDot,
 };
 
